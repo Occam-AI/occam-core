@@ -1,19 +1,13 @@
+
+
+
 import enum
 import types
 import typing
 from typing import List, Optional, Self, get_args, get_origin
 
-from occam_core.util.common import get_logger
-from occam_core.util.data_types.occam_data_type import OccamDataType
+from occam_core.util.occam_data_type import OccamDataType
 from pydantic import model_validator
-
-INPUTS_LABEL = "inputs"
-PARAMS_LABEL = "params"
-OUTPUTS_LABEL = "outputs"
-DATASETS_FIELD_NAME = "datasets"
-
-
-logger = get_logger()
 
 
 class IOModel(OccamDataType):
@@ -60,15 +54,6 @@ class IOModel(OccamDataType):
                     and not getattr(self, field_name, None):
                 setattr(self, field_name, [])
         return self
-
-    # # disallow 'dataset' to be used as a field name
-    # @model_validator(mode="after")
-    # def validate_dataset_field(self) -> Self:
-    #     if DATASETS_FIELD_NAME in self.__dict__:
-    #         raise ValueError(
-    #             f"'{DATASETS_FIELD_NAME}' cannot be used as a field name for input/output models"
-    #         )
-    #     return self
 
     @classmethod
     def load_model(cls, data: Self) -> Self:
@@ -117,7 +102,6 @@ class IOModel(OccamDataType):
         return output
 
     def concatenate_models(cls, io_models: List[Self]) -> List[Self]:
-        # TODO: document how concatenate models works.
         """
         The function of this is to merge a list of models
         of the the respective type. this is relevant when the behavior of a tool
@@ -146,19 +130,6 @@ class ParamsIOModel(IOModel):
 
     # This is the max number of input records to run in parallel.
     threaded_run_batch_size: int = 1
-
-    # @classmethod
-    # def __init_subclass__(cls, **kwargs):
-    #     super().__init_subclass__(**kwargs)
-    #     # Validate datasets field type annotation if it exists in subclass
-    #     if DATASETS_FIELD_NAME in cls.__annotations__:
-    #         field_type = cls.__annotations__[DATASETS_FIELD_NAME]
-    #         origin = get_origin(field_type)
-    #         args = get_args(field_type)
-    #         if origin != list or args != (str,):
-    #             raise TypeError(
-    #                 f"'{DATASETS_FIELD_NAME}' field must be annotated as List[str]"
-    #             )
 
     @model_validator(mode="after")
     def validate_batch_size(self) -> Self:

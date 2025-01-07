@@ -5,7 +5,7 @@ import typing
 from typing import Any, Type, Union, get_origin
 
 from occam_core.util.error import (StrictRequiredVariablesViolated,
-                                    TypeCheckFailedException)
+                                   TypeCheckFailedException)
 from pydantic import BaseModel
 from typing_extensions import Self
 
@@ -305,7 +305,7 @@ class OccamDataType(BaseModel):
                     spec_variable_type=field_type
                 )
                 if not types_compatible:
-                    error =  TypeCheckFailedException(
+                    error = TypeCheckFailedException(
                         source_model_name=source_model_name,
                         target_model_name=cls.__name__,
                         model_category=model_category,
