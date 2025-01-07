@@ -2,7 +2,7 @@ import inspect
 import itertools
 import types
 import typing
-from typing import Any, Dict, List, Optional, Tuple, Type, Union, get_origin
+from typing import Any, Type, Union, get_origin
 
 from occam_core.util.error import (StrictRequiredVariablesViolated,
                                     TypeCheckFailedException)
@@ -318,35 +318,6 @@ class OccamDataType(BaseModel):
                         raise error
                     return False
         return True
-
-
-class Code(OccamDataType):
-    """
-    Code for now is a simple class that accepts Code or string
-    types.
-    It will be expanded with logic for checking correctness
-    etc later.
-    """
-
-    value: str
-
-    @classmethod
-    def _load_model(cls, data) -> Self:
-        if isinstance(data, str):
-            return Code(value=data)
-
-    def _transform_model(self, variable_type):
-        if variable_type == str:
-            return self.value
-
-    @classmethod
-    def _accepts(cls, variable_type) -> bool:
-        return variable_type == str
-
-    @classmethod
-    def _emits(cls, variable_type) -> bool:
-        return variable_type == str
-
 
 
 def recursive_value_type_check(data: Any, spec_variable_type: type) -> bool:
