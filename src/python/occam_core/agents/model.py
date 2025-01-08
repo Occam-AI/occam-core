@@ -4,11 +4,9 @@ from inspect import isabstract
 from typing import Any, Dict, List, Optional, Type
 
 from occam_core.agents.util import LLMInputModel
+from occam_core.model_catalogue import PARAMS_MODEL_CATALOGUE
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, model_validator
-
-from python.occam_core.model_catalogue import (MODEL_CATALOGUE,
-                                               PARAMS_MODEL_CATALOGUE)
 
 
 class AgentType(str, Enum):
