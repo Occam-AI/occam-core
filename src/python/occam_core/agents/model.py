@@ -1,3 +1,4 @@
+import inspect
 from enum import Enum
 from inspect import isabstract
 from typing import Any, Dict, List, Optional, Type
@@ -66,7 +67,11 @@ class AgentIdentityCoreModel(BaseModel):
         if self.is_base_agent:
             if self.params is not None or self.dynamic_spec is not None:
                 raise ValueError("base agent must have no params or dynamic spec")
-            if self.name != base_agent_kind:
+            if (
+                inspect.isclass(base_agent_kind) and self.name != base_agent_kind.__name__
+            ) or (
+                isinstance(base_agent_kind, str) and self.name != base_agent_kind
+            ):
                 raise ValueError(f"agent {self.name}'s base agent must have name matching base tool kind.")
 
         if agent_type == AgentType.USER:
