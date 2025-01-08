@@ -96,3 +96,37 @@ class LLMParamsModel(ParamsIOModel):
     assistant_name: Optional[str] = None
     # non-serializable for a plan.
     response_format: Optional[Type[BaseModel]] = None
+
+
+class SupervisionType(str, enum.Enum):
+    FULL = "full"
+    SELECTIVE = "selective"
+    FINAL = "final"
+    BATCH = "batch"
+
+
+class EmailCommunicatorCardModel(BaseModel):
+    """
+    A card that contains information about the person
+    that the email communicator bot is speaking on behalf of.
+    """
+
+    email: str
+    first_name: str
+    last_name: str
+    company: str
+    role: str
+
+
+class SupervisorCardModel(EmailCommunicatorCardModel):
+    supervision_type: SupervisionType
+
+
+class EmailCommunicatorParamsModel(ParamsIOModel):
+    """
+    Parameters for the email communicator tool.
+    """
+
+    goal: str
+    email_communicator_card: EmailCommunicatorCardModel
+    supervisor_card: SupervisorCardModel
