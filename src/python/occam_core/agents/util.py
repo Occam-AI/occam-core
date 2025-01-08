@@ -86,3 +86,13 @@ class LLMInputModel(IOModel):
         if isinstance(raw, str):
             raw = remove_extra_spaces(raw)
         return raw
+
+
+class LLMParamsModel(ParamsIOModel):
+    system_prompt: Optional[str] = None
+    llm_model_name: Optional[str] = None
+    image_model_name: Optional[str] = None
+    log_chat: Optional[bool] = None
+    assistant_name: Optional[str] = None
+    # non-serializable for a plan.
+    response_format: Optional[Type[BaseModel]] = None
