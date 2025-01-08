@@ -7,6 +7,9 @@ from occam_core.agents.util import LLMInputModel
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, model_validator
 
+from python.occam_core.model_catalogue import (MODEL_CATALOGUE,
+                                               PARAMS_MODEL_CATALOGUE)
+
 
 class AgentType(str, Enum):
     OCCAM_AGENT = "OCCAM_AGENT"
@@ -44,12 +47,16 @@ class AgentIdentityCoreModel(BaseModel):
     # for agents that aren't users.
     prompt: Optional[str] = None
 
+    # for the user to be able to specify the params model
+    # to instantiate the agent with.
+    params_model_name: str
+
     # the agent defining params and dynamic
     # spec of the tool.
     # if neither are passed, then this agent is
     # simply the agentic tool itself, regardless
     # of which parameters it's run with.
-    params: Optional[IOModel] = None
+    partial_params: Optional[IOModel] = None
     dynamic_spec: Optional[Dict[str, Any]] = None
     is_base_agent: bool = False
 
@@ -65,7 +72,7 @@ class AgentIdentityCoreModel(BaseModel):
         last_name = self.last_name
 
         if self.is_base_agent:
-            if self.params is not None or self.dynamic_spec is not None:
+            if self.partial_params is not None or self.dynamic_spec is not None:
                 raise ValueError("base agent must have no params or dynamic spec")
             if (
                 inspect.isclass(base_agent_kind) and self.name != base_agent_kind.__name__
@@ -73,6 +80,9 @@ class AgentIdentityCoreModel(BaseModel):
                 isinstance(base_agent_kind, str) and self.name != base_agent_kind
             ):
                 raise ValueError(f"agent {self.name}'s base agent must have name matching base tool kind.")
+        
+        if self.params_model_name not in PARAMS_MODEL_CATALOGUE:
+            raise ValueError(f"agent {self.name}'s params model {self.params_model_name} not found in params_model catalogue.")
 
         if agent_type == AgentType.USER:
             if first_name is None or last_name is None:
