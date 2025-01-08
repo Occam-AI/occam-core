@@ -79,8 +79,9 @@ class AgentIdentityCoreModel(BaseModel):
             ):
                 raise ValueError(f"agent {self.name}'s base agent must have name matching base tool kind.")
         
-        if self.params_model_name not in PARAMS_MODEL_CATALOGUE:
-            raise ValueError(f"agent {self.name}'s params model {self.params_model_name} not found in params_model catalogue.")
+        # FIXME: revert once occam-tools stable and all models moved here.
+        # if self.params_model_name not in PARAMS_MODEL_CATALOGUE:
+        #     raise ValueError(f"agent {self.name}'s params model {self.params_model_name} not found in params_model catalogue.")
 
         if agent_type == AgentType.USER:
             if first_name is None or last_name is None:
