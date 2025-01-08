@@ -3,7 +3,7 @@ from inspect import isabstract
 from typing import Any, Dict, List, Optional, Type
 
 from occam_core.agents.util import LLMInputModel
-from occam_core.util.base_models import ParamsIOModel
+from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, model_validator
 
 
@@ -48,7 +48,7 @@ class AgentIdentityCoreModel(BaseModel):
     # if neither are passed, then this agent is
     # simply the agentic tool itself, regardless
     # of which parameters it's run with.
-    params: Optional[ParamsIOModel] = None
+    params: Optional[IOModel] = None
     dynamic_spec: Optional[Dict[str, Any]] = None
     is_base_agent: bool = False
 
