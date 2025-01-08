@@ -1,8 +1,8 @@
 import enum
 import re
-from typing import Any, Optional
+from typing import Any, Optional, Type
 
-from occam_core.util.base_models import IOModel
+from occam_core.util.base_models import IOModel, ParamsIOModel
 from pydantic import BaseModel, field_validator, model_validator
 
 
