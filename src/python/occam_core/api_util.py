@@ -8,34 +8,16 @@ class AgentInstanceMetadata(BaseModel):
     agent_instance_id: str
 
 
-class AgentFetchErrorType(Enum):
+class AgentSetupErrorType(Enum):
     AGENT_NOT_FOUND = "AGENT_NOT_FOUND"
-    OTHER = "OTHER"
-
-
-class AgentFetchError(BaseModel):
-    error_type: AgentFetchErrorType
-    error_message: str
-
-
-class AgentInstantiationErrorType(Enum):
     INVALID_PARAMS = "INVALID_PARAMS"
     INSUFFICIENT_CREDITS = "INSUFFICIENT_CREDITS"
-    OTHER = "OTHER"
-
-
-class AgentInstantiationError(BaseModel):
-    error_type: AgentInstantiationErrorType
-    error_message: str
-
-
-class AgentInstanceFetchErrorType(Enum):
     INVALID_AGENT_INSTANCE_ID = "INVALID_AGENT_INSTANCE_ID"
     OTHER = "OTHER"
 
 
-class AgentInstanceFetchError(BaseModel):
-    error_type: AgentInstanceFetchErrorType
+class AgentSetupError(BaseModel):
+    error_type: AgentSetupErrorType
     error_message: str
 
 
