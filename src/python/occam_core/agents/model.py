@@ -5,7 +5,7 @@ from inspect import isabstract
 from typing import Any, Dict, List, Optional, Type
 
 from occam_core.agents.util import LLMInputModel
-from occam_core.util.base_models import IOModel, ParamsIOModel
+from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, model_validator
 
 
@@ -123,40 +123,3 @@ class AgentsCatalogueModel(BaseModel):
 
 class AgentIOModel(LLMInputModel):
     extra: Optional[Any] = None
-
-
-class CommunicationMethod(str, enum.Enum):
-    SLACK = "slack"
-    EMAIL = "email"
-
-
-class ChatChannelPermission(enum.Enum):
-    READ_ONLY = "read_only"
-    SEND_MESSAGE = "send_message"
-    UPLOAD_FILES = "upload_files"
-    TERMINATE_CHAT = "terminate_chat"
-    ALL = "ALL"
-
-
-class UserAgentParamsModel(ParamsIOModel):
-    user_id: int
-    email: str
-    first_name: str
-    last_name: str
-    slack_handle: Optional[str] = None
-    channel_permission: ChatChannelPermission = ChatChannelPermission.READ_ONLY
-    notify_agent: Optional[bool] = False
-    # which methods are we allowed to reach user through.
-    communication_methods: Optional[List[CommunicationMethod]] = None
-
-    @model_validator(mode="after")
-    def check_either_slack_or_email(cls, v):
-        if CommunicationMethod.SLACK in v.communication_methods:
-            assert v.slack_handle, "Slack handle must be provided"
-        return v
-
-    @model_validator(mode="after")
-    def check_communication_methods(cls, v):
-        if v.communication_methods is None:
-            v.communication_methods = [CommunicationMethod.EMAIL]
-        return v

@@ -1,7 +1,6 @@
-from occam_core.agents.util import EmailCommunicatorParamsModel, LLMParamsModel
+from occam_core.agents.params import (EmailCommunicatorParamsModel,
+                                      LLMParamsModel, UserAgentParamsModel)
 from occam_core.util.base_models import IOModel, ParamsIOModel
-from occam_core.agents.model import UserAgentParamsModel
-
 
 # TODO: Auto-generate this by scanning the codebase.
 PARAMS_MODEL_CATALOGUE = {
