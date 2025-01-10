@@ -19,6 +19,7 @@ class ChatChannelPermission(enum.Enum):
     ALL = "ALL"
 
 
+
 class UserAgentParamsModel(ParamsIOModel):
     user_id: int
     email: str
@@ -26,7 +27,6 @@ class UserAgentParamsModel(ParamsIOModel):
     last_name: str
     slack_handle: Optional[str] = None
     channel_permission: ChatChannelPermission = ChatChannelPermission.READ_ONLY
-    notify_agent: Optional[bool] = False
     # which methods are we allowed to reach user through.
     communication_methods: Optional[List[CommunicationMethod]] = None
 
@@ -34,6 +34,8 @@ class UserAgentParamsModel(ParamsIOModel):
     def check_either_slack_or_email(cls, v):
         if CommunicationMethod.SLACK in v.communication_methods:
             assert v.slack_handle, "Slack handle must be provided"
+        if CommunicationMethod.SLACK and v.slack_handle is None:
+            raise ValueError("Slack handle must be provided given that slack communication method is selected.")
         return v
 
     @model_validator(mode="after")
