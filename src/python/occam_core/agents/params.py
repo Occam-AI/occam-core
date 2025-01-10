@@ -1,9 +1,8 @@
 import enum
 from typing import List, Optional, Type
 
+from occam_core.util.base_models import ParamsIOModel
 from pydantic import BaseModel, model_validator
-
-from python.occam_core.util.base_models import ParamsIOModel
 
 
 class CommunicationMethod(str, enum.Enum):
