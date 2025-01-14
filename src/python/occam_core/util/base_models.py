@@ -5,12 +5,17 @@ import enum
 import types
 import typing
 from typing import List, Optional, Self, get_args, get_origin
+import uuid
 
 from occam_core.util.occam_data_type import OccamDataType
 from pydantic import model_validator
 
 
 class IOModel(OccamDataType):
+    # Number of the run that produced the dataset.
+    run_number: int = 1
+    # Number of the attempt in the tool run that produced the dataset.
+    attempt_number: int = 1
 
     class Config:
         arbitrary_types_allowed = True
