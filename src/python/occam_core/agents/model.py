@@ -1,4 +1,3 @@
-import enum
 import inspect
 from enum import Enum
 from inspect import isabstract
@@ -54,7 +53,7 @@ class AgentIdentityCoreModel(BaseModel):
     # if neither are passed, then this agent is
     # simply the agentic tool itself, regardless
     # of which parameters it's run with.
-    partial_params: Optional[IOModel] = None
+    defining_params: Optional[IOModel] = None
     dynamic_spec: Optional[Dict[str, Any]] = None
     is_base_agent: bool = False
 
@@ -70,7 +69,7 @@ class AgentIdentityCoreModel(BaseModel):
         last_name = self.last_name
 
         if self.is_base_agent:
-            if self.partial_params is not None or self.dynamic_spec is not None:
+            if self.defining_params is not None or self.dynamic_spec is not None:
                 raise ValueError("base agent must have no params or dynamic spec")
             if (
                 inspect.isclass(base_agent_kind) and self.name != base_agent_kind.__name__
@@ -116,6 +115,7 @@ class AgentsCatalogueModel(BaseModel):
     @model_validator(mode="after")
     def validate_agents(self):
         for agent_name, agent_model in self.agents.values():
+            agent_model: AgentIdentityCoreModel
             if agent_name != agent_model.name:
                 raise ValueError(f"agent name {agent_name} doesn't match agent model name {agent_model.name}")
         return self
