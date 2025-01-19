@@ -4,14 +4,13 @@ import types
 import typing
 from typing import Any, Type, Union, get_origin
 
+from occam_core.util.data_types.util import (recursive_model_convert,
+                                             recursive_type_check,
+                                             recursive_value_type_check)
 from occam_core.util.error import (StrictRequiredVariablesViolated,
                                    TypeCheckFailedException)
 from pydantic import BaseModel
 from typing_extensions import Self
-
-from python.occam_core.util.data_types.util import (recursive_model_convert,
-                                                    recursive_type_check,
-                                                    recursive_value_type_check)
 
 pydantic_class_name_label = 'pydantic_class_name'
 

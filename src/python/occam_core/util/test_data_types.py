@@ -3,9 +3,9 @@ import enum
 import unittest
 from typing import Any, Dict, List, Optional, Self
 
-from occam_core.util.data_types.base import (OccamDataType,
-                                             recursive_type_check,
-                                             recursive_value_type_check)
+from occam_core.util.data_types.occam import (OccamDataType,
+                                              recursive_type_check,
+                                              recursive_value_type_check)
 from occam_core.util.data_types.util import (is_compatible_type,
                                              recursive_value_convert)
 
