@@ -1,36 +1,24 @@
 import enum
 from typing import List, Optional, Type
 
-from occam_core.util.base_models import ParamsIOModel
+from occam_core.util.base_models import AgentInstanceParamsModel, ParamsIOModel
 from pydantic import BaseModel, model_validator
 
 from python.occam_core.agents.util import (ChatChannelPermission,
                                            CommunicationMethod)
 
 
-class UserAgentParamsModel(ParamsIOModel):
-    user_id: int
-    email: str
-    first_name: str
-    last_name: str
-    slack_handle: Optional[str] = None
+class UserAgentParamsModel(AgentInstanceParamsModel):
+
     channel_permission: ChatChannelPermission = ChatChannelPermission.READ_ONLY
     # which methods are we allowed to reach user through.
     communication_methods: Optional[List[CommunicationMethod]] = None
 
     @model_validator(mode="after")
-    def check_either_slack_or_email(cls, v):
-        if CommunicationMethod.SLACK in v.communication_methods:
-            assert v.slack_handle, "Slack handle must be provided"
-        if CommunicationMethod.SLACK and v.slack_handle is None:
-            raise ValueError("Slack handle must be provided given that slack communication method is selected.")
-        return v
-
-    @model_validator(mode="after")
-    def check_communication_methods(cls, v):
-        if v.communication_methods is None:
-            v.communication_methods = [CommunicationMethod.EMAIL]
-        return v
+    def check_communication_methods(self):
+        if self.communication_methods is None:
+            self.communication_methods = [CommunicationMethod.EMAIL]
+        return self
 
 
 class LLMParamsModel(ParamsIOModel):
