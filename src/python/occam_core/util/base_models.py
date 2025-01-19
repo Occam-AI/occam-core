@@ -7,7 +7,7 @@ import typing
 import uuid
 from typing import List, Optional, Self, get_args, get_origin
 
-from occam_core.util.data_types.base import OccamDataType
+from occam_core.util.data_types.occam import OccamDataType
 from pydantic import model_validator
 
 

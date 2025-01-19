@@ -120,7 +120,7 @@ def recursive_model_convert(
     source_model_instance,
     target_model: Type
 ):
-    from occam_core.util.data_types.base import OccamDataType
+    from occam_core.util.data_types.occam import OccamDataType
     source_model_instance: OccamDataType
     target_model: Type[OccamDataType]
     """
@@ -151,10 +151,10 @@ def recursive_model_convert(
 
 def recursive_value_convert(
         value,
-        spec_variable_typ
+        spec_variable_type
     ) -> Any:
 
-    from occam_core.util.data_types.base import OccamDataType
+    from occam_core.util.data_types.occam import OccamDataType
     value: Union[Any | OccamDataType]
     spec_variable_type: Type[Union[Any | OccamDataType]]
 
@@ -219,7 +219,7 @@ def _union_type_compatibility_check(
 
 
 def is_compatible_type(variable_type, spec_variable_type) -> bool:
-    from occam_core.util.data_types.base import OccamDataType
+    from occam_core.util.data_types.occam import OccamDataType
     if not inspect.isclass(variable_type):
         return False
 
