@@ -155,5 +155,9 @@ class ParamsIOModel(IOModel):
         return self
 
 
+class AgentInstanceParamsModel(ParamsIOModel):
+    ...
+
+
 class OutputsModel(IOModel):
     ...
