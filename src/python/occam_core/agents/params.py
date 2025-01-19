@@ -1,14 +1,12 @@
 import enum
 from typing import List, Optional, Type
 
+from occam_core.agents.util import ChatChannelPermission, CommunicationMethod
 from occam_core.util.base_models import AgentInstanceParamsModel, ParamsIOModel
 from pydantic import BaseModel, model_validator
 
-from python.occam_core.agents.util import (ChatChannelPermission,
-                                           CommunicationMethod)
 
-
-class UserAgentParamsModel(AgentInstanceParamsModel):
+class UserAgentParticipationParamsModel(AgentInstanceParamsModel):
 
     channel_permission: ChatChannelPermission = ChatChannelPermission.READ_ONLY
     # which methods are we allowed to reach user through.
