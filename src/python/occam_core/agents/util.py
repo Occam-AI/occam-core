@@ -86,3 +86,16 @@ class LLMInputModel(IOModel):
         if isinstance(raw, str):
             raw = remove_extra_spaces(raw)
         return raw
+
+
+class CommunicationMethod(str, enum.Enum):
+    SLACK = "slack"
+    EMAIL = "email"
+
+
+class ChatChannelPermission(enum.Enum):
+    READ_ONLY = "read_only"
+    SEND_MESSAGE = "send_message"
+    UPLOAD_FILES = "upload_files"
+    TERMINATE_CHAT = "terminate_chat"
+    ALL = "ALL"
