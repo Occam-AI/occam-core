@@ -431,57 +431,6 @@ def recursive_type_check(variable_type: type, spec_variable_type: type) -> bool:
     )
 
 
-def _union_type_compatibility_check(
-        variable_type,
-        variable_type_is_union,
-        spec_variable_type,
-        spec_variable_type_is_union
-) -> bool:
-    """
-    This function checks if value_type is compatible with spec_variable_type, assuming that at least one of them
-    is a UnionType. The check will return False if neither variable_type nor spec_variable_type is of type UnionType
-    or has a type hint typing.Union.
-    """
-
-    # convert single args to list of 1 union elements
-    # to do a pairwise permutation
-    if not variable_type_is_union:
-        variable_type_args = [variable_type]
-    else:
-        variable_type_args = getattr(variable_type, '__args__', None)
-
-    if not spec_variable_type_is_union:
-        spec_variable_type_args = [spec_variable_type]
-    else:
-        spec_variable_type_args = getattr(spec_variable_type, '__args__', None)
-
-    return any(
-        recursive_type_check(variable_arg, spec_variable_arg)
-        for variable_arg, spec_variable_arg in itertools.product(
-            variable_type_args, spec_variable_type_args)
-    )
-
-
-def is_compatible_type(variable_type, spec_variable_type) -> bool:
-    if not inspect.isclass(variable_type):
-        return False
-
-    return variable_type == spec_variable_type or (
-        # ASSUMPTION: we only accept children if the
-        # specified type hint is an abstract parent
-        inspect.isabstract(spec_variable_type) and
-        issubclass(variable_type, spec_variable_type)
-    ) or (
-        # value_category in [INPUTS_LABEL, PARAMS_LABEL] and
-        issubclass(spec_variable_type, OccamDataType)
-        and spec_variable_type.accepts(variable_type)
-    ) or (
-        # value_category in [INPUTS_LABEL, PARAMS_LABEL] and
-        issubclass(variable_type, OccamDataType)
-        and variable_type.emits(spec_variable_type)
-    )
-
-
 def recursive_model_convert(
     source_model_instance: OccamDataType,
     target_model: Type[OccamDataType]
@@ -542,3 +491,55 @@ def recursive_value_convert(
             for k, v in value.items()
         }
     return value
+
+
+
+def _union_type_compatibility_check(
+        variable_type,
+        variable_type_is_union,
+        spec_variable_type,
+        spec_variable_type_is_union
+) -> bool:
+    """
+    This function checks if value_type is compatible with spec_variable_type, assuming that at least one of them
+    is a UnionType. The check will return False if neither variable_type nor spec_variable_type is of type UnionType
+    or has a type hint typing.Union.
+    """
+
+    # convert single args to list of 1 union elements
+    # to do a pairwise permutation
+    if not variable_type_is_union:
+        variable_type_args = [variable_type]
+    else:
+        variable_type_args = getattr(variable_type, '__args__', None)
+
+    if not spec_variable_type_is_union:
+        spec_variable_type_args = [spec_variable_type]
+    else:
+        spec_variable_type_args = getattr(spec_variable_type, '__args__', None)
+
+    return any(
+        recursive_type_check(variable_arg, spec_variable_arg)
+        for variable_arg, spec_variable_arg in itertools.product(
+            variable_type_args, spec_variable_type_args)
+    )
+
+
+def is_compatible_type(variable_type, spec_variable_type) -> bool:
+    if not inspect.isclass(variable_type):
+        return False
+
+    return variable_type == spec_variable_type or (
+        # ASSUMPTION: we only accept children if the
+        # specified type hint is an abstract parent
+        inspect.isabstract(spec_variable_type) and
+        issubclass(variable_type, spec_variable_type)
+    ) or (
+        # value_category in [INPUTS_LABEL, PARAMS_LABEL] and
+        issubclass(spec_variable_type, OccamDataType)
+        and spec_variable_type.accepts(variable_type)
+    ) or (
+        # value_category in [INPUTS_LABEL, PARAMS_LABEL] and
+        issubclass(variable_type, OccamDataType)
+        and variable_type.emits(spec_variable_type)
+    )
