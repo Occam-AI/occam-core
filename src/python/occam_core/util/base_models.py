@@ -4,10 +4,10 @@
 import enum
 import types
 import typing
-from typing import List, Optional, Self, get_args, get_origin
 import uuid
+from typing import List, Optional, Self, get_args, get_origin
 
-from occam_core.util.occam_data_type import OccamDataType
+from occam_core.util.data_types.base import OccamDataType
 from pydantic import model_validator
 
 
