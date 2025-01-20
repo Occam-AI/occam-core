@@ -10,7 +10,7 @@ class AgentInstanceMetadata(BaseModel):
     agent_instance_id: str
 
 
-class AgentSetupErrorType(Enum):
+class AgentHandlingErrorType(Enum):
     AGENT_NOT_FOUND = "AGENT_NOT_FOUND"
     INVALID_PARAMS = "INVALID_PARAMS"
     INSUFFICIENT_CREDITS = "INSUFFICIENT_CREDITS"
@@ -27,8 +27,8 @@ class AgentRunStatus(Enum):
     TERMINATED = "terminated"
 
 
-class AgentSetupError(BaseModel):
-    error_type: AgentSetupErrorType
+class AgentHandlingError(BaseModel):
+    error_type: AgentHandlingErrorType
     error_message: str
 
 
