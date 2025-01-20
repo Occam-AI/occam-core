@@ -49,8 +49,6 @@ class LLMParamsModel(ParamsIOModel):
     image_model_name: Optional[str] = None
     log_chat: Optional[bool] = None
     assistant_name: Optional[str] = None
-    # non-serializable for a plan.
-    response_format: Optional[Type[BaseModel]] = None
 
 
 class SupervisionType(str, enum.Enum):

@@ -16,14 +16,15 @@ class AgentHandlingErrorType(Enum):
     INSUFFICIENT_CREDITS = "INSUFFICIENT_CREDITS"
     INVALID_AGENT_INSTANCE_ID = "INVALID_AGENT_INSTANCE_ID"
     OTHER = "OTHER"
+    # add errors for pausing, resumign and terminating.
 
 
 class AgentRunStatus(Enum):
     PENDING = "pending"
     RUNNING = "running"
+    PAUSED = "paused"
     COMPLETED = "completed"
     FAILED = "failed"
-    PAUSED = "paused"
     TERMINATED = "terminated"
 
 
