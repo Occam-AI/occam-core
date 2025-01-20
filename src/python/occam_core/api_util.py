@@ -38,5 +38,3 @@ class AgentRunDetail(BaseModel):
     status: AgentRunStatus
     start_time: datetime
     running_time_seconds: int
-    # Placed here because we won't start with separate init and run methods.
-    error: Optional[AgentSetupError] = None
