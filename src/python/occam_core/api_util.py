@@ -17,6 +17,15 @@ class AgentSetupErrorType(Enum):
     OTHER = "OTHER"
 
 
+class AgentRunStatus(Enum):
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    PAUSED = "paused"
+    TERMINATED = "terminated"
+
+
 class AgentSetupError(BaseModel):
     error_type: AgentSetupErrorType
     error_message: str
