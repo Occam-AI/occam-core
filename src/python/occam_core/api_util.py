@@ -34,8 +34,8 @@ class AgentSetupError(BaseModel):
 
 class AgentRunDetail(BaseModel):
     instance_id: str
-    result: AgentIOModel
-    status: str
+    result: Optional[AgentIOModel] = None
+    status: AgentRunStatus
     start_time: datetime
     running_time_seconds: int
     # Placed here because we won't start with separate init and run methods.
