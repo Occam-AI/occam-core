@@ -2,6 +2,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Optional, Union
 
+from occam_core.agents.model import AgentIOModel
 from pydantic import BaseModel
 
 
@@ -32,7 +33,8 @@ class AgentSetupError(BaseModel):
 
 
 class AgentRunDetail(BaseModel):
-    agent_run_instance_id: str
+    instance_id: str
+    result: AgentIOModel
     status: str
     start_time: datetime
     running_time_seconds: int
