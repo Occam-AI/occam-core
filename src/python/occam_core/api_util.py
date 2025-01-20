@@ -1,5 +1,6 @@
+from datetime import datetime
 from enum import Enum
-from typing import Union
+from typing import Optional, Union
 
 from pydantic import BaseModel
 
@@ -22,4 +23,9 @@ class AgentSetupError(BaseModel):
 
 
 class AgentRunDetail(BaseModel):
+    agent_run_instance_id: str
     status: str
+    start_time: datetime
+    running_time_seconds: int
+    # Placed here because we won't start with separate init and run methods.
+    error: Optional[AgentSetupError] = None
