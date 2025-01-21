@@ -54,6 +54,8 @@ class AgentIdentityCoreModel(BaseModel):
         # It runs when AgentIdentityModels are instantiated (not just AgentIdentityCoreModels),
         # and the param_model_name for those is not (and will not be) in PARAMS_MODEL_CATALOGUE.
         # For now I added this check to skip validation if self is not an AgentIdentityCoreModel.
+        # FIXME: Remove this if and skip condition once all params models saved in DB are present
+        # in PARAMS_MODEL_CATALOGUE.
         if type(self) != AgentIdentityCoreModel:
             return self
         if self.params_model_name not in PARAMS_MODEL_CATALOGUE:
