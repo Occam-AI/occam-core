@@ -50,6 +50,12 @@ class AgentIdentityCoreModel(BaseModel):
 
     @model_validator(mode="after")
     def validate_params_model_name(self):
+        # NOTE: @Medhat I added this type check because the validator was wrong.
+        # It runs when AgentIdentityModels are instantiated (not just AgentIdentityCoreModels),
+        # and the param_model_name for those is not (and will not be) in PARAMS_MODEL_CATALOGUE.
+        # For now I added this check to skip validation if self is not an AgentIdentityCoreModel.
+        if type(self) != AgentIdentityCoreModel:
+            return self
         if self.params_model_name not in PARAMS_MODEL_CATALOGUE:
             raise ValueError(f"agent {self.name}'s params model {self.params_model_name} not found in params_model catalogue.")
         return self
