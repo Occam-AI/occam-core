@@ -44,6 +44,11 @@ class OccamInterfaceAgentPermissionsModel(AgentInstanceParamsModel):
 
 
 class UserAgentPermissionsModel(AgentInstanceParamsModel):
+    """
+    This is for human agents for which we have contact information
+    and only need to know their designated permissions and communication methods.
+    """
+
     channel_permission: ChatChannelPermission = ChatChannelPermission.READ_ONLY
     communication_methods: Optional[List[CommunicationMethod]] = None
 
