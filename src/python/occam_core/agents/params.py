@@ -43,6 +43,11 @@ class OccamInterfaceAgentPermissionsModel(AgentInstanceParamsModel):
         return self
 
 
+class UserAgentPermissionsModel(AgentInstanceParamsModel):
+    channel_permission: ChatChannelPermission = ChatChannelPermission.READ_ONLY
+    communication_methods: Optional[List[CommunicationMethod]] = None
+
+
 class LLMParamsModel(ParamsIOModel):
     system_prompt: Optional[str] = None
     llm_model_name: Optional[str] = None
@@ -59,10 +64,6 @@ class SupervisionType(str, enum.Enum):
 
 
 class EmailCommunicatorCardModel(BaseModel):
-    """
-    A card that contains information about the person
-    that the email communicator bot is speaking on behalf of.
-    """
 
     email: str
     first_name: str
