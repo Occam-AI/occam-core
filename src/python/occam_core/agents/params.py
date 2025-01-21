@@ -1,9 +1,21 @@
 import enum
 from typing import List, Optional, Type
 
-from occam_core.agents.util import ChatChannelPermission, CommunicationMethod
 from occam_core.util.base_models import AgentInstanceParamsModel, ParamsIOModel
 from pydantic import BaseModel, model_validator
+
+
+class CommunicationMethod(str, enum.Enum):
+    SLACK = "slack"
+    EMAIL = "email"
+
+
+class ChatChannelPermission(enum.Enum):
+    READ_ONLY = "read_only"
+    SEND_MESSAGE = "send_message"
+    UPLOAD_FILES = "upload_files"
+    TERMINATE_CHAT = "terminate_chat"
+    ALL = "ALL"
 
 
 class CustomInterfaceAgentParamsModel(AgentInstanceParamsModel):
@@ -41,6 +53,7 @@ class OccamInterfaceAgentPermissionsModel(AgentInstanceParamsModel):
         if self.communication_methods is None:
             self.communication_methods = [CommunicationMethod.EMAIL]
         return self
+
 
 
 class UserAgentPermissionsModel(AgentInstanceParamsModel):
