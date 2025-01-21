@@ -4,10 +4,10 @@
 import enum
 import types
 import typing
-from typing import List, Optional, Self, get_args, get_origin
 import uuid
+from typing import List, Optional, Self, get_args, get_origin
 
-from occam_core.util.occam_data_type import OccamDataType
+from occam_core.util.data_types.occam import OccamDataType
 from pydantic import model_validator
 
 
@@ -153,6 +153,10 @@ class ParamsIOModel(IOModel):
                 and len(self.datasets) > 0:
             raise ValueError("white_list datasets must be empty when reference_datasets_mode is not WHITELIST.")
         return self
+
+
+class AgentInstanceParamsModel(ParamsIOModel):
+    ...
 
 
 class OutputsModel(IOModel):
