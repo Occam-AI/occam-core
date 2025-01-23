@@ -4,7 +4,7 @@
 import enum
 import types
 import typing
-from typing import List, Optional, Self, get_args, get_origin
+from typing import List, Optional, Self, TypeVar, get_args, get_origin
 
 from occam_core.util.data_types.occam import OccamDataType
 from pydantic import model_validator
@@ -119,15 +119,15 @@ class InputsModel(IOModel):
     ...
 
 
-class ReferenceDatasetsMode(str, enum.Enum):
-    NONE = "none"
-    WHITELIST = "whitelist"
-    EVERYTHING = "everything"
-
-
 class AgentInstanceParamsModel(IOModel):
     ...
 
 
 class OutputsModel(IOModel):
     ...
+
+
+TAgentInstanceParamsModel = TypeVar(
+    "TAgentInstanceParamsModel",
+    bound=AgentInstanceParamsModel
+)
