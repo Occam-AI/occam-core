@@ -1,4 +1,5 @@
-from occam_core.agents.params import (DefinedLLMAgentParamsModel,
+from occam_core.agents.params import (AgentsChatParamsModel,
+                                      DefinedLLMAgentParamsModel,
                                       EmailCommunicatorAgentParamsModel,
                                       LLMAgentParamsModel,
                                       OccamProvidedHumanAgentParamsModel,
@@ -7,6 +8,7 @@ from occam_core.util.base_models import IOModel
 
 # TODO: Auto-generate this by scanning the codebase.
 PARAMS_MODEL_CATALOGUE = {
+    AgentsChatParamsModel.__name__: AgentsChatParamsModel,
     LLMAgentParamsModel.__name__: LLMAgentParamsModel,
     DefinedLLMAgentParamsModel.__name__: DefinedLLMAgentParamsModel,
     EmailCommunicatorAgentParamsModel.__name__: EmailCommunicatorAgentParamsModel,

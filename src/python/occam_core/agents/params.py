@@ -1,7 +1,8 @@
 import enum
-from typing import List, Optional, Type
+from typing import Dict, List, Optional, Type
 
-from occam_core.util.base_models import AgentInstanceParamsModel
+from occam_core.util.base_models import (AgentInstanceParamsModel,
+                                         TAgentInstanceParamsModel)
 from pydantic import BaseModel, model_validator
 
 
@@ -110,3 +111,14 @@ class EmailCommunicatorAgentParamsModel(AgentInstanceParamsModel):
 class DataStructuringAgentParamsModel(AgentInstanceParamsModel):
     structuring_goal: str
     structured_output_model: Optional[str] = None
+
+
+# Agents Chat Params
+class AgentsChatParamsModel(AgentInstanceParamsModel):
+
+    # 1. chat goal
+    chat_goal: str
+    # 2. Agents participating in the chat.
+    agents: Dict[str, TAgentInstanceParamsModel]
+    # 3. Chat session id, this allows merging multiple distinct chat runs together.
+    session_id: Optional[str] = None
