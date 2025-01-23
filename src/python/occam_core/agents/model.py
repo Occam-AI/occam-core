@@ -68,7 +68,7 @@ class AgentsCatalogueModel(BaseModel):
 
     @model_validator(mode="after")
     def validate_agents(self):
-        for agent_name, agent_model in self.agents.values():
+        for agent_name, agent_model in self.agents.items():
             agent_model: AgentIdentityCoreModel
             if agent_name != agent_model.name:
                 raise ValueError(f"agent name {agent_name} doesn't match agent model name {agent_model.name}")
