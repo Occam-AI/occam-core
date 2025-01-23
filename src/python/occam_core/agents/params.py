@@ -96,7 +96,7 @@ class SupervisorCardModel(EmailCommunicatorCardModel):
     supervision_type: SupervisionType
 
 
-class CommunicatorAgentParamsModel(AgentInstanceParamsModel):
+class EmailCommunicatorAgentParamsModel(AgentInstanceParamsModel):
     """
     Parameters for the email communicator tool.
     """

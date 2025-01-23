@@ -1,5 +1,5 @@
-from occam_core.agents.params import (CommunicatorAgentParamsModel,
-                                      DefinedLLMAgentParamsModel,
+from occam_core.agents.params import (DefinedLLMAgentParamsModel,
+                                      EmailCommunicatorAgentParamsModel,
                                       LLMAgentParamsModel,
                                       OccamProvidedHumanAgentParamsModel,
                                       UserProvidedHumanAgentParamsModel)
@@ -9,7 +9,7 @@ from occam_core.util.base_models import IOModel
 PARAMS_MODEL_CATALOGUE = {
     LLMAgentParamsModel.__name__: LLMAgentParamsModel,
     DefinedLLMAgentParamsModel.__name__: DefinedLLMAgentParamsModel,
-    CommunicatorAgentParamsModel.__name__: CommunicatorAgentParamsModel,
+    EmailCommunicatorAgentParamsModel.__name__: EmailCommunicatorAgentParamsModel,
     UserProvidedHumanAgentParamsModel.__name__: UserProvidedHumanAgentParamsModel,
     OccamProvidedHumanAgentParamsModel.__name__: OccamProvidedHumanAgentParamsModel,
 }
