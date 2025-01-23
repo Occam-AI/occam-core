@@ -46,7 +46,7 @@ class AgentIdentityCoreModel(BaseModel):
 
     # for loading the params model
     # needed for instantiating the agent with.
-    params_model_name: str
+    instance_params_model_name: str
 
     @model_validator(mode="after")
     def validate_params_model_name(self):
@@ -58,8 +58,8 @@ class AgentIdentityCoreModel(BaseModel):
         # in PARAMS_MODEL_CATALOGUE.
         if type(self) != AgentIdentityCoreModel:
             return self
-        if self.params_model_name not in PARAMS_MODEL_CATALOGUE:
-            raise ValueError(f"agent {self.name}'s params model {self.params_model_name} not found in params_model catalogue.")
+        if self.instance_params_model_name not in PARAMS_MODEL_CATALOGUE:
+            raise ValueError(f"agent {self.name}'s params model {self.instance_params_model_name} not found in params_model catalogue.")
         return self
 
 
