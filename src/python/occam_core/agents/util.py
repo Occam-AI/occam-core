@@ -2,7 +2,7 @@ import enum
 import re
 from typing import Any, Optional, Type
 
-from occam_core.util.base_models import IOModel, ParamsIOModel
+from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, field_validator, model_validator
 
 

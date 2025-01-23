@@ -1,7 +1,7 @@
 import enum
 from typing import List, Optional, Type
 
-from occam_core.util.base_models import AgentInstanceParamsModel, ParamsIOModel
+from occam_core.util.base_models import AgentInstanceParamsModel
 from pydantic import BaseModel, model_validator
 
 
@@ -18,9 +18,12 @@ class ChatChannelPermission(enum.Enum):
     ALL = "ALL"
 
 
-class CustomInterfaceAgentParamsModel(AgentInstanceParamsModel):
+# User Provided Human Agent Params
+class UserProvidedHumanAgentParamsModel(AgentInstanceParamsModel):
     """
-    This is when you need to spin up interface.
+    This is when you need to bring in a human agent into a workflow
+    using agents chat, where the human agent is provided by the user
+    in full.
     """
 
     email: str
@@ -37,7 +40,8 @@ class CustomInterfaceAgentParamsModel(AgentInstanceParamsModel):
         return self
 
 
-class OccamInterfaceAgentPermissionsModel(AgentInstanceParamsModel):
+# Occam Provided Human Agent Params
+class OccamProvidedHumanAgentParamsModel(AgentInstanceParamsModel):
     """
     This is for occam provided interface agents for which we
     have contact information and only need to know their designated
@@ -55,18 +59,8 @@ class OccamInterfaceAgentPermissionsModel(AgentInstanceParamsModel):
         return self
 
 
-
-class UserAgentPermissionsModel(AgentInstanceParamsModel):
-    """
-    This is for human agents for which we have contact information
-    and only need to know their designated permissions and communication methods.
-    """
-
-    channel_permission: ChatChannelPermission = ChatChannelPermission.READ_ONLY
-    communication_methods: Optional[List[CommunicationMethod]] = None
-
-
-class LLMParamsModel(ParamsIOModel):
+# LLM Agent Params
+class LLMAgentParamsModel(AgentInstanceParamsModel):
     system_prompt: Optional[str] = None
     llm_model_name: Optional[str] = None
     image_model_name: Optional[str] = None
@@ -74,6 +68,8 @@ class LLMParamsModel(ParamsIOModel):
     assistant_name: Optional[str] = None
 
 
+
+# Communication Agent Params
 class SupervisionType(str, enum.Enum):
     FULL = "full"
     SELECTIVE = "selective"
@@ -94,7 +90,7 @@ class SupervisorCardModel(EmailCommunicatorCardModel):
     supervision_type: SupervisionType
 
 
-class CommunicatorAgentParamsModel(ParamsIOModel):
+class CommunicatorAgentParamsModel(AgentInstanceParamsModel):
     """
     Parameters for the email communicator tool.
     """

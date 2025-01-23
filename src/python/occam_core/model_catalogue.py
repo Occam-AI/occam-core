@@ -1,13 +1,15 @@
 from occam_core.agents.params import (CommunicatorAgentParamsModel,
-                                      LLMParamsModel,
-                                      OccamInterfaceAgentPermissionsModel)
-from occam_core.util.base_models import IOModel, ParamsIOModel
+                                      LLMAgentParamsModel,
+                                      OccamProvidedHumanAgentParamsModel,
+                                      UserProvidedHumanAgentParamsModel)
+from occam_core.util.base_models import IOModel
 
 # TODO: Auto-generate this by scanning the codebase.
 PARAMS_MODEL_CATALOGUE = {
-    LLMParamsModel.__name__: LLMParamsModel,
+    LLMAgentParamsModel.__name__: LLMAgentParamsModel,
     CommunicatorAgentParamsModel.__name__: CommunicatorAgentParamsModel,
-    OccamInterfaceAgentPermissionsModel.__name__: OccamInterfaceAgentPermissionsModel,
+    UserProvidedHumanAgentParamsModel.__name__: UserProvidedHumanAgentParamsModel,
+    OccamProvidedHumanAgentParamsModel.__name__: OccamProvidedHumanAgentParamsModel,
 }
 
 IO_MODEL_CATALOGUE = {
