@@ -104,3 +104,9 @@ class EmailCommunicatorAgentParamsModel(AgentInstanceParamsModel):
     goal: str
     email_communicator_card: EmailCommunicatorCardModel
     supervisor_card: SupervisorCardModel
+
+
+# Data Structuring Agent Params
+class DataStructuringAgentParamsModel(AgentInstanceParamsModel):
+    structuring_goal: str
+    structured_output_model: Optional[str] = None
