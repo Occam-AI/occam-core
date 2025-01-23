@@ -60,13 +60,11 @@ class OccamProvidedHumanAgentParamsModel(AgentInstanceParamsModel):
 
 
 # LLM Agent Params
-class LLMAgentParamsModel(AgentInstanceParamsModel):
+class DefinedLLMAgentParamsModel(AgentInstanceParamsModel):
     system_prompt: Optional[str] = None
-    llm_model_name: Optional[str] = None
     image_model_name: Optional[str] = None
     log_chat: Optional[bool] = None
     assistant_name: Optional[str] = None
-
 
 
 # Communication Agent Params
