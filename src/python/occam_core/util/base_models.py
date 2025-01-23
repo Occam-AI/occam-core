@@ -4,8 +4,7 @@
 import enum
 import types
 import typing
-import uuid
-from typing import List, Optional, Self, get_args, get_origin
+from typing import List, Optional, Self, TypeVar, get_args, get_origin
 
 from occam_core.util.data_types.occam import OccamDataType
 from pydantic import model_validator
@@ -120,39 +119,8 @@ class InputsModel(IOModel):
     ...
 
 
-class ReferenceDatasetsMode(str, enum.Enum):
-    NONE = "none"
-    WHITELIST = "whitelist"
-    EVERYTHING = "everything"
-
-
-class ParamsIOModel(IOModel):
-
-    datasets: Optional[List[str]] = None
-    reference_datasets_mode: ReferenceDatasetsMode = ReferenceDatasetsMode.NONE
-
-    concatenate_inputs: bool = False
-
-    # This is the max number of input records to run in parallel.
-    threaded_run_batch_size: int = 1
-
-    @model_validator(mode="after")
-    def validate_batch_size(self) -> Self:
-        if self.threaded_run_batch_size < 1:
-            raise ValueError("threaded_run_batch_size must be greater than 0.")
-        return self
-
-    # # allow param children to have a datasets field.
-    @model_validator(mode="after")
-    def validate_datasets(self) -> Self:
-        self.datasets = self.datasets or []
-        if self.reference_datasets_mode == ReferenceDatasetsMode.WHITELIST \
-                and len(self.datasets) == 0:
-            raise ValueError("datasets must be provided when reference_datasets_mode is WHITELIST.")
-        if self.reference_datasets_mode != ReferenceDatasetsMode.WHITELIST \
-                and len(self.datasets) > 0:
-            raise ValueError("white_list datasets must be empty when reference_datasets_mode is not WHITELIST.")
-        return self
+class AgentInstanceParamsModel(IOModel):
+    ...
 
 
 class AgentInstanceParamsModel(ParamsIOModel):
@@ -161,3 +129,9 @@ class AgentInstanceParamsModel(ParamsIOModel):
 
 class OutputsModel(IOModel):
     ...
+
+
+TAgentInstanceParamsModel = TypeVar(
+    "TAgentInstanceParamsModel",
+    bound=AgentInstanceParamsModel
+)
