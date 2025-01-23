@@ -123,6 +123,10 @@ class AgentInstanceParamsModel(IOModel):
     ...
 
 
+class AgentInstanceParamsModel(ParamsIOModel):
+    ...
+
+
 class OutputsModel(IOModel):
     ...
 
