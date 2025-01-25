@@ -27,7 +27,7 @@ class AgentIdentityCoreModel(BaseModel):
     """
 
     # name information.
-    name: str
+    key: str
     first_name: Optional[str] = None
     last_name: Optional[str] = None
 
