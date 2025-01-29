@@ -12,9 +12,9 @@ from pydantic import model_validator
 
 class IOModel(OccamDataType):
     # Number of the run that produced the dataset.
-    _batch_number: int = 1
+    batch_number: int = 1
     # Number of the attempt in the tool run that produced the dataset.
-    _attempt_number: int = 1
+    attempt_number: int = 1
 
     class Config:
         arbitrary_types_allowed = True
@@ -115,10 +115,10 @@ class IOModel(OccamDataType):
             f"No combine_models implementation for {cls.__name__}.")
 
     def set_batch_number(self, batch_number: int):
-        self._batch_number = batch_number
+        self.batch_number = batch_number
 
     def set_attempt_number(self, attempt_number: int):
-        self._attempt_number = attempt_number
+        self.attempt_number = attempt_number
 
 
 class InputsModel(IOModel):
