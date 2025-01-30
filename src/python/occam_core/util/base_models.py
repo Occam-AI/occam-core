@@ -12,11 +12,11 @@ from pydantic import model_validator
 
 class IOModel(OccamDataType):
     # Number of the run that produced the dataset.
-    batch_number: Optional[int] = None
+    batch_number: Optional[int] = 0
     # Number of the attempt in the tool run that produced the dataset.
-    attempt_number: Optional[int] = None
+    attempt_number: Optional[int] = 0
     # Index of the input record that produced the dataset.
-    originator_index: Optional[int] = None
+    originator_index: Optional[int] = 0
 
     class Config:
         arbitrary_types_allowed = True
