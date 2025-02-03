@@ -59,11 +59,6 @@ class LLMInputModel(IOModel):
     # llm expects either a single query or a list of chat messages
     query: Optional[str] = None
 
-    # reset chat messages means that if this rool has been running
-    # a chat prior ton this run call, we ignore all previous convos
-    # and only factor in the initial system prompt of the LLM.
-    reset_chat_messages: bool = False
-
     # role of the user providing the query or chat messages
     role: LLMRole = LLMRole.user
 
