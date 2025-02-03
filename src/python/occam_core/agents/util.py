@@ -1,6 +1,6 @@
 import enum
 import re
-from typing import Any, Optional, Type
+from typing import Any, Optional, Type, TypeVar
 
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, field_validator, model_validator
@@ -37,6 +37,13 @@ class OccamLLMMessage(BaseModel):
         v.name = format_llm_messenger_name(v.name)
         return v
 
+    class Config:
+        arbitrary_types_allowed = True
+        extra = "allow"
+
+
+IOccamLLMMessage = TypeVar("IOccamLLMMessage", bound=OccamLLMMessage)
+
 
 class LLMInputModel(IOModel):
     """
@@ -52,7 +59,7 @@ class LLMInputModel(IOModel):
     agent in a conversation, with the convo being the chat messages
     list.
     """
-    chat_messages: Optional[list[OccamLLMMessage]] = None
+    chat_messages: Optional[list[IOccamLLMMessage]] = None
 
     # intermediate prompt that can be used to guide interpretation
     # of the message to follow.
