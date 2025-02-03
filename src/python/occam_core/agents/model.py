@@ -1,7 +1,7 @@
 import inspect
 from enum import Enum
 from inspect import isabstract
-from typing import Any, Dict, List, Optional, Type
+from typing import Any, Dict, List, Optional, Type, TypeVar
 
 from occam_core.agents.util import LLMInputModel
 from occam_core.model_catalogue import PARAMS_MODEL_CATALOGUE
@@ -77,3 +77,6 @@ class AgentsCatalogueModel(BaseModel):
 
 class AgentIOModel(LLMInputModel):
     extra: Optional[Any] = None
+
+
+TAgentIOModel = TypeVar("TAgentIOModel", bound=AgentIOModel)
