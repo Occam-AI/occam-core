@@ -18,6 +18,7 @@ def format_llm_messenger_name(name: str):
 class LLMRole(str, enum.Enum):
     assistant = "assistant"
     system = "system"
+    developer = "developer"
     user = "user"
 
 
