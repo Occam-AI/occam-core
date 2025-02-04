@@ -29,7 +29,7 @@ class AgentIdentityCoreModel(BaseModel):
     # name information.
     key: str
     # some agents' name is based on key, for humans, it's first and last name.
-    name: str
+    # name: str
     first_name: Optional[str] = None
     last_name: Optional[str] = None
 
@@ -62,18 +62,6 @@ class AgentIdentityCoreModel(BaseModel):
             return self
         if self.instance_params_model_name not in PARAMS_MODEL_CATALOGUE:
             raise ValueError(f"agent {self.name}'s params model {self.instance_params_model_name} not found in params_model catalogue.")
-        return self
-
-
-class AgentsCatalogueModel(BaseModel):
-    agents: Dict[str, AgentIdentityCoreModel]
-
-    @model_validator(mode="after")
-    def validate_agents(self):
-        for agent_name, agent_model in self.agents.items():
-            agent_model: AgentIdentityCoreModel
-            if agent_name != agent_model.name:
-                raise ValueError(f"agent name {agent_name} doesn't match agent model name {agent_model.name}")
         return self
 
 
