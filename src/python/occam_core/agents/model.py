@@ -3,7 +3,7 @@ from enum import Enum
 from inspect import isabstract
 from typing import Any, Dict, List, Optional, Type, TypeVar
 
-from occam_core.agents.util import LLMInputModel
+from occam_core.agents.util import LLMInputModel, OccamLLMMessage
 from occam_core.model_catalogue import PARAMS_MODEL_CATALOGUE
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, model_validator
@@ -79,6 +79,10 @@ class AgentsCatalogueModel(BaseModel):
 
 class AgentIOModel(LLMInputModel):
     extra: Optional[Any] = None
+
+    @property
+    def last_message(self) -> OccamLLMMessage:
+        return self.chat_messages[-1]
 
 
 TAgentIOModel = TypeVar("TAgentIOModel", bound=AgentIOModel)
