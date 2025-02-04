@@ -29,7 +29,7 @@ class AgentIdentityCoreModel(BaseModel):
     # name information.
     key: str
     # some agents' name is based on key, for humans, it's first and last name.
-    # name: str
+    name: str
     first_name: Optional[str] = None
     last_name: Optional[str] = None
 
