@@ -10,10 +10,10 @@ from pydantic import BaseModel, model_validator
 
 
 class AgentType(str, Enum):
-    OCCAM_AGENT = "Occam AI Agent"
-    BOT_USER = "Browser Based AI Agent"
-    HUMAN_USER = "Human"
-    EXTERNAL_WORKER = "EXTERNAL_WORKER"
+    Occam_AI_Agent = "Occam_AI_Agent"
+    Browser_Based_AI_Agent = "Browser_Based_AI_Agent"
+    Human = "Human"
+    External_Worker = "External_Worker"
 
 
 class AgentRole(str, Enum):
