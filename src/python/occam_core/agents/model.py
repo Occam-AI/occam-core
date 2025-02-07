@@ -33,18 +33,19 @@ class AgentIdentityCoreModel(BaseModel):
     first_name: Optional[str] = None
     last_name: Optional[str] = None
 
-    # agent type and role.
-    type: AgentType
-    role: AgentRole
-
-    # agent descriptors
-    role_embedding_vector: Optional[List[float]] = None
-    short_role_description: Optional[str] = None
-    long_role_description: Optional[str] = None
-
     # agent contact information
     email: Optional[str] = None
     slack_handle: Optional[str] = None
+
+    # agent properties
+    type: AgentType
+    role: AgentRole
+    role_embedding_vector: Optional[List[float]] = None
+    short_description: Optional[str] = None
+    long_description: Optional[str] = None
+    price_per_token: Optional[float] = None
+    price_per_run: Optional[float] = None
+    is_bot: bool = True
 
     # for loading the params model
     # needed for instantiating the agent with.
@@ -52,12 +53,7 @@ class AgentIdentityCoreModel(BaseModel):
 
     @model_validator(mode="after")
     def validate_params_model_name(self):
-        # NOTE: @Medhat I added this type check because the validator was wrong.
-        # It runs when AgentIdentityModels are instantiated (not just AgentIdentityCoreModels),
-        # and the param_model_name for those is not (and will not be) in PARAMS_MODEL_CATALOGUE.
-        # For now I added this check to skip validation if self is not an AgentIdentityCoreModel.
-        # FIXME: Remove this if and skip condition once all params models saved in DB are present
-        # in PARAMS_MODEL_CATALOGUE.
+        # FIXME: remove this once PARAMS_MODEL_CATALOGUE is also auto-generated.
         if type(self) != AgentIdentityCoreModel:
             return self
         if self.instance_params_model_name not in PARAMS_MODEL_CATALOGUE:
