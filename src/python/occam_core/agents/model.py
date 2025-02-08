@@ -44,7 +44,8 @@ class AgentIdentityCoreModel(BaseModel):
     role_embedding_vector: Optional[List[float]] = None
     short_description: Optional[str] = None
     long_description: Optional[str] = None
-    price_per_token: Optional[float] = None
+    price_per_input_token: Optional[float] = None
+    price_per_output_token: Optional[float] = None
     price_per_run: Optional[float] = None
     is_bot: bool = True
 
