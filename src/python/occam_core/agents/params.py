@@ -131,6 +131,6 @@ PARAMS_MODEL_CATALOGUE = {
     EmailCommunicatorAgentParamsModel.__name__: EmailCommunicatorAgentParamsModel,
     LLMAgentParamsModel.__name__: LLMAgentParamsModel,
     UserProvidedHumanAgentParamsModel.__name__: UserProvidedHumanAgentParamsModel,
-    OccamProvidedHumanAgentParamsModel.__name__: OccamProvidedHumanAgentParamsModel,
+    OccamProvidedUserAgentParamsModel.__name__: OccamProvidedUserAgentParamsModel,
     DefinedLLMAgentParamsModel.__name__: DefinedLLMAgentParamsModel,
 }
