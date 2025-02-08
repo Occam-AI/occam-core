@@ -42,7 +42,7 @@ class UserProvidedHumanAgentParamsModel(AgentInstanceParamsModel):
 
 
 # Occam Provided Human Agent Params
-class OccamProvidedHumanAgentParamsModel(AgentInstanceParamsModel):
+class OccamProvidedUserAgentParamsModel(AgentInstanceParamsModel):
     """
     This is for occam provided interface agents for which we
     have contact information and only need to know their designated
@@ -122,3 +122,15 @@ class AgentsChatParamsModel(AgentInstanceParamsModel):
     agents: Dict[str, TAgentInstanceParamsModel]
     # 3. Chat session id, this allows merging multiple distinct chat runs together.
     session_id: Optional[str] = None
+
+
+# TODO: Auto-generate this by scanning the codebase.
+PARAMS_MODEL_CATALOGUE = {
+    AgentsChatParamsModel.__name__: AgentsChatParamsModel,
+    DataStructuringAgentParamsModel.__name__: DataStructuringAgentParamsModel,
+    EmailCommunicatorAgentParamsModel.__name__: EmailCommunicatorAgentParamsModel,
+    LLMAgentParamsModel.__name__: LLMAgentParamsModel,
+    UserProvidedHumanAgentParamsModel.__name__: UserProvidedHumanAgentParamsModel,
+    OccamProvidedHumanAgentParamsModel.__name__: OccamProvidedHumanAgentParamsModel,
+    DefinedLLMAgentParamsModel.__name__: DefinedLLMAgentParamsModel,
+}

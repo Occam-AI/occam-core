@@ -3,8 +3,8 @@ from enum import Enum
 from inspect import isabstract
 from typing import Any, Dict, List, Optional, Type, TypeVar
 
+from occam_core.agents.params import PARAMS_MODEL_CATALOGUE
 from occam_core.agents.util import LLMInputModel, OccamLLMMessage
-from occam_core.model_catalogue import PARAMS_MODEL_CATALOGUE
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, model_validator
 
@@ -55,9 +55,6 @@ class AgentIdentityCoreModel(BaseModel):
 
     @model_validator(mode="after")
     def validate_params_model_name(self):
-        # FIXME: remove this once PARAMS_MODEL_CATALOGUE is also auto-generated.
-        if type(self) != AgentIdentityCoreModel:
-            return self
         if self.instance_params_model_name not in PARAMS_MODEL_CATALOGUE:
             raise ValueError(f"agent {self.name}'s params model {self.instance_params_model_name} not found in params_model catalogue.")
         return self
