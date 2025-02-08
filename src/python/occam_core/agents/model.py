@@ -46,7 +46,7 @@ class AgentIdentityCoreModel(BaseModel):
     long_description: Optional[str] = None
     price_per_input_token: Optional[float] = None
     price_per_output_token: Optional[float] = None
-    price_per_run: Optional[float] = None
+    price_per_response: Optional[float] = None
     is_bot: bool = True
 
     # for loading the params model
