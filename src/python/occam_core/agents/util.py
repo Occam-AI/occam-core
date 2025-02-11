@@ -12,7 +12,9 @@ def remove_extra_spaces(original_text):
 
 def format_llm_messenger_name(name: str):
     if name:
-        return name.replace(" ", "")
+        name = remove_extra_spaces(name)
+        pat = r'[^a-zA-Z0-9_-]'
+        return re.sub(pat, '', name)
 
 
 class LLMRole(str, enum.Enum):
