@@ -82,7 +82,11 @@ class LLMIOModel(IOModel):
 
     @field_validator('query', 'prompt', mode="before")
     @classmethod
-    def transform(cls, raw: str) -> tuple[int, int]:
+    def transform(cls, raw: str):
+        if raw is None:
+            return raw
         if isinstance(raw, str):
             raw = remove_extra_spaces(raw)
+            pat = r'[^a-zA-Z0-9_-]'
+            raw = re.sub(pat, '', raw)
         return raw
