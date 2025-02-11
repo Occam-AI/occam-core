@@ -4,7 +4,7 @@ from inspect import isabstract
 from typing import Any, Dict, List, Optional, Type, TypeVar
 
 from occam_core.agents.params import PARAMS_MODEL_CATALOGUE
-from occam_core.agents.util import LLMInputModel, OccamLLMMessage
+from occam_core.agents.util import LLMIOModel, OccamLLMMessage
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, model_validator
 
@@ -60,7 +60,7 @@ class AgentIdentityCoreModel(BaseModel):
         return self
 
 
-class AgentIOModel(LLMInputModel):
+class AgentIOModel(LLMIOModel):
     extra: Optional[Any] = None
 
     @property

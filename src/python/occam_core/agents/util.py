@@ -45,7 +45,7 @@ class OccamLLMMessage(BaseModel):
 IOccamLLMMessage = TypeVar("IOccamLLMMessage", bound=OccamLLMMessage)
 
 
-class LLMInputModel(IOModel):
+class LLMIOModel(IOModel):
     """
     Input model for LLM tools.
 
@@ -76,11 +76,8 @@ class LLMInputModel(IOModel):
     # file paths to be used for vision models
     file_paths: Optional[list[str]] = None
 
-    # we dont' save as TypeVar IBaseModel as it can't be loaded back and beaks validation
-    # as a result.
-    # ASSUMPTION: response format is ONLY provided through a direct instasntiation
-    # inside composite tools i.e. LLMInputModel(response_format=)
-    # NOTE model_validate_json, as we won't know how to load it.
+    # we dont' save as TypeVar IBaseModel as it can't be
+    # loaded back and beaks validation as a result.
     response_format: Optional[Any] = None
 
     @field_validator('query', 'prompt', mode="before")
