@@ -53,12 +53,6 @@ class AgentIdentityCoreModel(BaseModel):
     # needed for instantiating the agent with.
     instance_params_model_name: str
 
-    @model_validator(mode="after")
-    def validate_params_model_name(self):
-        if self.instance_params_model_name not in PARAMS_MODEL_CATALOGUE:
-            raise ValueError(f"agent {self.name}'s params model {self.instance_params_model_name} not found in params_model catalogue.")
-        return self
-
 
 class AgentIOModel(LLMIOModel):
     extra: Optional[Any] = None
