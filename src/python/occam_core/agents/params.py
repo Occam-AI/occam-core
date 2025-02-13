@@ -98,6 +98,10 @@ class InvitedUserAgentParamsModel(AgentInstanceParamsModel):
     chat_permission: ChatPermissions = ChatPermissions.ANY
 
 
+class SummarizerAgentParamsModel(AgentInstanceParamsModel):
+    pass
+
+
 PARAMS_MODEL_CATALOGUE: Dict[str, Type[AgentInstanceParamsModel]] = {
     DefinedLLMAgentParamsModel.__name__: DefinedLLMAgentParamsModel,
     OccamProvidedUserAgentParamsModel.__name__: OccamProvidedUserAgentParamsModel,
@@ -106,4 +110,5 @@ PARAMS_MODEL_CATALOGUE: Dict[str, Type[AgentInstanceParamsModel]] = {
     EmailCommunicatorAgentParamsModel.__name__: EmailCommunicatorAgentParamsModel,
     AgentsChatParamsModel.__name__: AgentsChatParamsModel,
     InvitedUserAgentParamsModel.__name__: InvitedUserAgentParamsModel,
+    SummarizerAgentParamsModel.__name__: SummarizerAgentParamsModel,
 }
