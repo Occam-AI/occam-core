@@ -131,7 +131,7 @@ class InputsModel(IOModel):
 
 
 class AgentInstanceParamsModel(IOModel):
-    ...
+    budget_limit: Optional[float] = None
 
 
 class OutputsModel(IOModel):
