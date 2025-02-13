@@ -80,7 +80,6 @@ class EmailCommunicatorAgentParamsModel(AgentInstanceParamsModel):
 
 
 class AgentsChatParamsModel(AgentInstanceParamsModel):
-    dollar_budget: float
     chat_goal: Optional[str] = None
     agent_selection_rule: ChatSelectionRule = ChatSelectionRule.ROUND_ROBIN
     agents: Optional[dict[str, TAgentInstanceParamsModel]] = None

@@ -131,7 +131,10 @@ class InputsModel(IOModel):
 
 
 class AgentInstanceParamsModel(IOModel):
-    budget_limit: Optional[float] = None
+    # if unspecified, assumption is that budget is uncapped.
+    # exception is when parametrizing agents that are part of chat
+    # the budget is capped by the overall chat.
+    dollar_budget: Optional[float] = None
 
 
 class OutputsModel(IOModel):
