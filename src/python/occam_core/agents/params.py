@@ -43,6 +43,14 @@ class SupervisorCardModel(BaseModel):
 
 
 
+class AgentChatCreatorParamsModel(AgentInstanceParamsModel):
+    agents: Optional[dict[str, TAgentInstanceParamsModel]] = None
+    agent_turn_order: Optional[list[str]] = None
+    session_id: Optional[str] = None
+    max_chat_steps: int = 1000
+    chat_manager_name: str = "Occam Chat Assistant"
+
+
 class DefinedLLMAgentParamsModel(AgentInstanceParamsModel):
     system_prompt: Optional[str] = None
     log_chat: Optional[bool] = None
@@ -80,13 +88,18 @@ class EmailCommunicatorAgentParamsModel(AgentInstanceParamsModel):
 
 
 class AgentsChatParamsModel(AgentInstanceParamsModel):
-    chat_goal: Optional[str] = None
+    chat_goal: str = "Let's talk about all things that are good and lighthearted in the world."
     agent_selection_rule: ChatSelectionRule = ChatSelectionRule.ROUND_ROBIN
     agents: Optional[dict[str, TAgentInstanceParamsModel]] = None
     agent_turn_order: Optional[list[str]] = None
     session_id: Optional[str] = None
     max_chat_steps: int = 1000
     chat_manager_name: str = "Occam Chat Assistant"
+
+
+class SummarizerAgentParamsModel(AgentInstanceParamsModel):
+    summary_length: int = 30
+    custom_prompt: Optional[str] = None
 
 
 class InvitedUserAgentParamsModel(AgentInstanceParamsModel):
@@ -97,17 +110,14 @@ class InvitedUserAgentParamsModel(AgentInstanceParamsModel):
     chat_permission: ChatPermissions = ChatPermissions.ANY
 
 
-class SummarizerAgentParamsModel(AgentInstanceParamsModel):
-    pass
-
-
 PARAMS_MODEL_CATALOGUE: Dict[str, Type[AgentInstanceParamsModel]] = {
+    AgentChatCreatorParamsModel.__name__: AgentChatCreatorParamsModel,
     DefinedLLMAgentParamsModel.__name__: DefinedLLMAgentParamsModel,
     OccamProvidedUserAgentParamsModel.__name__: OccamProvidedUserAgentParamsModel,
     LLMAgentParamsModel.__name__: LLMAgentParamsModel,
     DataStructuringAgentParamsModel.__name__: DataStructuringAgentParamsModel,
     EmailCommunicatorAgentParamsModel.__name__: EmailCommunicatorAgentParamsModel,
     AgentsChatParamsModel.__name__: AgentsChatParamsModel,
-    InvitedUserAgentParamsModel.__name__: InvitedUserAgentParamsModel,
     SummarizerAgentParamsModel.__name__: SummarizerAgentParamsModel,
+    InvitedUserAgentParamsModel.__name__: InvitedUserAgentParamsModel,
 }
