@@ -1,5 +1,6 @@
 from enum import Enum
-from typing import Any, Dict, List, Optional, Type
+from types import NoneType
+from typing import Any, Dict, List, Optional, Type, Union
 
 from occam_core.util.base_models import (AgentInstanceParamsModel,
                                          TAgentInstanceParamsModel)
@@ -44,7 +45,7 @@ class SupervisorCardModel(BaseModel):
 
 
 class AgentChatCreatorParamsModel(AgentInstanceParamsModel):
-    agents: Optional[dict[str, TAgentInstanceParamsModel]] = None
+    agents: Optional[dict[str, Union[TAgentInstanceParamsModel, NoneType]]] = None
     agent_turn_order: Optional[list[str]] = None
     session_id: Optional[str] = None
     max_chat_steps: int = 1000
@@ -90,7 +91,7 @@ class EmailCommunicatorAgentParamsModel(AgentInstanceParamsModel):
 class AgentsChatParamsModel(AgentInstanceParamsModel):
     chat_goal: str = "Let's talk about all things that are good and lighthearted in the world."
     agent_selection_rule: ChatSelectionRule = ChatSelectionRule.ROUND_ROBIN
-    agents: Optional[dict[str, TAgentInstanceParamsModel]] = None
+    agents: Optional[dict[str, Union[TAgentInstanceParamsModel, NoneType]]] = None
     agent_turn_order: Optional[list[str]] = None
     session_id: Optional[str] = None
     max_chat_steps: int = 1000
