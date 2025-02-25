@@ -88,7 +88,7 @@ class EmailCommunicatorAgentParamsModel(AgentInstanceParamsModel):
     supervisor_card: SupervisorCardModel
 
 
-class AgentsChatParamsModel(AgentInstanceParamsModel):
+class MultiAgentWorkspaceParamsModel(AgentInstanceParamsModel):
     chat_goal: str = "Let's talk about all things that are good and lighthearted in the world."
     agent_selection_rule: ChatSelectionRule = ChatSelectionRule.ROUND_ROBIN
     agents: Optional[dict[str, Union[TAgentInstanceParamsModel, NoneType]]] = None
@@ -118,7 +118,7 @@ PARAMS_MODEL_CATALOGUE: Dict[str, Type[AgentInstanceParamsModel]] = {
     LLMAgentParamsModel.__name__: LLMAgentParamsModel,
     DataStructuringAgentParamsModel.__name__: DataStructuringAgentParamsModel,
     EmailCommunicatorAgentParamsModel.__name__: EmailCommunicatorAgentParamsModel,
-    AgentsChatParamsModel.__name__: AgentsChatParamsModel,
+    MultiAgentWorkspaceParamsModel.__name__: MultiAgentWorkspaceParamsModel,
     SummarizerAgentParamsModel.__name__: SummarizerAgentParamsModel,
     InvitedUserAgentParamsModel.__name__: InvitedUserAgentParamsModel,
 }
