@@ -10,7 +10,8 @@ from pydantic import BaseModel, Field
 
 
 class ChatPermissions(str, Enum):
-    ANY = "any"
+    WRITE = "write"
+    END_CHAT = "end_chat"
 
 
 class SupervisionType(str, Enum):
@@ -63,7 +64,7 @@ class DefinedLLMAgentParamsModel(AgentInstanceParamsModel):
 
 class OccamProvidedUserAgentParamsModel(AgentInstanceParamsModel):
     session_id: Optional[str] = None
-    chat_permission: ChatPermissions = ChatPermissions.ANY
+    chat_permission: List[ChatPermissions] = [ChatPermissions.WRITE]
 
 
 class LLMAgentParamsModel(AgentInstanceParamsModel):
@@ -108,7 +109,7 @@ class InvitedUserAgentParamsModel(AgentInstanceParamsModel):
     first_name: str
     last_name: Optional[str] = None
     session_id: Optional[str] = None
-    chat_permission: ChatPermissions = ChatPermissions.ANY
+    chat_permission: List[ChatPermissions] = [ChatPermissions.WRITE]
 
 
 PARAMS_MODEL_CATALOGUE: Dict[str, Type[AgentInstanceParamsModel]] = {
