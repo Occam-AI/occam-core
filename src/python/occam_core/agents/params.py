@@ -10,6 +10,7 @@ from pydantic import BaseModel, Field
 
 
 class ChatPermissions(str, Enum):
+    ALL = "all"
     WRITE = "write"
     END_CHAT = "end_chat"
 
