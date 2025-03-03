@@ -5,7 +5,7 @@ from typing import Optional, Union
 from occam_core.agents.model import AgentIOModel
 from pydantic import BaseModel
 
-from python.occam_core.enums import AgentRunStatus
+from occam_core.enums import AgentRunStatus
 
 
 class AgentInstanceMetadata(BaseModel):
