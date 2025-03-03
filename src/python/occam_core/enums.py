@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ToolRunStatus(Enum):
+class ToolRunStatus(str, Enum):
     PENDING = "pending"
     RUNNING = "running"
     PAUSED = "paused"
