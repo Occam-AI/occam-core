@@ -18,14 +18,16 @@ class AgentHandlingErrorType(Enum):
     OTHER = "OTHER"
     # add errors for pausing, resumign and terminating.
 
-
-class AgentRunStatus(Enum):
+class ToolRunStatus(Enum):
     PENDING = "pending"
     RUNNING = "running"
     PAUSED = "paused"
     COMPLETED = "completed"
     FAILED = "failed"
     TERMINATED = "terminated"
+
+
+AgentRunStatus = ToolRunStatus
 
 
 class AgentHandlingError(BaseModel):
