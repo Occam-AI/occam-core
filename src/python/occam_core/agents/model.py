@@ -46,7 +46,7 @@ class AgentIdentityCoreModel(BaseModel):
     long_description: Optional[str] = None
     price_per_input_token: Optional[float] = None
     price_per_output_token: Optional[float] = None
-    price_per_response: Optional[float] = None
+    price_per_hour: Optional[float] = None
     minimum_charge: Optional[float] = None
     maximum_concurrent_runs: Optional[int] = None
     active_runs: int = 0
