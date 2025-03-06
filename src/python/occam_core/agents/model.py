@@ -48,6 +48,8 @@ class AgentIdentityCoreModel(BaseModel):
     price_per_output_token: Optional[float] = None
     price_per_hour: Optional[float] = None
     minimum_charge: Optional[float] = None
+    maximum_concurrent_runs: Optional[int] = None
+    active_runs: int = 0
     is_bot: bool = True
 
     # for loading the params model
