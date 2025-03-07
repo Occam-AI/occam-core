@@ -5,6 +5,8 @@ from typing import Optional, Union
 from occam_core.agents.model import AgentIOModel
 from pydantic import BaseModel
 
+from occam_core.enums import AgentRunStatus
+
 
 class AgentInstanceMetadata(BaseModel):
     agent_instance_id: str
@@ -17,15 +19,6 @@ class AgentHandlingErrorType(Enum):
     INVALID_AGENT_INSTANCE_ID = "INVALID_AGENT_INSTANCE_ID"
     OTHER = "OTHER"
     # add errors for pausing, resumign and terminating.
-
-
-class AgentRunStatus(Enum):
-    PENDING = "pending"
-    RUNNING = "running"
-    PAUSED = "paused"
-    COMPLETED = "completed"
-    FAILED = "failed"
-    TERMINATED = "terminated"
 
 
 class AgentHandlingError(BaseModel):
