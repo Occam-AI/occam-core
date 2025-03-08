@@ -59,10 +59,16 @@ class AgentIdentityCoreModel(BaseModel):
 
 class AgentIOModel(LLMIOModel):
     extra: Optional[Any] = None
-
+    _text: Optional[str] = None
     @property
     def last_message(self) -> OccamLLMMessage:
         return self.chat_messages[-1]
+
+    @property
+    def text(self) -> str:
+        if not self._text:
+            self._text = '\n'.join([message.content for message in self.chat_messages])
+        return self._text
 
 
 TAgentIOModel = TypeVar("TAgentIOModel", bound=AgentIOModel)
