@@ -1,9 +1,9 @@
 import enum
 import re
-from typing import Any, Optional, Type, TypeVar
+from typing import Any, List, Optional, Type, TypeVar
 
 from occam_core.util.base_models import IOModel
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 def remove_extra_spaces(original_text):
@@ -33,6 +33,8 @@ class OccamLLMMessage(BaseModel):
     # from the DB as we don't know what the model is.
     # even if we store it as IBaseModel, we have the same issue.
     parsed: Optional[Any] = None
+
+    tagged_agents: List[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def format_messenger_name(cls, v):

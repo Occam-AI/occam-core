@@ -60,7 +60,6 @@ class AgentIdentityCoreModel(BaseModel):
 class AgentIOModel(LLMIOModel):
     extra: Optional[Any] = None
     _text: Optional[str] = None
-    tagged_agents: List[str] = Field(default_factory=list)
 
     @property
     def last_message(self) -> OccamLLMMessage:
