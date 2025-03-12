@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional, Type, TypeVar
 from occam_core.agents.params import PARAMS_MODEL_CATALOGUE
 from occam_core.agents.util import LLMIOModel, OccamLLMMessage
 from occam_core.util.base_models import IOModel
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, Field, model_validator
 
 
 class AgentType(str, Enum):
@@ -60,7 +60,7 @@ class AgentIdentityCoreModel(BaseModel):
 class AgentIOModel(LLMIOModel):
     extra: Optional[Any] = None
     _text: Optional[str] = None
-    tagged_agents: Optional[List[str]] = None
+    tagged_agents: List[str] = Field(default_factory=list)
 
     @property
     def last_message(self) -> OccamLLMMessage:
