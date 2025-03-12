@@ -60,6 +60,8 @@ class AgentIdentityCoreModel(BaseModel):
 class AgentIOModel(LLMIOModel):
     extra: Optional[Any] = None
     _text: Optional[str] = None
+    tagged_agents: Optional[List[str]] = None
+
     @property
     def last_message(self) -> OccamLLMMessage:
         return self.chat_messages[-1]
