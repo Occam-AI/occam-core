@@ -29,21 +29,6 @@ class AgentRole(str, Enum):
     USER_AGENT = "USER_AGENT"
 
 
-AGENT_ROLE_DISPLAY_NAME_MAP = {
-    AgentRole.GENERAL: "General",
-    AgentRole.LANGUAGE_MODEL: "Language Model",
-    AgentRole.VISION_MODEL: "Vision Model",
-    AgentRole.DATA_MANIPULATION: "Data Manipulation",
-    AgentRole.COMMUNICATION: "Communication",
-    AgentRole.WEB_SEARCH: "Web Search",
-    AgentRole.ACCOUNTING_FINANCE: "Accounting & Finance",
-    AgentRole.HUMAN_RESOURCES: "Human Resources",
-    AgentRole.SCIENCE: "Science",
-    AgentRole.ANALYSIS: "Analysis",
-    AgentRole.USER_AGENT: "User Agent",
-}
-
-
 class AgentIdentityCoreModel(BaseModel):
     """
     This model enforces field requirements based on AgentType.
