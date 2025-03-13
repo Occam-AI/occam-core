@@ -15,11 +15,31 @@ class AgentType(str, Enum):
     Human = "Human"
     External_Worker = "External_Worker"
 
-
 class AgentRole(str, Enum):
-    GENERAL = "general"
-    LANGUAGE_MODEL = "language_model"
-    todo = "todo"
+    GENERAL = "GENERAL"
+    LANGUAGE_MODEL = "LANGUAGE_MODEL"
+    DATA_MANIPULATION = "DATA_MANIPULATION"
+    COMMUNICATION = "COMMUNICATION"
+    WEB_SEARCH = "WEB_SEARCH"
+    ACCOUNTING_FINANCE = "ACCOUNTING_FINANCE"
+    HUMAN_RESOURCES = "HUMAN_RESOURCES"
+    SCIENCE = "SCIENCE"
+    ANALYSIS = "ANALYSIS"
+    USER_AGENT = "USER_AGENT"
+
+
+AGENT_ROLE_DISPLAY_NAME_MAP = {
+    AgentRole.GENERAL: "General",
+    AgentRole.LANGUAGE_MODEL: "Language Model",
+    AgentRole.DATA_MANIPULATION: "Data Manipulation",
+    AgentRole.COMMUNICATION: "Communication",
+    AgentRole.WEB_SEARCH: "Web Search",
+    AgentRole.ACCOUNTING_FINANCE: "Accounting & Finance",
+    AgentRole.HUMAN_RESOURCES: "Human Resources",
+    AgentRole.SCIENCE: "Science",
+    AgentRole.ANALYSIS: "Analysis",
+    AgentRole.USER_AGENT: "User Agent",
+}
 
 
 class AgentIdentityCoreModel(BaseModel):
