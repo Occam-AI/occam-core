@@ -18,6 +18,7 @@ class AgentType(str, Enum):
 class AgentRole(str, Enum):
     GENERAL = "GENERAL"
     LANGUAGE_MODEL = "LANGUAGE_MODEL"
+    VISION_MODEL = "VISION_MODEL"
     DATA_MANIPULATION = "DATA_MANIPULATION"
     COMMUNICATION = "COMMUNICATION"
     WEB_SEARCH = "WEB_SEARCH"
@@ -31,6 +32,7 @@ class AgentRole(str, Enum):
 AGENT_ROLE_DISPLAY_NAME_MAP = {
     AgentRole.GENERAL: "General",
     AgentRole.LANGUAGE_MODEL: "Language Model",
+    AgentRole.VISION_MODEL: "Vision Model",
     AgentRole.DATA_MANIPULATION: "Data Manipulation",
     AgentRole.COMMUNICATION: "Communication",
     AgentRole.WEB_SEARCH: "Web Search",
