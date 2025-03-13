@@ -15,7 +15,8 @@ class AgentType(str, Enum):
     Human = "Human"
     External_Worker = "External_Worker"
 
-class AgentRole(str, Enum):
+
+class OccamCategory(str, Enum):
     GENERAL = "GENERAL"
     LANGUAGE_MODEL = "LANGUAGE_MODEL"
     VISION_MODEL = "VISION_MODEL"
@@ -27,6 +28,8 @@ class AgentRole(str, Enum):
     SCIENCE = "SCIENCE"
     ANALYSIS = "ANALYSIS"
     USER_AGENT = "USER_AGENT"
+    FILE_SYSTEM = "FILE_SYSTEM"
+    DATABASE = "DATABASE"
 
 
 class AgentIdentityCoreModel(BaseModel):
@@ -47,8 +50,8 @@ class AgentIdentityCoreModel(BaseModel):
 
     # agent properties
     type: AgentType
-    role: AgentRole
-    role_embedding_vector: Optional[List[float]] = None
+    category: OccamCategory
+    category_embedding_vector: Optional[List[float]] = None
     short_description: Optional[str] = None
     long_description: Optional[str] = None
     price_per_input_token: Optional[float] = None
