@@ -37,9 +37,11 @@ class OccamLLMMessage(BaseModel):
     tagged_agents: List[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def format_messenger_name(cls, v):
-        v.name = format_llm_messenger_name(v.name)
-        return v
+    def validate_messages(self):
+        self.name = format_llm_messenger_name(self.name)
+        if self.tagged_agents:
+            assert (len(self.tagged_agents) == len(set(self.tagged_agents))), "tagged_agents must must be unique."
+        return self
 
     class Config:
         arbitrary_types_allowed = True
