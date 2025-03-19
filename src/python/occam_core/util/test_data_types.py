@@ -1,6 +1,7 @@
 import abc
 import enum
 import unittest
+from types import NoneType
 from typing import Any, Dict, List, Optional, Self, Union
 
 from occam_core.util.data_types.occam import (OccamDataType,
@@ -523,30 +524,27 @@ class TestRecursiveValueConvert(unittest.TestCase):
 
 def test_recursive_type_hint_derivation():
     # Test 1: Simple primitives
-    print("=== Test 1: Simple Primitives ===")
     test_int = 42
     test_float = 3.14
     test_str = "hello"
     test_bool = True
 
-    print(f"int: {recursive_type_hint_derivation(test_int)}")
-    print(f"float: {recursive_type_hint_derivation(test_float)}")
-    print(f"str: {recursive_type_hint_derivation(test_str)}")
-    print(f"bool: {recursive_type_hint_derivation(test_bool)}")
-    print(f"None: {recursive_type_hint_derivation(None)}")
+    assert recursive_type_hint_derivation(test_int) == int
+    assert recursive_type_hint_derivation(test_float) == float
+    assert recursive_type_hint_derivation(test_str) == str
+    assert recursive_type_hint_derivation(test_bool) == bool
+    assert recursive_type_hint_derivation(None) == NoneType
 
     # Test 2: Homogeneous collections
-    print("\n=== Test 2: Homogeneous Collections ===")
     test_int_list = [1, 2, 3, 4, 5]
     test_str_list = ["a", "b", "c"]
     test_str_dict = {"a": "apple", "b": "banana", "c": "cherry"}
 
-    print(f"List[int]: {recursive_type_hint_derivation(test_int_list)}")
-    print(f"List[str]: {recursive_type_hint_derivation(test_str_list)}")
-    print(f"Dict[str, str]: {recursive_type_hint_derivation(test_str_dict)}")
+    assert recursive_type_hint_derivation(test_int_list) == List[int]
+    assert recursive_type_hint_derivation(test_str_list) == List[str]
+    assert recursive_type_hint_derivation(test_str_dict) == Dict[str, str]
 
     # Test 3: Heterogeneous collections
-    print("\n=== Test 3: Heterogeneous Collections ===")
     test_mixed_list = [1, "two", 3.0, True]
     test_mixed_dict = {
         "name": "John",
@@ -558,11 +556,10 @@ def test_recursive_type_hint_derivation():
     mixed_list_type = recursive_type_hint_derivation(test_mixed_list)
     mixed_dict_type = recursive_type_hint_derivation(test_mixed_dict)
 
-    print(f"Mixed list: {mixed_list_type}")
-    print(f"Mixed dict: {mixed_dict_type}")
+    assert mixed_list_type == List[Union[int, str, float, bool]]
+    assert mixed_dict_type == Dict[str, Union[str, int, bool, List[int]]]
 
     # Test 4: Nested structures
-    print("\n=== Test 4: Nested Structures ===")
     test_nested = {
         "users": [
             {
@@ -574,8 +571,6 @@ def test_recursive_type_hint_derivation():
             {
                 "name": "Bob",
                 "age": 30,
-                "hobbies": ["gaming", "cooking"],
-                "contact": {"email": "bob@example.com", "phone": "555-1234"}
             }
         ],
         "config": {
@@ -586,98 +581,37 @@ def test_recursive_type_hint_derivation():
     }
 
     nested_type = recursive_type_hint_derivation(test_nested)
-    print(f"Nested structure: {nested_type}")
+    assert nested_type == Dict[
+        str, 
+        Union[
+            List[Union[Dict[str, Union[str, int, List[str], Dict[str, Union[str, NoneType]]]],
+                       Dict[str, Union[str, int]]]],
+            Dict[str, Union[float, int, bool]]
+        ]
+    ]
 
     # Test 5: Edge cases
-    print("\n=== Test 5: Edge Cases ===")
     empty_list = []
     empty_dict = {}
     mixed_type_values = {"a": 1, "b": "string", "c": 3.14}
     mixed_type_keys = {1: "one", "two": 2, 3.0: "three"}
 
-    print(f"Empty list: {recursive_type_hint_derivation(empty_list)}")
-    print(f"Empty dict: {recursive_type_hint_derivation(empty_dict)}")
-    print(f"Dict with mixed values: {recursive_type_hint_derivation(mixed_type_values)}")
-    print(f"Dict with mixed keys: {recursive_type_hint_derivation(mixed_type_keys)}")
+    assert recursive_type_hint_derivation(empty_list) == List[Any]
+    assert recursive_type_hint_derivation(empty_dict) == Dict[Any, Any]
+    assert recursive_type_hint_derivation(mixed_type_values) == Dict[str, Union[int, str, float]]
+    assert recursive_type_hint_derivation(mixed_type_keys) == Dict[Union[int, float, str], Union[str, int]]
 
-    # Test 6: Very complex nested structure
-    print("\n=== Test 6: Very Complex Nested Structure ===")
+    # Test 6: Complex data with pydantic models
     complex_data = {
-        "metadata": {
-            "version": 3,
-            "generated_at": "2023-05-15",
-            "is_valid": True
-        },
-        "records": [
-            {
-                "id": 1,
-                "data": [1, 2, 3],
-                "tags": ["important", "urgent"],
-                "properties": {
-                    "visible": True,
-                    "priority": 5,
-                    "notes": None
-                }
-            },
-            {
-                "id": 2,
-                "data": [4.5, 6.7, 8.9],
-                "tags": ["normal"],
-                "properties": {
-                    "visible": False,
-                    "priority": 3,
-                    "notes": "Check this later"
-                }
-            }
-        ],
-        "statistics": {
-            "counts": [10, 20, 30],
-            "averages": [1.1, 2.2, 3.3],
-            "summary": {
-                "total": 60,
-                "mean": 20.0,
-                "valid": True
-            }
-        }
+        "metadaa": TestDataType(value="test"),
+        "x": 1,
+        "y": True
     }
 
     complex_type = recursive_type_hint_derivation(complex_data)
-    print(f"Complex nested structure: {complex_type}")
-
-    # Print more readable representation of the complex type
-    print("\nDetailed breakdown of complex structure type:")
-    _print_type_structure(complex_type)
-
-def _print_type_structure(type_hint, indent=0):
-    """Helper to print a more readable representation of complex type hints"""
-    prefix = "  " * indent
-
-    if hasattr(type_hint, "__origin__"):
-        origin = type_hint.__origin__
-        args = getattr(type_hint, "__args__", [])
-
-        if origin == list:
-            print(f"{prefix}List[")
-            _print_type_structure(args[0], indent+1)
-            print(f"{prefix}]")
-        elif origin == dict:
-            print(f"{prefix}Dict[")
-            print(f"{prefix}  Key: ", end="")
-            _print_type_structure(args[0], 0)
-            print(f"{prefix}  Value: ", end="")
-            _print_type_structure(args[1], 0)
-            print(f"{prefix}]")
-        elif origin == Union:
-            print(f"{prefix}Union[")
-            for arg in args:
-                print(f"{prefix}  ", end="")
-                _print_type_structure(arg, 0)
-            print(f"{prefix}]")
-        else:
-            print(f"{prefix}{type_hint}")
-    else:
-        print(f"{prefix}{type_hint}")
+    assert complex_type == Dict[str, Union[TestDataType, int, bool]]
 
 
 if __name__ == "__main__":
+
     unittest.main()
