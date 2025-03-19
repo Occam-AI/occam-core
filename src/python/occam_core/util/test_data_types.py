@@ -582,7 +582,7 @@ def test_recursive_type_hint_derivation():
 
     nested_type = recursive_type_hint_derivation(test_nested)
     assert nested_type == Dict[
-        str, 
+        str,
         Union[
             List[Union[Dict[str, Union[str, int, List[str], Dict[str, Union[str, NoneType]]]],
                        Dict[str, Union[str, int]]]],

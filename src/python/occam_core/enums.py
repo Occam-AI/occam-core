@@ -4,11 +4,11 @@ from enum import Enum
 class ToolRunStatus(str, Enum):
     """
     new
-    ALIVE: 
+    ALIVE:
     BATCH_COMPLETED:
     FAILED: we have batch number (with failure type)
     RUNNING: we have batch number (with )
-    PAUSED: 
+    PAUSED:
 
     run sub-statuses
     Big enum that overlaps across run statuses. Mainly relevant for failures and pauses.
@@ -31,7 +31,7 @@ class ToolRunStatus(str, Enum):
 
     User agent and multi-agent workspaces instantiation has some complexities in parameterisation:
     - Budget and other "meta" parameters.
-    - 
+    -
     """
     #These are states where the instance exists
     # but no run is active.
