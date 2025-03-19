@@ -237,3 +237,78 @@ def is_compatible_type(variable_type, spec_variable_type) -> bool:
         issubclass(variable_type, OccamDataType)
         and variable_type.emits(spec_variable_type)
     )
+
+
+def recursive_type_hint_derivation(data: Any) -> Type:
+    """
+    Recursively derives a type hint for a given value.
+
+    This function examines the structure of the provided value and constructs
+    an appropriate type hint based on its type and contents. It handles
+    primitive types, lists, dictionaries, and attempts to identify common
+    patterns for union types.
+
+    Important note: we assume that lists and dictionaries have single
+    key and value types, to avoid inefficient looping over every element.
+
+    Args:
+        data: The value to derive a type hint for
+
+    Returns:
+        A type hint that represents the structure of the input value
+    """
+    from typing import Dict, List, Union
+
+    from occam_core.util.data_types.occam import OccamDataType
+
+    # Handle None
+    if data is None:
+        return type(None)
+
+    if isinstance(data, OccamDataType):
+        return type(data)
+
+    # Handle primitive types
+    if isinstance(data, (int, float, str, bool)):
+        return type(data)
+
+    # Handle lists
+    if isinstance(data, list):
+        if not data:
+            return List[Any]  # Empty list, can't infer element type
+
+        # Get type hints for all elements
+        element_types = [recursive_type_hint_derivation(item) for item in data]
+
+        # If all elements have the same type, use that
+        if all(t == element_types[0] for t in element_types):
+            return List[element_types[0]]
+        else:
+            # Create a union of all possible element types
+            return List[Union[tuple(set(element_types))]]
+
+    # Handle dictionaries
+    if isinstance(data, dict):
+        if not data:
+            return Dict[Any, Any]  # Empty dict, can't infer key/value types
+
+        # Get type hints for all keys and values
+        key_types = [recursive_type_hint_derivation(k) for k in data.keys()]
+        value_types = [recursive_type_hint_derivation(v) for v in data.values()]
+
+        # If all keys have the same type and all values have the same type
+        if all(t == key_types[0] for t in key_types) and all(
+                t == value_types[0] for t in value_types):
+            return Dict[key_types[0], value_types[0]]
+        else:
+            # More complex case: different key or value types
+            key_type = key_types[0] if all(
+                t == key_types[0] for t in key_types) else Union[
+                    tuple(set(key_types))]
+            value_type = value_types[0] if all(
+                t == value_types[0] for t in value_types) else Union[
+                    tuple(set(value_types))]
+            return Dict[key_type, value_type]
+
+    # For other complex objects, just return their type
+    return type(data)

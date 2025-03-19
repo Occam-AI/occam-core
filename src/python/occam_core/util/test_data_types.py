@@ -1,12 +1,13 @@
 import abc
 import enum
 import unittest
-from typing import Any, Dict, List, Optional, Self
+from typing import Any, Dict, List, Optional, Self, Union
 
 from occam_core.util.data_types.occam import (OccamDataType,
                                               recursive_type_check,
                                               recursive_value_type_check)
 from occam_core.util.data_types.util import (is_compatible_type,
+                                             recursive_type_hint_derivation,
                                              recursive_value_convert)
 
 
@@ -518,6 +519,164 @@ class TestRecursiveValueConvert(unittest.TestCase):
             ),
             TargetStringMain(sub=TargetStringSub(sub_content="1"))
         )
+
+
+def test_recursive_type_hint_derivation():
+    # Test 1: Simple primitives
+    print("=== Test 1: Simple Primitives ===")
+    test_int = 42
+    test_float = 3.14
+    test_str = "hello"
+    test_bool = True
+
+    print(f"int: {recursive_type_hint_derivation(test_int)}")
+    print(f"float: {recursive_type_hint_derivation(test_float)}")
+    print(f"str: {recursive_type_hint_derivation(test_str)}")
+    print(f"bool: {recursive_type_hint_derivation(test_bool)}")
+    print(f"None: {recursive_type_hint_derivation(None)}")
+
+    # Test 2: Homogeneous collections
+    print("\n=== Test 2: Homogeneous Collections ===")
+    test_int_list = [1, 2, 3, 4, 5]
+    test_str_list = ["a", "b", "c"]
+    test_str_dict = {"a": "apple", "b": "banana", "c": "cherry"}
+
+    print(f"List[int]: {recursive_type_hint_derivation(test_int_list)}")
+    print(f"List[str]: {recursive_type_hint_derivation(test_str_list)}")
+    print(f"Dict[str, str]: {recursive_type_hint_derivation(test_str_dict)}")
+
+    # Test 3: Heterogeneous collections
+    print("\n=== Test 3: Heterogeneous Collections ===")
+    test_mixed_list = [1, "two", 3.0, True]
+    test_mixed_dict = {
+        "name": "John",
+        "age": 30,
+        "is_active": True,
+        "scores": [95, 87, 92]
+    }
+
+    mixed_list_type = recursive_type_hint_derivation(test_mixed_list)
+    mixed_dict_type = recursive_type_hint_derivation(test_mixed_dict)
+
+    print(f"Mixed list: {mixed_list_type}")
+    print(f"Mixed dict: {mixed_dict_type}")
+
+    # Test 4: Nested structures
+    print("\n=== Test 4: Nested Structures ===")
+    test_nested = {
+        "users": [
+            {
+                "name": "Alice",
+                "age": 25,
+                "hobbies": ["reading", "hiking"],
+                "contact": {"email": "alice@example.com", "phone": None}
+            },
+            {
+                "name": "Bob",
+                "age": 30,
+                "hobbies": ["gaming", "cooking"],
+                "contact": {"email": "bob@example.com", "phone": "555-1234"}
+            }
+        ],
+        "config": {
+            "max_users": 10,
+            "features_enabled": True,
+            "version": 2.1
+        }
+    }
+
+    nested_type = recursive_type_hint_derivation(test_nested)
+    print(f"Nested structure: {nested_type}")
+
+    # Test 5: Edge cases
+    print("\n=== Test 5: Edge Cases ===")
+    empty_list = []
+    empty_dict = {}
+    mixed_type_values = {"a": 1, "b": "string", "c": 3.14}
+    mixed_type_keys = {1: "one", "two": 2, 3.0: "three"}
+
+    print(f"Empty list: {recursive_type_hint_derivation(empty_list)}")
+    print(f"Empty dict: {recursive_type_hint_derivation(empty_dict)}")
+    print(f"Dict with mixed values: {recursive_type_hint_derivation(mixed_type_values)}")
+    print(f"Dict with mixed keys: {recursive_type_hint_derivation(mixed_type_keys)}")
+
+    # Test 6: Very complex nested structure
+    print("\n=== Test 6: Very Complex Nested Structure ===")
+    complex_data = {
+        "metadata": {
+            "version": 3,
+            "generated_at": "2023-05-15",
+            "is_valid": True
+        },
+        "records": [
+            {
+                "id": 1,
+                "data": [1, 2, 3],
+                "tags": ["important", "urgent"],
+                "properties": {
+                    "visible": True,
+                    "priority": 5,
+                    "notes": None
+                }
+            },
+            {
+                "id": 2,
+                "data": [4.5, 6.7, 8.9],
+                "tags": ["normal"],
+                "properties": {
+                    "visible": False,
+                    "priority": 3,
+                    "notes": "Check this later"
+                }
+            }
+        ],
+        "statistics": {
+            "counts": [10, 20, 30],
+            "averages": [1.1, 2.2, 3.3],
+            "summary": {
+                "total": 60,
+                "mean": 20.0,
+                "valid": True
+            }
+        }
+    }
+
+    complex_type = recursive_type_hint_derivation(complex_data)
+    print(f"Complex nested structure: {complex_type}")
+
+    # Print more readable representation of the complex type
+    print("\nDetailed breakdown of complex structure type:")
+    _print_type_structure(complex_type)
+
+def _print_type_structure(type_hint, indent=0):
+    """Helper to print a more readable representation of complex type hints"""
+    prefix = "  " * indent
+
+    if hasattr(type_hint, "__origin__"):
+        origin = type_hint.__origin__
+        args = getattr(type_hint, "__args__", [])
+
+        if origin == list:
+            print(f"{prefix}List[")
+            _print_type_structure(args[0], indent+1)
+            print(f"{prefix}]")
+        elif origin == dict:
+            print(f"{prefix}Dict[")
+            print(f"{prefix}  Key: ", end="")
+            _print_type_structure(args[0], 0)
+            print(f"{prefix}  Value: ", end="")
+            _print_type_structure(args[1], 0)
+            print(f"{prefix}]")
+        elif origin == Union:
+            print(f"{prefix}Union[")
+            for arg in args:
+                print(f"{prefix}  ", end="")
+                _print_type_structure(arg, 0)
+            print(f"{prefix}]")
+        else:
+            print(f"{prefix}{type_hint}")
+    else:
+        print(f"{prefix}{type_hint}")
 
 
 if __name__ == "__main__":

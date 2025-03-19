@@ -3,9 +3,8 @@ from enum import Enum
 from typing import Optional, Union
 
 from occam_core.agents.model import AgentIOModel
-from pydantic import BaseModel
-
 from occam_core.enums import AgentRunStatus
+from pydantic import BaseModel
 
 
 class AgentInstanceMetadata(BaseModel):

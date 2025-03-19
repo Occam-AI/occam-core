@@ -33,10 +33,16 @@ class ToolRunStatus(str, Enum):
     - Budget and other "meta" parameters.
     - 
     """
+    #These are states where the instance exists
+    # but no run is active.
     ALIVE = "ALIVE"
-    RUNNING = "RUNNING"
-    PAUSED = "PAUSED"
     BATCH_COMPLETED = "BATCH_COMPLETED"
+
+    # This is when a run is active.
+    RUNNING = "RUNNING"
+
+    #These are states that we can resume from 
+    PAUSED = "PAUSED"
     FAILED = "FAILED"
 
 
