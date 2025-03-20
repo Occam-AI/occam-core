@@ -51,7 +51,7 @@ class AgentIdentityCoreModel(BaseModel):
     # agent properties
     type: AgentType
     category: OccamCategory
-    category_embedding_vector: Optional[List[float]] = None
+    agent_embedding_vector: Optional[List[float]] = None
     short_description: Optional[str] = None
     long_description: Optional[str] = None
     price_per_input_token: Optional[float] = None
