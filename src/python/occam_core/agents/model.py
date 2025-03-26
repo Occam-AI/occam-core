@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional, Type, TypeVar
 
 from occam_core.agents.params import PARAMS_MODEL_CATALOGUE
 from occam_core.agents.util import LLMIOModel, OccamLLMMessage
-from occam_core.util.base_models import IOModel
+from occam_core.util.base_models import AgentInstanceParamsModel
 from pydantic import BaseModel, Field, model_validator
 
 
@@ -73,14 +73,24 @@ class AgentIdentityCoreModel(BaseModel):
         are satisfied by pre-assigned values.
         """
         params_model = PARAMS_MODEL_CATALOGUE[self.instance_params_model_name]
-        required_fields = {
-            field_name
-            for field_name, field_info in params_model.model_fields.items()
-            if field_info.is_required()
-        }
-        self.is_ready_to_run = not required_fields
+        self.is_ready_to_run = validate_readiness_to_run(params_model)
         return self
 
+
+
+def validate_readiness_to_run(params_model: Type[AgentInstanceParamsModel]) -> bool:
+    """
+    Agent can run without run-time parameters.
+
+    If the agent has required run-time parameters, then the agent is not ready to run
+    until all required parameters are set.
+    """
+    required_fields = {
+        field_name
+        for field_name, field_info in params_model.model_fields.items()
+        if field_info.is_required()
+    }
+    return not required_fields
 
 
 class AgentIOModel(LLMIOModel):
