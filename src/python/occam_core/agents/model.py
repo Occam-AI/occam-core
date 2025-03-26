@@ -64,7 +64,7 @@ class AgentIdentityCoreModel(BaseModel):
     # needed for instantiating the agent with.
     instance_params_model_name: str
 
-    _is_ready_to_run: bool = False
+    is_ready_to_run: bool = False
 
     @model_validator(mode="after")
     def check_ready_to_run(self):
@@ -78,12 +78,9 @@ class AgentIdentityCoreModel(BaseModel):
             for field_name, field_info in params_model.model_fields.items()
             if field_info.is_required()
         }
-        self._is_ready_to_run = not required_fields
+        self.is_ready_to_run = not required_fields
         return self
 
-    @property
-    def is_ready_to_run(self) -> bool:
-        return self._is_ready_to_run
 
 
 class AgentIOModel(LLMIOModel):
