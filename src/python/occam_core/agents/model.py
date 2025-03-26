@@ -68,6 +68,10 @@ class AgentIdentityCoreModel(BaseModel):
 
     @model_validator(mode="after")
     def check_ready_to_run(self):
+        """
+        Determines if an agent is ready to run by checking if all required parameters
+        are satisfied by pre-assigned values.
+        """
         params_model = PARAMS_MODEL_CATALOGUE[self.instance_params_model_name]
         required_fields = {
             field_name
