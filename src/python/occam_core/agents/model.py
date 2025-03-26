@@ -64,7 +64,7 @@ class AgentIdentityCoreModel(BaseModel):
     # needed for instantiating the agent with.
     instance_params_model_name: str
 
-    is_ready_to_run: bool = False
+    is_ready_to_run: bool = None
 
     @model_validator(mode="after")
     def check_ready_to_run(self):
@@ -72,10 +72,10 @@ class AgentIdentityCoreModel(BaseModel):
         Determines if an agent is ready to run by checking if all required parameters
         are satisfied by pre-assigned values.
         """
-        params_model = PARAMS_MODEL_CATALOGUE[self.instance_params_model_name]
-        self.is_ready_to_run = validate_readiness_to_run(params_model)
+        if self.is_ready_to_run is None:
+            params_model = PARAMS_MODEL_CATALOGUE[self.instance_params_model_name]
+            self.is_ready_to_run = validate_readiness_to_run(params_model)
         return self
-
 
 
 def validate_readiness_to_run(params_model: Type[AgentInstanceParamsModel]) -> bool:
