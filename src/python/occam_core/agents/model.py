@@ -63,34 +63,7 @@ class AgentIdentityCoreModel(BaseModel):
     # for loading the params model
     # needed for instantiating the agent with.
     instance_params_model_name: str
-
-    is_ready_to_run: bool = None
-
-    @model_validator(mode="after")
-    def check_ready_to_run(self):
-        """
-        Determines if an agent is ready to run by checking if all required parameters
-        are satisfied by pre-assigned values.
-        """
-        if self.is_ready_to_run is None:
-            params_model = PARAMS_MODEL_CATALOGUE[self.instance_params_model_name]
-            self.is_ready_to_run = validate_readiness_to_run(params_model)
-        return self
-
-
-def validate_readiness_to_run(params_model: Type[AgentInstanceParamsModel]) -> bool:
-    """
-    Agent can run without run-time parameters.
-
-    If the agent has required run-time parameters, then the agent is not ready to run
-    until all required parameters are set.
-    """
-    required_fields = {
-        field_name
-        for field_name, field_info in params_model.model_fields.items()
-        if field_info.is_required()
-    }
-    return not required_fields
+    is_ready_to_run: bool
 
 
 class AgentIOModel(LLMIOModel):
