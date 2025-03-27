@@ -67,6 +67,10 @@ class AgentIdentityCoreModel(BaseModel):
 
 
 class AgentIOModel(LLMIOModel):
+    """
+    IO model for agents.
+    """
+
     extra: Optional[Any] = None
     _text: Optional[str] = None
 

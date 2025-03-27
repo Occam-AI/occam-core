@@ -76,7 +76,10 @@ class LLMIOModel(IOModel):
     # role of the user providing the query or chat messages
     role: LLMRole = LLMRole.user
 
-    # name of the user, eg. engineer, architect etc.
+    # name of the user that's sending the llm model.
+    # usually this is in case where we're using top-level
+    # prompt query and role, if instead we're relying on chat_messages
+    # each message has its own quadruple.
     name: Optional[str] = None
 
     # file paths to be used for vision models
