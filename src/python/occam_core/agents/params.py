@@ -1,8 +1,10 @@
 from enum import Enum
-from typing import Optional, List, Dict, Any, Type, Union
 from types import NoneType
+from typing import Any, Dict, List, Optional, Type, Union
+
+from occam_core.util.base_models import (AgentInstanceParamsModel,
+                                         TAgentInstanceParamsModel)
 from pydantic import BaseModel, Field
-from occam_core.util.base_models import AgentInstanceParamsModel, TAgentInstanceParamsModel
 
 """This file is auto-generated. Do not edit manually."""
 

@@ -1,7 +1,7 @@
 import inspect
 from enum import Enum
 from inspect import isabstract
-from typing import Any, Dict, List, Optional, Type, TypeVar
+from typing import Any, Dict, List, Optional, Self, Type, TypeVar
 
 from occam_core.agents.params import PARAMS_MODEL_CATALOGUE
 from occam_core.agents.util import LLMIOModel, OccamLLMMessage
@@ -83,6 +83,18 @@ class AgentIOModel(LLMIOModel):
         if not self._text:
             self._text = '\n'.join([message.content for message in self.chat_messages])
         return self._text
+
+    @classmethod
+    def merge_models(cls, models: List[Self]) -> Self:
+        """
+        Merge a list of AgentIOModel objects into a single AgentIOModel object.
+
+        Note: this assumes models only have chat messages
+        """
+        merged_model = cls()
+        for model in models:
+            merged_model.chat_messages.extend(model.chat_messages)
+        return merged_model
 
 
 TAgentIOModel = TypeVar("TAgentIOModel", bound=AgentIOModel)
