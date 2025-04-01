@@ -1,8 +1,9 @@
+from datetime import UTC, datetime
 import inspect
 import itertools
 import types
 import typing
-from typing import Any, Optional, Type, Union, get_origin
+from typing import Any, Dict, Optional, Type, Union, get_origin
 import uuid
 
 from occam_core.util.data_types.util import (recursive_model_convert,
@@ -10,7 +11,8 @@ from occam_core.util.data_types.util import (recursive_model_convert,
                                              recursive_value_type_check)
 from occam_core.util.error import (StrictRequiredVariablesViolated,
                                    TypeCheckFailedException)
-from pydantic import BaseModel, model_validator
+from occam_core.agents.util import LLMRole, OccamLLMMessage
+from pydantic import BaseModel, Field, model_validator
 from typing_extensions import Self
 
 pydantic_class_name_label = 'pydantic_class_name'
@@ -364,4 +366,46 @@ class ToolInstanceCoreContext(BaseModel):
             self.instance_id = OccamUUID.uuid4_no_dash()
         if self.session_id is None:
             self.session_id = OccamUUID.uuid4_no_dash()
+        return self
+
+
+class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
+    create_time: Optional[datetime] = None
+    update_time: Optional[datetime] = None
+
+    session_id: str
+
+    # Key of the agent that sent the message
+    # this is only passed for users, not the chat
+    # manager.
+    agent_key: Optional[str] = None
+
+    # fields coming from ChatManagerOutputMessageModel
+    additional_content: Optional[Dict[str, Any]]
+
+    # chat manager only returns the name, we set the
+    # other details.
+    show_content_in_chat: bool = True
+
+    message_index: Optional[int] = None
+    message_time_unix: Optional[int] = None
+    message_time: datetime = Field(default_factory=lambda: datetime.now(UTC))
+
+    @model_validator(mode='after')
+    def validate_message(self):
+        if self.role == LLMRole.user:
+            # currently we don't allow users to ask questions in the chat.
+            assert self.additional_content is None
+            assert self.agent_key is not None
+        elif self.role == LLMRole.assistant:
+            assert self.user_selection is None
+            assert self.agent_key is None
+        else:
+            raise ValueError(f"Invalid role for agent chat messages: {self.role}")
+        return self
+
+    @model_validator(mode='after')
+    def validate_message_time(self):
+        if not self.message_time_unix:
+            self.message_time_unix = int(self.message_time.timestamp() * 1000)
         return self
