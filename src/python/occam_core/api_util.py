@@ -7,10 +7,6 @@ from occam_core.enums import AgentRunStatus
 from pydantic import BaseModel
 
 
-class AgentInstanceMetadata(BaseModel):
-    agent_instance_id: str
-
-
 class AgentHandlingErrorType(Enum):
     AGENT_NOT_FOUND = "AGENT_NOT_FOUND"
     INVALID_PARAMS = "INVALID_PARAMS"
@@ -22,14 +18,35 @@ class AgentHandlingErrorType(Enum):
     # add errors for pausing, resumign and terminating.
 
 
-class AgentHandlingError(BaseModel):
+class AgentHandlingError(AgentIOModel):
     error_type: AgentHandlingErrorType
     error_message: str
 
 
-class AgentRunDetail(BaseModel):
-    instance_id: str
-    result: Optional[AgentIOModel] = None
+class AgentResponseType(Enum):
+    ERROR = "ERROR"
+    UPDATE = "UPDATE"
+    OUTPUT = "OUTPUT"
+
+
+class AgentRunResponse(BaseModel):
+   ...
+
+
+class AgentResponseModel(AgentIOModel):
+    # just ideas.
+    # instance_id: str
+    # result: Optional[AgentIOModel] = None
+    response_type: AgentResponseType
+    sub_type: Union[AgentHandlingErrorType, RunResponseType]]
+    error_response: Optional[str] = None
+    run_response: Optional[AgentRunResponse] = None
     status: AgentRunStatus
     start_time: datetime
     running_time_seconds: int
+
+
+# errors and run details will both be structured as agent io models
+# to provide a unified agent speech format, extra fields can either be
+# conceptualized through special children of agnet io model, or using
+# the extra field.
