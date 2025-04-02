@@ -18,7 +18,7 @@ class AgentHandlingErrorType(Enum):
     INVALID_AGENT_INSTANCE_ID = "INVALID_AGENT_INSTANCE_ID"
     OTHER = "OTHER"
     # run errors
-    AGENT_ALREADY_RUNNING = "AGENT_ALREADY_RUNNING"
+    AGENT_RUN_REQUEST_ERROR = "AGENT_RUN_REQUEST_ERROR"
     # add errors for pausing, resumign and terminating.
 
 
