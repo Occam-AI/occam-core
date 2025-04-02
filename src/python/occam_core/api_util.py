@@ -11,10 +11,6 @@ class AgentInstanceMetadata(BaseModel):
     agent_instance_id: str
 
 
-class WorkspaceInstanceMetadata(AgentInstanceMetadata):
-    session_id: str
-
-
 class AgentHandlingErrorType(Enum):
     AGENT_NOT_FOUND = "AGENT_NOT_FOUND"
     INVALID_PARAMS = "INVALID_PARAMS"

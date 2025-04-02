@@ -1,11 +1,6 @@
 from enum import Enum
 
 
-class ApiContext(str, Enum):
-    WEBAPP = "WEBAPP"
-    SDK = "SDK"
-
-
 class ToolRunStatus(str, Enum):
     #These are states where the instance exists
     # but no run is active.
