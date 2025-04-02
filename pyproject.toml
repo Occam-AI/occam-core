@@ -2,7 +2,7 @@
 authors = ["Occam AI <support@occam.ai>, Mo <mo@occam.ai>, Ahmed <ahmed@occam.ai>"]
 description = "Repo containing the open core components and capabilities of Occam AI's tools and agents"
 name = "occam_core"
-version = "0.1.0.dev11"
+version = "0.1.0.dev12"
 packages = [{include = "occam_core", from="src/python"}]
 
 [tool.poetry.dependencies]
