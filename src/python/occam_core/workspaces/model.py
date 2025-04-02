@@ -8,7 +8,7 @@ from typing import Optional
 
 from pydantic import Field
 
-from python.occam_core.agents.util import OccamLLMMessage
+from occam_core.agents.util import OccamLLMMessage
 
 
 class ChatStatus(str, enum.Enum):
