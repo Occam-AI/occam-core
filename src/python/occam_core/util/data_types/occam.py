@@ -7,7 +7,6 @@ import uuid
 from datetime import UTC, datetime
 from typing import Any, Dict, Optional, Type, Union, get_origin
 
-from occam_core.agents.util import LLMRole, OccamLLMMessage
 from occam_core.util.data_types.util import (recursive_model_convert,
                                              recursive_type_check,
                                              recursive_value_type_check)
