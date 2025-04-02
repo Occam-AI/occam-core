@@ -31,10 +31,10 @@ class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
     """
 
     # instance is run specific
-    workspace_instance_id: str
+    instance_id: str
     # session can span across independent multi-agent workspaces
     # runs that we throw in the same place.
-    workspace_session_id: str
+    session_id: str
 
     # Key of the agent that sent the message
     # this is only passed for users, not the chat
