@@ -38,7 +38,7 @@ class AgentResponseModel(AgentIOModel):
     # instance_id: str
     # result: Optional[AgentIOModel] = None
     response_type: AgentResponseType
-    sub_type: Union[AgentHandlingErrorType, RunResponseType]]
+    sub_type: Union[AgentHandlingErrorType, 'RunResponseType']
     error_response: Optional[str] = None
     run_response: Optional[AgentRunResponse] = None
     status: AgentRunStatus
