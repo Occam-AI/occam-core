@@ -1,11 +1,15 @@
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import Dict, Optional
 
-from occam_core.agents.model import AgentIOModel
+from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
 from occam_core.enums import AgentRunStatus
-from pydantic import model_validator
+from pydantic import BaseModel, model_validator
 
+
+class AgentCatalogueSDKResponse(BaseModel):
+    connected: Dict[str, AgentIdentityCoreModel]
+    unconnected: Dict[str, AgentIdentityCoreModel]
 
 class AgentHandlingErrorType(Enum):
     AGENT_NOT_FOUND = "AGENT_NOT_FOUND"
