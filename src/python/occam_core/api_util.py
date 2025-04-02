@@ -37,10 +37,9 @@ class AgentResponseModel(AgentIOModel):
     running_time_seconds: int
 
     @model_validator(mode="after")
-    def validate_single_message_on_error(self):
+    def validate_at_most_one_message_on_error(self):
         if self.error_type:
-            assert len(self.chat_messages) == 1
-            assert self.chat_messages[0].role == "assistant"
+            assert len(self.chat_messages) <= 1
 
         return self
 
