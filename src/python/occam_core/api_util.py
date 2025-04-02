@@ -1,10 +1,10 @@
 from datetime import datetime
 from enum import Enum
-from typing import Optional, Union
+from typing import Optional
 
 from occam_core.agents.model import AgentIOModel
 from occam_core.enums import AgentRunStatus
-from pydantic import BaseModel
+from pydantic import model_validator
 
 
 class AgentHandlingErrorType(Enum):
@@ -29,21 +29,20 @@ class AgentResponseType(Enum):
     OUTPUT = "OUTPUT"
 
 
-class AgentRunResponse(BaseModel):
-   ...
-
-
 class AgentResponseModel(AgentIOModel):
-    # just ideas.
-    # instance_id: str
-    # result: Optional[AgentIOModel] = None
     response_type: AgentResponseType
-    sub_type: Union[AgentHandlingErrorType, 'RunResponseType']
-    error_response: Optional[str] = None
-    run_response: Optional[AgentRunResponse] = None
+    error_type: Optional[AgentHandlingErrorType] = None
     status: AgentRunStatus
     start_time: datetime
     running_time_seconds: int
+
+    @model_validator(mode="after")
+    def validate_single_message_on_error(self):
+        if self.error_type:
+            assert len(self.chat_messages) == 1
+            assert self.chat_messages[0].role == "assistant"
+
+        return self
 
 
 # errors and run details will both be structured as agent io models
