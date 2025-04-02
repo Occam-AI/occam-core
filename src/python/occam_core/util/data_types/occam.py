@@ -1,17 +1,18 @@
-from datetime import UTC, datetime
+import enum
 import inspect
 import itertools
 import types
 import typing
-from typing import Any, Dict, Optional, Type, Union, get_origin
 import uuid
+from datetime import UTC, datetime
+from typing import Any, Dict, Optional, Type, Union, get_origin
 
+from occam_core.agents.util import LLMRole, OccamLLMMessage
 from occam_core.util.data_types.util import (recursive_model_convert,
                                              recursive_type_check,
                                              recursive_value_type_check)
 from occam_core.util.error import (StrictRequiredVariablesViolated,
                                    TypeCheckFailedException)
-from occam_core.agents.util import LLMRole, OccamLLMMessage
 from pydantic import BaseModel, Field, model_validator
 from typing_extensions import Self
 
@@ -324,88 +325,3 @@ class OccamDataType(BaseModel):
                         raise error
                     return False
         return True
-    
-
-
-class OccamUUID(uuid.UUID):
-    """
-    A subclass of uuid.UUID that ensures the UUID is a valid Occam UUID.
-    """
-
-    @staticmethod
-    def uuid4_no_dash():
-        return str(uuid.uuid4()).replace("-", "_")
-
-
-
-class ToolInstanceCoreContext(BaseModel):
-
-    # this is track the init instance
-    # for checkpointing and tracking.
-    instance_id: Optional[str] = OccamUUID.uuid4_no_dash()
-
-    # this is to track the channel
-    # in which tool activity ends up
-    session_id: Optional[str] = OccamUUID.uuid4_no_dash()
-
-    # ths is in case this is an agentic tool
-    # and it's being launched by agent
-    # agent_key. otherwise there's no
-    # way for us to tell who the agent is.
-    agent_key: Optional[str] = None
-
-    # this is the link for tracking the agent as it works.
-    run_link: Optional[str] = None
-
-    class Config:
-        extra = "forbid"
-
-    @model_validator(mode="after")
-    def check_instance_id(self):
-        if self.instance_id is None:
-            self.instance_id = OccamUUID.uuid4_no_dash()
-        if self.session_id is None:
-            self.session_id = OccamUUID.uuid4_no_dash()
-        return self
-
-
-class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
-    create_time: Optional[datetime] = None
-    update_time: Optional[datetime] = None
-
-    session_id: str
-
-    # Key of the agent that sent the message
-    # this is only passed for users, not the chat
-    # manager.
-    agent_key: Optional[str] = None
-
-    # fields coming from ChatManagerOutputMessageModel
-    additional_content: Optional[Dict[str, Any]]
-
-    # chat manager only returns the name, we set the
-    # other details.
-    show_content_in_chat: bool = True
-
-    message_index: Optional[int] = None
-    message_time_unix: Optional[int] = None
-    message_time: datetime = Field(default_factory=lambda: datetime.now(UTC))
-
-    @model_validator(mode='after')
-    def validate_message(self):
-        if self.role == LLMRole.user:
-            # currently we don't allow users to ask questions in the chat.
-            assert self.additional_content is None
-            assert self.agent_key is not None
-        elif self.role == LLMRole.assistant:
-            assert self.user_selection is None
-            assert self.agent_key is None
-        else:
-            raise ValueError(f"Invalid role for agent chat messages: {self.role}")
-        return self
-
-    @model_validator(mode='after')
-    def validate_message_time(self):
-        if not self.message_time_unix:
-            self.message_time_unix = int(self.message_time.timestamp() * 1000)
-        return self
