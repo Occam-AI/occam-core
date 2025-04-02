@@ -14,8 +14,8 @@ from occam_core.agents.util import OccamLLMMessage
 class ChatStatus(str, enum.Enum):
     # the chat is continuing.
     ACTIVE = "ACTIVE"
-    # this is the state while the user is being asked for their workspace details.
-    CREATING_WORKSPACE = "CREATING_WORKSPACE"
+    # this is the state while the user is being asked for their chat details.
+    CREATING_CHAT = "CREATING_CHAT"
 
     # the chat is transitioning.
     SPIN_UP_REQUESTED = "SPIN_UP_REQUESTED"
@@ -23,7 +23,7 @@ class ChatStatus(str, enum.Enum):
     FAILURE = "FAILURE"
 
 
-class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
+class MultiAgentChatCoreMessageModel(OccamLLMMessage):
     """
     This unifies message models of agent members
     and chat managers, so that they can be centralized
@@ -32,7 +32,7 @@ class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
 
     # instance is run specific
     instance_id: str
-    # session can span across independent multi-agent workspaces
+    # session can span across independent multi-agent chats
     # runs that we throw in the same place.
     session_id: str
 
