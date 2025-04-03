@@ -15,7 +15,7 @@ class ChatStatus(str, enum.Enum):
     # the chat is continuing.
     ACTIVE = "ACTIVE"
     # this is the state while the user is being asked for their chat details.
-    CREATING_CHAT = "CREATING_CHAT"
+    CREATING_WORKSPACE = "CREATING_WORKSPACE"
 
     # the chat is transitioning.
     SPIN_UP_REQUESTED = "SPIN_UP_REQUESTED"
@@ -23,7 +23,7 @@ class ChatStatus(str, enum.Enum):
     FAILURE = "FAILURE"
 
 
-class MultiAgentChatCoreMessageModel(OccamLLMMessage):
+class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
     """
     This unifies message models of agent members
     and chat managers, so that they can be centralized

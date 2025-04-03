@@ -32,7 +32,7 @@ class ChatMode(str, Enum):
     ROUND_ROBIN = "ROUND_ROBIN"
     GENERATIVE = "GENERATIVE"
     GROUP_CHAT = "GROUP_CHAT"
-    CHAT_CREATION = "CHAT_CREATION"
+    WORKSPACE_CREATION = "WORKSPACE_CREATION"
 
 
 class EmailCommunicatorCardModel(BaseModel):
@@ -63,7 +63,7 @@ class DefinedLLMAgentParamsModel(AgentInstanceParamsModel):
     initial_chat_messages: Optional[list] = None
 
 
-class MultiAgentChatCreatorParamsModel(AgentInstanceParamsModel):
+class MultiAgentWorkspaceCreatorParamsModel(AgentInstanceParamsModel):
     agents: Optional[dict[str, Union[TAgentInstanceParamsModel, NoneType]]] = None
     agent_turn_order: Optional[list[str]] = None
     session_id: Optional[str] = None
@@ -104,7 +104,7 @@ class MailToolAgentParamsModel(AgentInstanceParamsModel):
     max_results: int = None
 
 
-class MultiAgentChatParamsModel(AgentInstanceParamsModel):
+class MultiAgentWorkspaceParamsModel(AgentInstanceParamsModel):
     chat_goal: str = "Let's talk about all things that are good and lighthearted in the world."
     agent_selection_rule: ChatMode = ChatMode.ROUND_ROBIN
     agents: Optional[dict[str, Union[TAgentInstanceParamsModel, NoneType]]] = None
@@ -139,13 +139,13 @@ class MultiAgentNetworkComputationAgentParamsModel(AgentInstanceParamsModel):
 
 PARAMS_MODEL_CATALOGUE: Dict[str, Type[AgentInstanceParamsModel]] = {
     DefinedLLMAgentParamsModel.__name__: DefinedLLMAgentParamsModel,
-    MultiAgentChatCreatorParamsModel.__name__: MultiAgentChatCreatorParamsModel,
+    MultiAgentWorkspaceCreatorParamsModel.__name__: MultiAgentWorkspaceCreatorParamsModel,
     OccamProvidedUserAgentParamsModel.__name__: OccamProvidedUserAgentParamsModel,
     LLMAgentParamsModel.__name__: LLMAgentParamsModel,
     DataStructuringAgentParamsModel.__name__: DataStructuringAgentParamsModel,
     EmailCommunicatorAgentParamsModel.__name__: EmailCommunicatorAgentParamsModel,
     MailToolAgentParamsModel.__name__: MailToolAgentParamsModel,
-    MultiAgentChatParamsModel.__name__: MultiAgentChatParamsModel,
+    MultiAgentWorkspaceParamsModel.__name__: MultiAgentWorkspaceParamsModel,
     SummarizerAgentParamsModel.__name__: SummarizerAgentParamsModel,
     InvitedUserAgentParamsModel.__name__: InvitedUserAgentParamsModel,
     MultiAgentNetworkComputationAgentParamsModel.__name__: MultiAgentNetworkComputationAgentParamsModel,
