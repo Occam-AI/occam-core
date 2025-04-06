@@ -58,6 +58,8 @@ class OccamDataType(BaseModel):
     The _emits object allows specifying the types that are
     additionally emitted by transform_model.
     """
+    class Config:
+        arbitrary_types_allowed = True
 
     @classmethod
     def load_model(cls, data: Any, throw_error: bool = True) -> Self:
