@@ -46,3 +46,6 @@ class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
 
     message_index: Optional[int] = None
     message_time: datetime = Field(default_factory=lambda: datetime.now(UTC))
+
+    # includes content, plus any extra structured data added to the message.
+    full_content: Optional[str] = None
