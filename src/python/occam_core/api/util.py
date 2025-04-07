@@ -34,6 +34,13 @@ class AgentResponseType(Enum):
 
 
 class AgentResponseModel(AgentIOModel):
+    """
+    A unified agent IO model used to return agent responses.
+    This covers
+    - Progress update (where chat_messages won't be set), status and timing data will be set.
+    - Error cases, where we return the error type
+    - Final output case, where chat_messages will be set.
+    """
     response_type: AgentResponseType
     error_type: Optional[AgentHandlingErrorType] = None
     status: AgentRunStatus
