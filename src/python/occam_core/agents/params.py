@@ -29,9 +29,16 @@ class MailAction(str, Enum):
 
 
 class ChatMode(str, Enum):
+    # Go over chat members in a circle.
     ROUND_ROBIN = "ROUND_ROBIN"
+    # Let the chat manager decide who speaks next.
     GENERATIVE = "GENERATIVE"
+    #user managed means AI agents only get called upon
+    # by regular users, and the chat manager is only called
+    # on by users as well, if for example the user needs to
+    # invite new agents.
     GROUP_CHAT = "GROUP_CHAT"
+    # this is the workspace spin up model.
     WORKSPACE_CREATION = "WORKSPACE_CREATION"
 
 
