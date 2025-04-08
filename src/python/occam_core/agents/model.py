@@ -3,7 +3,6 @@ from enum import Enum
 from inspect import isabstract
 from typing import Any, Dict, List, Optional, Self, Type, TypeVar
 
-from occam_core.agents.params import PARAMS_MODEL_CATALOGUE
 from occam_core.agents.util import LLMIOModel, OccamLLMMessage
 from occam_core.util.base_models import AgentInstanceParamsModel
 from pydantic import BaseModel, Field, model_validator
