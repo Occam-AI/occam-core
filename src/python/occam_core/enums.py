@@ -27,4 +27,4 @@ class ToolRunSubStatus(str, Enum):
 
 
 # Aliasing tool run status as agent run status
-AgentRunStatus = ToolRunStatus
+AgentStatus = ToolRunStatus
