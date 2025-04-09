@@ -26,5 +26,11 @@ class ToolRunSubStatus(str, Enum):
     ...
 
 
+class AgentOutputRequestType(str, Enum):
+    ALL = "ALL"
+    LATEST = "LATEST"
+    NONE = "NONE"
+
+
 # Aliasing tool run status as agent run status
 AgentStatus = ToolRunStatus
