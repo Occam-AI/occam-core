@@ -22,7 +22,6 @@ class LLMRole(str, enum.Enum):
     system = "system"
     developer = "developer"
     user = "user"
-    browser_agent = "browser_agent"
 
 
 class OccamLLMMessage(BaseModel):
@@ -43,6 +42,15 @@ class OccamLLMMessage(BaseModel):
         if self.tagged_agents:
             assert (len(self.tagged_agents) == len(set(self.tagged_agents))), "tagged_agents must must be unique."
         return self
+
+    def __str__(self, message_index: int | None = None):
+        return "\n".join([
+            f"Message Index: {message_index}" if message_index is not None else "",
+            f"Messenger: {self.name}",
+            f"Role: {self.role}",
+            f"Content: {self.content}",
+            f"Tagged Agents: {self.tagged_agents}" if self.tagged_agents else "",
+        ]).strip()
 
     class Config:
         arbitrary_types_allowed = True
