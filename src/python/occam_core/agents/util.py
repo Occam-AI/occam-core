@@ -22,6 +22,7 @@ class LLMRole(str, enum.Enum):
     system = "system"
     developer = "developer"
     user = "user"
+    browser_agent = "browser_agent"
 
 
 class OccamLLMMessage(BaseModel):
