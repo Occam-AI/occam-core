@@ -1,7 +1,7 @@
 import uuid
 from typing import Any, Optional
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, Field, model_validator
 
 
 class OccamUUID(uuid.UUID):
@@ -18,11 +18,12 @@ class ToolInstanceContext(BaseModel):
 
     # this is track the init instance
     # for checkpointing and tracking.
-    instance_id: Optional[str] = OccamUUID.uuid4_no_dash()
+    instance_id: Optional[str] = Field(default_factory=lambda: OccamUUID.uuid4_no_dash())
+    workspace_id: Optional[str] = None
 
     # this is to track the channel
     # in which tool activity ends up
-    session_id: Optional[str] = OccamUUID.uuid4_no_dash()
+    session_id: Optional[str] = Field(default_factory=lambda: OccamUUID.uuid4_no_dash())
 
     # ths is in case this is an agentic tool
     # and it's being launched by agent
@@ -38,11 +39,3 @@ class ToolInstanceContext(BaseModel):
     class Config:
         arbitrary_types_allowed = True
         extra = "allow"
-
-    @model_validator(mode="after")
-    def check_instance_id(self):
-        if self.instance_id is None:
-            self.instance_id = OccamUUID.uuid4_no_dash()
-        if self.session_id is None:
-            self.session_id = OccamUUID.uuid4_no_dash()
-        return self
