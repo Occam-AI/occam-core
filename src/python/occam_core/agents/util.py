@@ -43,7 +43,7 @@ class OccamLLMMessage(BaseModel):
             assert (len(self.tagged_agents) == len(set(self.tagged_agents))), "tagged_agents must must be unique."
         return self
 
-    def __str__(self, message_index: int | None = None):
+    def to_str(self, message_index: int | None = None):
         return "\n".join([
             f"Message Index: {message_index}" if message_index is not None else "",
             f"Messenger: {self.name}",
