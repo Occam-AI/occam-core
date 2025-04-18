@@ -58,6 +58,15 @@ class TaggedAgentsModel(BaseModel):
     tagged_agents: List[TaggedAgentModel] = Field(default_factory=list)
     _agent_keys: set[str] = Field(default_factory=set)
 
+
+    @property
+    def agent_keys(self):
+        return self._agent_keys
+
+    @classmethod
+    def from_keys(cls, agent_keys: set[str] | list[str]):
+        return cls(tagged_agents=[TaggedAgentModel(agent_key=key) for key in agent_keys])
+
     def append(self, tagged_agent: TaggedAgentModel):
         self.tagged_agents.append(tagged_agent)
         assert tagged_agent.agent_key not in self._agent_keys, \
