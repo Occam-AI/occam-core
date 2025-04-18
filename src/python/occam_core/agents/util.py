@@ -99,6 +99,10 @@ class TaggedAgentsModel(BaseModel):
     def __str__(self):
         return str(self._agent_keys)
 
+    def __iadd__(self, other: "TaggedAgentsModel"):
+        self.extend(other.tagged_agents)
+        return self
+
 
 class OccamLLMMessage(BaseModel):
     content: str | list[dict[str, Any]]
