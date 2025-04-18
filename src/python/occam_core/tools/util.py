@@ -1,6 +1,8 @@
+import enum
 import uuid
-from typing import Any, Optional
+from typing import Any, List, Optional
 
+from occam_core.chat.model import ChatPermissions
 from pydantic import BaseModel, Field, model_validator
 
 
@@ -14,12 +16,20 @@ class OccamUUID(uuid.UUID):
         return str(uuid.uuid4()).replace("-", "_")
 
 
+
+class ToolInstanceType(str, enum.Enum):
+    TOOL = "TOOL"
+    AGENT = "AGENT"
+    WORKSPACE = "WORKSPACE"
+
+
 class ToolInstanceContext(BaseModel):
 
     # this is track the init instance
     # for checkpointing and tracking.
     instance_id: Optional[str] = None
     workspace_id: Optional[str] = None
+    workspace_permissions: Optional[List[ChatPermissions]] = None
 
     # this is to track the channel
     # in which tool activity ends up
@@ -46,4 +56,13 @@ class ToolInstanceContext(BaseModel):
             self.instance_id = OccamUUID.uuid4_no_dash()
         if self.session_id is None:
             self.session_id = OccamUUID.uuid4_no_dash()
+        return self
+
+    @model_validator(mode="after")
+    def check_instance_type(self):
+        if self.instance_type is None:
+            assert self.workspace_id is None, "Workspaces can only involve agents."
+            self.instance_type = ToolInstanceType.TOOL
+        elif self.instance_type == ToolInstanceType.AGENT:
+            assert self.agent_key is not None
         return self

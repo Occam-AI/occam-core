@@ -6,9 +6,13 @@ import enum
 from datetime import UTC, datetime
 from typing import Optional
 
+from occam_core.agents.util import OccamLLMMessage
 from pydantic import Field
 
-from occam_core.agents.util import OccamLLMMessage
+
+class ChatPermissions(enum.Enum):
+    WRITE = "write"
+    END_CHAT = "end_chat"
 
 
 class ChatStatus(str, enum.Enum):
