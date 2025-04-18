@@ -24,6 +24,29 @@ class LLMRole(str, enum.Enum):
     user = "user"
 
 
+
+class AgentMessageType(str, enum.Enum):
+    STATUS = "STATUS"
+    RUN = "RUN"
+    PAUSE = "PAUSE"
+    RESUME = "RESUME"
+    STOP = "STOP"
+    OUTPUT = "OUTPUT"
+    GENERAL = "GENERAL"
+    ERROR = "ERROR"
+    OTHER = "OTHER"
+
+
+class AgentRequestModel(BaseModel):
+    agent_key: str
+    request: AgentMessageType
+
+
+class TaggedAgentModel(BaseModel):
+    agent_key: str
+    request: Optional[AgentRequestModel] = None
+
+
 class OccamLLMMessage(BaseModel):
     content: str | list[dict[str, Any]]
     role: LLMRole # system vs user vs assistant
@@ -34,13 +57,14 @@ class OccamLLMMessage(BaseModel):
     # even if we store it as IBaseModel, we have the same issue.
     parsed: Optional[Any] = None
 
-    tagged_agents: List[str] = Field(default_factory=list)
+    tagged_agents: List[TaggedAgentModel] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def validate_messages(self):
         self.name = format_llm_messenger_name(self.name)
         if self.tagged_agents:
-            assert (len(self.tagged_agents) == len(set(self.tagged_agents))), "tagged_agents must must be unique."
+            assert (len(self.tagged_agents) == len({a.agent_key for a in self.tagged_agents})), \
+                "tagged_agents must have unique agent_keys"
         return self
 
     def to_str(self, message_index: int | None = None):
