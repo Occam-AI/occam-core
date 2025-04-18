@@ -66,3 +66,9 @@ class ToolInstanceContext(BaseModel):
         elif self.instance_type == ToolInstanceType.AGENT:
             assert self.agent_key is not None
         return self
+
+    @model_validator(mode="after")
+    def check_workspace_permissions(self):
+        if self.instance_type == ToolInstanceType.WORKSPACE and not self.workspace_permissions:
+            self.workspace_permissions = [ChatPermissions.WRITE]
+        return self
