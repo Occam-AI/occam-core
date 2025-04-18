@@ -50,7 +50,7 @@ class AgentContactType(str, enum.Enum):
 
 class TaggedAgentModel(BaseModel):
     agent_key: str
-    tag_type: Optional[AgentContactType] = None
+    tag_type: AgentContactType = AgentContactType.GENERAL
     tag_message: Optional[str] = None
 
 
