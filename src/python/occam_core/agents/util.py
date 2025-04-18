@@ -54,6 +54,43 @@ class TaggedAgentModel(BaseModel):
     tag_message: Optional[str] = None
 
 
+class TaggedAgentsModel(BaseModel):
+    tagged_agents: List[TaggedAgentModel] = Field(default_factory=list)
+    _agent_keys: set[str] = Field(default_factory=set)
+
+    def append(self, tagged_agent: TaggedAgentModel):
+        self.tagged_agents.append(tagged_agent)
+        assert tagged_agent.agent_key not in self._agent_keys, \
+            "each agent can only be tagged once in a tagged agents list"
+        self._agent_keys.add(tagged_agent.agent_key)
+
+    def extend(self, tagged_agents: List[TaggedAgentModel]):
+        self.tagged_agents.extend(tagged_agents)
+        tagged_agent_keys_set = {a.agent_key for a in tagged_agents}
+        assert self._agent_keys - tagged_agent_keys_set == set(), \
+            "each agent can only be tagged once in a message"
+        self._agent_keys.update(tagged_agent_keys_set)
+
+    def clear(self):
+        self.tagged_agents.clear()
+        self._agent_keys.clear()
+
+    def __len__(self):
+        return len(self.tagged_agents)
+
+    def __getitem__(self, idx):
+        return self.tagged_agents[idx]
+
+    def __iter__(self):
+        return iter(self.tagged_agents)
+
+    def __contains__(self, agent_key: str):
+        return agent_key in self._agent_keys
+
+    def __str__(self):
+        return str(self._agent_keys)
+
+
 class OccamLLMMessage(BaseModel):
     content: str | list[dict[str, Any]]
     role: LLMRole # system vs user vs assistant
@@ -64,14 +101,11 @@ class OccamLLMMessage(BaseModel):
     # even if we store it as IBaseModel, we have the same issue.
     parsed: Optional[Any] = None
 
-    tagged_agents: List[TaggedAgentModel] = Field(default_factory=list)
+    tagged_agents: Optional[TaggedAgentsModel] = None
 
     @model_validator(mode="after")
     def validate_messages(self):
         self.name = format_llm_messenger_name(self.name)
-        if self.tagged_agents:
-            assert (len(self.tagged_agents) == len({a.agent_key for a in self.tagged_agents})), \
-                "tagged_agents must have unique agent_keys"
         return self
 
     def to_str(self, message_index: int | None = None):
