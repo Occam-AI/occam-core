@@ -18,6 +18,7 @@ class ToolRunStatus(str, Enum):
 
     # When a pause has been requested, but not yet processed.
     PAUSE_REQUESTED = "PAUSE_REQUESTED"
+    PAUSE_IN_PROGRESS = "PAUSE_IN_PROGRESS"
 
     #These are states that we can resume from 
     PAUSED = "PAUSED"
