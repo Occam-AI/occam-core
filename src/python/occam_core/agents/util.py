@@ -2,6 +2,7 @@ import enum
 import re
 from typing import Any, List, Optional, Type, TypeVar
 
+from occam_core.enums import ToolRunStatus
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -25,7 +26,17 @@ class LLMRole(str, enum.Enum):
 
 
 
-class AgentMessageType(str, enum.Enum):
+class AgentOutputType(str, Enum):
+    ALL = "ALL"
+    LATEST = "LATEST"
+    NONE = "NONE"
+
+
+# Aliasing tool run status as agent run status
+AgentStatus = ToolRunStatus
+
+
+class AgentContactType(str, enum.Enum):
     STATUS = "STATUS"
     RUN = "RUN"
     PAUSE = "PAUSE"
@@ -37,14 +48,10 @@ class AgentMessageType(str, enum.Enum):
     OTHER = "OTHER"
 
 
-class AgentRequestModel(BaseModel):
-    agent_key: str
-    request: AgentMessageType
-
-
 class TaggedAgentModel(BaseModel):
     agent_key: str
-    request: Optional[AgentRequestModel] = None
+    tag_type: Optional[AgentContactType] = None
+    tag_message: Optional[str] = None
 
 
 class OccamLLMMessage(BaseModel):
