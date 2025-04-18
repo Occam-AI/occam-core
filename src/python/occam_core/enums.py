@@ -16,6 +16,9 @@ class ToolRunStatus(str, Enum):
     # This is when a run is active.
     RUNNING = "RUNNING"
 
+    # When a pause has been requested, but not yet processed.
+    PAUSE_REQUESTED = "PAUSE_REQUESTED"
+
     #These are states that we can resume from 
     PAUSED = "PAUSED"
     FAILED = "FAILED"
