@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
 from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
-from occam_core.enums import AgentStatus
+from occam_core.agents.util import AgentStatus
 from pydantic import BaseModel, model_validator
 
 
