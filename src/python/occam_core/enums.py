@@ -36,3 +36,9 @@ class ToolRunStatus(str, Enum):
 class ToolRunSubStatus(str, Enum):
     # TODO: Implement
     ...
+
+
+class ToolStreamStatus(str, Enum):
+    COMPLETED = "COMPLETED"
+    PAUSED = "PAUSED"
+    RUNNING = "RUNNINNG"
