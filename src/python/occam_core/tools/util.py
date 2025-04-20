@@ -25,18 +25,18 @@ class ToolInstanceType(str, enum.Enum):
 
 class ToolInstanceContext(BaseModel):
 
-    # this is track the init instance
+    # This is track the init instance
     # for checkpointing and tracking.
     instance_id: Optional[str] = None
     instance_type: Optional[ToolInstanceType] = None
     workspace_id: Optional[str] = None
     workspace_permissions: Optional[List[ChatPermissions]] = None
 
-    # this is to track the channel
+    # This is to track the channel
     # in which tool activity ends up
     session_id: Optional[str] = None
 
-    # ths is in case this is an agentic tool
+    # Ths is in case this is an agentic tool
     # and it's being launched by agent
     # agent_key. otherwise there's no
     # way for us to tell who the agent is.
@@ -44,6 +44,10 @@ class ToolInstanceContext(BaseModel):
 
     # this is the link for tracking the agent as it works.
     run_link: Optional[str] = None
+
+    # this is to allow the tool to control the
+    # state of the agent if allowed to do so.
+    allow_external_state_control: bool = False
 
     extra: Optional[Any] = None
 
