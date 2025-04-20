@@ -28,6 +28,7 @@ class ToolInstanceContext(BaseModel):
     # this is track the init instance
     # for checkpointing and tracking.
     instance_id: Optional[str] = None
+    instance_type: Optional[ToolInstanceType] = None
     workspace_id: Optional[str] = None
     workspace_permissions: Optional[List[ChatPermissions]] = None
 
@@ -60,9 +61,9 @@ class ToolInstanceContext(BaseModel):
 
     @model_validator(mode="after")
     def check_instance_type(self):
-        if self.instance_type is None:
+        if self.instance_type in (None, ToolInstanceType.TOOL):
             assert self.workspace_id is None, "Workspaces can only involve agents."
-            self.instance_type = ToolInstanceType.TOOL
+            self.instance_type = self.instance_type or ToolInstanceType.TOOL
         elif self.instance_type == ToolInstanceType.AGENT:
             assert self.agent_key is not None
         return self
