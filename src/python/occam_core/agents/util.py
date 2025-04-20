@@ -26,7 +26,7 @@ class LLMRole(str, enum.Enum):
 
 
 
-class AgentOutputType(str, Enum):
+class AgentOutputType(str, enum.Enum):
     ALL = "ALL"
     LATEST = "LATEST"
     NONE = "NONE"
@@ -56,11 +56,12 @@ class TaggedAgentModel(BaseModel):
 
 class TaggedAgentsModel(BaseModel):
     tagged_agents: List[TaggedAgentModel] = Field(default_factory=list)
-    _agent_keys: set[str] = Field(default_factory=set)
-
+    _agent_keys: set[str] = None
 
     @property
     def agent_keys(self):
+        if not self._agent_keys:
+            self._agent_keys = set()
         return self._agent_keys
 
     @classmethod
@@ -69,20 +70,20 @@ class TaggedAgentsModel(BaseModel):
 
     def append(self, tagged_agent: TaggedAgentModel):
         self.tagged_agents.append(tagged_agent)
-        assert tagged_agent.agent_key not in self._agent_keys, \
+        assert tagged_agent.agent_key not in self.agent_keys, \
             "each agent can only be tagged once in a tagged agents list"
-        self._agent_keys.add(tagged_agent.agent_key)
+        self.agent_keys.add(tagged_agent.agent_key)
 
     def extend(self, tagged_agents: List[TaggedAgentModel]):
         self.tagged_agents.extend(tagged_agents)
         tagged_agent_keys_set = {a.agent_key for a in tagged_agents}
-        assert self._agent_keys - tagged_agent_keys_set == set(), \
+        assert self.agent_keys - tagged_agent_keys_set == set(), \
             "each agent can only be tagged once in a message"
-        self._agent_keys.update(tagged_agent_keys_set)
+        self.agent_keys.update(tagged_agent_keys_set)
 
     def clear(self):
         self.tagged_agents.clear()
-        self._agent_keys.clear()
+        self.agent_keys.clear()
 
     def __len__(self):
         return len(self.tagged_agents)
@@ -94,10 +95,10 @@ class TaggedAgentsModel(BaseModel):
         return iter(self.tagged_agents)
 
     def __contains__(self, agent_key: str):
-        return agent_key in self._agent_keys
+        return agent_key in self.agent_keys
 
     def __str__(self):
-        return str(self._agent_keys)
+        return str(self.agent_keys)
 
     def __iadd__(self, other: "TaggedAgentsModel"):
         self.extend(other.tagged_agents)
