@@ -2,7 +2,9 @@ import inspect
 import itertools
 import types
 import typing
-from typing import Any, Type, Union, get_origin
+from typing import Any, Type, TypeVar, Union, get_origin
+
+from pydantic import BaseModel
 
 
 def recursive_value_type_check(data: Any, spec_variable_type: type) -> bool:
@@ -12,6 +14,13 @@ def recursive_value_type_check(data: Any, spec_variable_type: type) -> bool:
     """
     if spec_variable_type == Any:
         return True
+
+    if (
+        isinstance(data, BaseModel)
+        and isinstance(spec_variable_type, TypeVar)
+        and spec_variable_type.__bound__
+    ):
+        return isinstance(data, spec_variable_type.__bound__)
 
     args = getattr(spec_variable_type, '__args__', None)
     origin = get_origin(spec_variable_type)
