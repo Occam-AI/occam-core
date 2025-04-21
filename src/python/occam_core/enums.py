@@ -64,7 +64,7 @@ class ToolDataType(str, Enum):
     """Data sent back when the tool announces that it's paused"""
 
 
-class BatchStepDataTypes(str, Enum):
+class BatchStepDataType(str, Enum):
     """
     This list defines the different types of data
     that a tool can send when in batch mode.
@@ -77,7 +77,7 @@ class BatchStepDataTypes(str, Enum):
     """Data sent back when the tool announces that it's paused"""
 
 
-class StreamingStepDataTypes(str, Enum):
+class StreamingStepDataType(str, Enum):
     """
     This list defines the different types of data
     that a tool can send.
