@@ -50,8 +50,8 @@ class AgentContactType(str, enum.Enum):
     STOP = "STOP"
     """These are requests that can be sent to the agent"""
 
-    STREAM = "STREAM"
-    """ Internal updates sent back from the agent sometimes this won't exist."""
+    RUN_UPDATES = "RUN_UPDATES"
+    """Internal updates sent back from the agent sometimes this won't exist."""
 
     PAUSED = "PAUSED"
     """Data sent back when the agent announces that it's paused"""
