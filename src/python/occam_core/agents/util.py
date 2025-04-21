@@ -55,6 +55,22 @@ class AgentDataType(str, enum.Enum):
     """Data sent back when the agent announces that it's paused"""
 
 
+class IntermediateAgentDataType(str, enum.Enum):
+    """
+    This list defines the different types of data
+    that can agent can send.
+    """
+
+    RUN_UPDATES = "RUN_UPDATES"
+    """Internal updates sent back from the agent sometimes this won't exist."""
+
+    PAUSED = "PAUSED"
+    """Data sent back when the agent announces that it's paused"""
+
+    BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
+    """Data sent back when the agent announces that a batch step has completed."""
+
+
 class AgentContactType(str, enum.Enum):
     """
     This list defines the different types of messages
