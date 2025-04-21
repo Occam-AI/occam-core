@@ -38,12 +38,6 @@ class ToolRunSubStatus(str, Enum):
     ...
 
 
-class ToolStreamStatus(str, Enum):
-    RUN_STEP_COMPLETED = "RUN_STEP_COMPLETED"
-    BATCH_COMPLETED = "BATCH_COMPLETED"
-    PAUSED = "PAUSED"
-    RUNNING = "RUNNINNG"
-
 
 class ToolDataType(str, Enum):
     """
