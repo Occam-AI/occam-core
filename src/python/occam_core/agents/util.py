@@ -37,14 +37,55 @@ AgentStatus = ToolRunStatus
 
 
 class AgentContactType(str, enum.Enum):
+    """
+    This list defines the different types of messages
+    that can agent can receive or send over channels
+    to other agents, workspaces and the wider ecosystem.
+    """
+
+    """
+    These are requests that can be sent to the agent
+    """
     STATUS = "STATUS"
     RUN = "RUN"
     PAUSE = "PAUSE"
     RESUME = "RESUME"
     STOP = "STOP"
+
+    """
+    Internal updates sent back from the agent
+    sometimes this won't exist.
+    """
+    STREAM = "STREAM"
+    """
+    Data sent back when the agent announces that
+    it's paused
+    """
+    PAUSED = "PAUSED"
+    """
+    Data sent back when the agent announces that
+    a batch step has completed.
+    """
+    BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
+    """
+    Data sent back when the agent announces that
+    it's completed a full streaming/batch run
+    call involving a list of input records or
+    an AgentIOModel.
+    """
     OUTPUT = "OUTPUT"
+
+    """
+    General purpose data sent back from the agent.
+    """
     GENERAL = "GENERAL"
+    """
+    Error data sent back from the agent.
+    """
     ERROR = "ERROR"
+    """
+    Other data sent back from the agent.
+    """
     OTHER = "OTHER"
 
 
