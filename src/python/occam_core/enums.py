@@ -64,7 +64,20 @@ class ToolDataType(str, Enum):
     """Data sent back when the tool announces that it's paused"""
 
 
-class IntermediateToolDataType(str, Enum):
+class BatchStepDataTypes(str, Enum):
+    """
+    This list defines the different types of data
+    that a tool can send when in batch mode.
+    """
+
+    BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
+    """Data sent back when the tool announces that a batch step has completed."""
+
+    PAUSED = "PAUSED"
+    """Data sent back when the tool announces that it's paused"""
+
+
+class StreamingStepDataTypes(str, Enum):
     """
     This list defines the different types of data
     that a tool can send.
@@ -73,8 +86,8 @@ class IntermediateToolDataType(str, Enum):
     RUN_UPDATES = "RUN_UPDATES"
     """Internal updates sent back from the tool sometimes this won't exist."""
 
-    PAUSED = "PAUSED"
-    """Data sent back when the tool announces that it's paused"""
-
     BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
     """Data sent back when the tool announces that a batch step has completed."""
+
+    PAUSED = "PAUSED"
+    """Data sent back when the tool announces that it's paused"""
