@@ -45,7 +45,7 @@ class ToolDataType(str, Enum):
     that can agent can send.
     """
 
-    RUN_UPDATES = "RUN_UPDATES"
+    STREAMING_UPDATES = "STREAMING_UPDATES"
     """Internal updates sent back from the tool sometimes this won't exist."""
 
     RUN_STEP_COMPLETED = "RUN_STEP_COMPLETED"
@@ -77,7 +77,7 @@ class StreamingStepDataType(str, Enum):
     that a tool can send.
     """
 
-    RUN_UPDATES = "RUN_UPDATES"
+    STREAMING_UPDATES = "STREAMING_UPDATES"
     """Internal updates sent back from the tool sometimes this won't exist."""
 
     RUN_STEP_COMPLETED = "RUN_STEP_COMPLETED"
