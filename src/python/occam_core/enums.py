@@ -43,3 +43,38 @@ class ToolStreamStatus(str, Enum):
     BATCH_COMPLETED = "BATCH_COMPLETED"
     PAUSED = "PAUSED"
     RUNNING = "RUNNINNG"
+
+
+class ToolDataType(str, Enum):
+    """
+    This list defines the different categories of data
+    that can agent can send.
+    """
+
+    RUN_UPDATES = "RUN_UPDATES"
+    """Internal updates sent back from the tool sometimes this won't exist."""
+
+    BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
+    """Data sent back when the tool announces that a batch step has completed."""
+
+    OUTPUT = "OUTPUT"
+    """Data sent back when the tool announces that it's completed a full streaming/batch run"""
+
+    PAUSED = "PAUSED"
+    """Data sent back when the tool announces that it's paused"""
+
+
+class IntermediateToolDataType(str, Enum):
+    """
+    This list defines the different types of data
+    that a tool can send.
+    """
+
+    RUN_UPDATES = "RUN_UPDATES"
+    """Internal updates sent back from the tool sometimes this won't exist."""
+
+    PAUSED = "PAUSED"
+    """Data sent back when the tool announces that it's paused"""
+
+    BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
+    """Data sent back when the tool announces that a batch step has completed."""
