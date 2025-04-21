@@ -48,50 +48,31 @@ class AgentContactType(str, enum.Enum):
     PAUSE = "PAUSE"
     RESUME = "RESUME"
     STOP = "STOP"
-    """
-    These are requests that can be sent to the agent
-    """
+    """These are requests that can be sent to the agent"""
 
     STREAM = "STREAM"
-    """
-    Internal updates sent back from the agent
-    sometimes this won't exist.
-    """
+    """ Internal updates sent back from the agent sometimes this won't exist."""
 
     PAUSED = "PAUSED"
-    """
-    Data sent back when the agent announces that
-    it's paused
-    """
+    """Data sent back when the agent announces that it's paused"""
 
     BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
-    """
-    Data sent back when the agent announces that
-    a batch step has completed.
-    """
+    """Data sent back when the agent announces that a batch step has completed."""
 
     OUTPUT = "OUTPUT"
     """
-    Data sent back when the agent announces that
-    it's completed a full streaming/batch run
-    call involving a list of input records or
-    an AgentIOModel.
+    Data sent back when the agent announces that it's completed a full streaming/batch run
+    call involving a list of input records or an AgentIOModel.
     """
 
     GENERAL = "GENERAL"
-    """
-    General purpose data sent back from the agent.
-    """
+    """General purpose data sent back from the agent."""
 
     ERROR = "ERROR"
-    """
-    Error data sent back from the agent.
-    """
+    """Error data sent back from the agent."""
 
     OTHER = "OTHER"
-    """
-    Other data sent back from the agent.
-    """
+    """Other data sent back from the agent."""
 
 
 class TaggedAgentModel(BaseModel):
