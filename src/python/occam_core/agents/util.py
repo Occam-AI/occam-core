@@ -36,7 +36,7 @@ class AgentOutputType(str, enum.Enum):
 AgentStatus = ToolRunStatus
 
 
-class AgentDataContactType(str, enum.Enum):
+class AgentDataType(str, enum.Enum):
     """
     This list defines the different categories of data
     that can agent can send.
