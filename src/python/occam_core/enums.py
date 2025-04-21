@@ -39,7 +39,7 @@ class ToolRunSubStatus(str, Enum):
 
 
 class ToolStreamStatus(str, Enum):
-    BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
+    RUN_STEP_COMPLETED = "RUN_STEP_COMPLETED"
     BATCH_COMPLETED = "BATCH_COMPLETED"
     PAUSED = "PAUSED"
     RUNNING = "RUNNINNG"
@@ -54,7 +54,7 @@ class ToolDataType(str, Enum):
     RUN_UPDATES = "RUN_UPDATES"
     """Internal updates sent back from the tool sometimes this won't exist."""
 
-    BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
+    RUN_STEP_COMPLETED = "RUN_STEP_COMPLETED"
     """Data sent back when the tool announces that a batch step has completed."""
 
     OUTPUT = "OUTPUT"
@@ -70,7 +70,7 @@ class BatchStepDataType(str, Enum):
     that a tool can send when in batch mode.
     """
 
-    BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
+    RUN_STEP_COMPLETED = "RUN_STEP_COMPLETED"
     """Data sent back when the tool announces that a batch step has completed."""
 
     PAUSED = "PAUSED"
@@ -86,7 +86,7 @@ class StreamingStepDataType(str, Enum):
     RUN_UPDATES = "RUN_UPDATES"
     """Internal updates sent back from the tool sometimes this won't exist."""
 
-    BATCH_STEP_COMPLETED = "BATCH_STEP_COMPLETED"
+    RUN_STEP_COMPLETED = "RUN_STEP_COMPLETED"
     """Data sent back when the tool announces that a batch step has completed."""
 
     PAUSED = "PAUSED"
