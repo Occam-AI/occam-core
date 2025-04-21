@@ -28,7 +28,7 @@ class ToolInstanceContext(BaseModel):
     # This is track the init instance
     # for checkpointing and tracking.
     instance_id: Optional[str] = None
-    instance_type: Optional[ToolInstanceType] = None
+    _instance_type: ToolInstanceType = None
     workspace_id: Optional[str] = None
     workspace_permissions: Optional[List[ChatPermissions]] = None
 
@@ -56,24 +56,30 @@ class ToolInstanceContext(BaseModel):
         extra = "allow"
 
     @model_validator(mode="after")
-    def check_instance_id(self):
+    def validators(self):
+        self.set_ids()
+        self.check_instance_type()
+        self.check_workspace_permissions()
+        return self
+
+    def set_ids(self):
         if self.instance_id is None:
             self.instance_id = OccamUUID.uuid4_no_dash()
         if self.session_id is None:
             self.session_id = OccamUUID.uuid4_no_dash()
-        return self
 
-    @model_validator(mode="after")
     def check_instance_type(self):
-        if self.instance_type in (None, ToolInstanceType.TOOL):
-            assert self.workspace_id is None, "Workspaces can only involve agents."
-            self.instance_type = self.instance_type or ToolInstanceType.TOOL
-        elif self.instance_type == ToolInstanceType.AGENT:
-            assert self.agent_key is not None
-        return self
+        if self.workspace_id is not None:
+            self._instance_type = ToolInstanceType.WORKSPACE
+        elif self.agent_key is not None:
+            self._instance_type = ToolInstanceType.AGENT
+        else:
+            self._instance_type = ToolInstanceType.TOOL
 
-    @model_validator(mode="after")
     def check_workspace_permissions(self):
         if self.instance_type == ToolInstanceType.WORKSPACE and not self.workspace_permissions:
             self.workspace_permissions = [ChatPermissions.WRITE]
-        return self
+
+    @property
+    def instance_type(self) -> ToolInstanceType:
+        return self._instance_type
