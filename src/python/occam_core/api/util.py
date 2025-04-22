@@ -3,7 +3,7 @@ from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
 from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
-from occam_core.agents.util import AgentStatus
+from occam_core.agents.util import AgentState
 from pydantic import BaseModel, model_validator
 
 
@@ -41,7 +41,7 @@ class AgentStateModel(AgentIOModel):
     saved in agent_output tables.
     """
     error_type: Optional[AgentHandlingErrorType] = None
-    status: AgentStatus
+    status: AgentState
     last_run_start_time: Optional[datetime] = None
     last_run_duration: Optional[int] = None
     chat_messages_batch_numbers: Optional[List[int]] = None
