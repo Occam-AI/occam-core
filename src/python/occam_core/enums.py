@@ -2,55 +2,58 @@ from enum import Enum
 
 
 class ToolState(str, Enum):
+    """
+    These are are both stable instance states,
+    absent a run, as well as run related states.
+    """
 
-    """
-    These are run ready states.
-    """
     # alive means the python instance is live somewhere
-    # but hasn't run yet.
     ALIVE = "ALIVE"
-    # sleeping means the db has all the instance info,
-    # but the instance itself is not live.
+    """A tool is alive means the python instance is live somewhere and ready to receive a run request."""
+
     SLEEPING = "SLEEPING"
-    # batch completed means its alive, and in its last run
-    # has completed a batch.
-    BATCH_COMPLETED = "BATCH_COMPLETED"
+    """A tool is sleeping when it's not running, but the db has all the instance info."""
 
     # Request States
     PAUSE_REQUESTED = "PAUSE_REQUESTED"
     RESUME_REQUESTED = "RESUME_REQUESTED"
     TERMINATE_REQUESTED = "TERMINATE_REQUESTED"
+    """These are requests that can be sent to the tool to interrupt a run."""
 
     # Request in progress states
     PAUSE_IN_PROGRESS = "PAUSE_IN_PROGRESS"
     RESUME_IN_PROGRESS = "RESUME_IN_PROGRESS"
     TERMINATE_IN_PROGRESS = "TERMINATE_IN_PROGRESS"
+    """Once a tool receives a request, it will transition to the appropriate in progress state."""
 
     # Run related states
     RUNNING = "RUNNING"
     PAUSED = "PAUSED"
+    """A tool run can switch between RUNNING and PAUSED states."""
+
+    BATCH_COMPLETED = "BATCH_COMPLETED"
     FAILED = "FAILED"
     TERMINATED = "TERMINATED"
+    """These are terminal states that a tool can be in."""
 
 
 class ToolRunState(str, Enum):
     """
-    This list defines the different statuses that a tool can be in.
+    These are run related states
     """
 
-    # Run request States
     PAUSE_REQUESTED = "PAUSE_REQUESTED"
     RESUME_REQUESTED = "RESUME_REQUESTED"
     TERMINATE_REQUESTED = "TERMINATE_REQUESTED"
 
-    # Run request in progress states
     PAUSE_IN_PROGRESS = "PAUSE_IN_PROGRESS"
     RESUME_IN_PROGRESS = "RESUME_IN_PROGRESS"
     TERMINATE_IN_PROGRESS = "TERMINATE_IN_PROGRESS"
 
-    # Run related states
     RUNNING = "RUNNING"
     PAUSED = "PAUSED"
+
+    BATCH_COMPLETED = "BATCH_COMPLETED"
     FAILED = "FAILED"
     TERMINATED = "TERMINATED"
 
