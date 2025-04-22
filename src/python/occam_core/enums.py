@@ -33,6 +33,28 @@ class ToolStatus(str, Enum):
     TERMINATED = "TERMINATED"
 
 
+class ToolRunStatus(str, Enum):
+    """
+    This list defines the different statuses that a tool can be in.
+    """
+
+    # Run request States
+    PAUSE_REQUESTED = "PAUSE_REQUESTED"
+    RESUME_REQUESTED = "RESUME_REQUESTED"
+    TERMINATE_REQUESTED = "TERMINATE_REQUESTED"
+
+    # Run request in progress states
+    PAUSE_IN_PROGRESS = "PAUSE_IN_PROGRESS"
+    RESUME_IN_PROGRESS = "RESUME_IN_PROGRESS"
+    TERMINATE_IN_PROGRESS = "TERMINATE_IN_PROGRESS"
+
+    # Run related states
+    RUNNING = "RUNNING"
+    PAUSED = "PAUSED"
+    FAILED = "FAILED"
+    TERMINATED = "TERMINATED"
+
+
 class ToolRunSubStatus(str, Enum):
     # TODO: Implement
     ...
