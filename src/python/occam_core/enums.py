@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ToolStatus(str, Enum):
+class ToolState(str, Enum):
 
     """
     These are run ready states.
@@ -33,7 +33,7 @@ class ToolStatus(str, Enum):
     TERMINATED = "TERMINATED"
 
 
-class ToolRunStatus(str, Enum):
+class ToolRunState(str, Enum):
     """
     This list defines the different statuses that a tool can be in.
     """
