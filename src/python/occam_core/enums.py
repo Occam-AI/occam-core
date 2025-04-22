@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class ToolRunStatus(str, Enum):
+class ToolStatus(str, Enum):
 
     """
     These are run ready states.
