@@ -32,8 +32,9 @@ class AgentOutputType(str, enum.Enum):
     NONE = "NONE"
 
 
-# Aliasing tool run status as agent run status
+# Aliasing tool state as agent state
 AgentState = ToolState
+AgentRunState = ToolRunState
 
 
 class AgentContactType(str, enum.Enum):
