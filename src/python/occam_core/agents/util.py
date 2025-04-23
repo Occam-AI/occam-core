@@ -2,7 +2,7 @@ import enum
 import re
 from typing import Any, List, Optional, Type, TypeVar
 
-from occam_core.enums import ToolState
+from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, Field, field_validator, model_validator
 
