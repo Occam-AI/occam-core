@@ -78,7 +78,8 @@ class AgentContactType(str, enum.Enum):
 
 
 class TaggedAgentModel(BaseModel):
-    agent_key: str
+    tagging_agent_key: str
+    tagged_agent_key: str
     tag_type: AgentContactType = AgentContactType.GENERAL
     tag_message: Optional[str] = None
 
@@ -94,8 +95,12 @@ class TaggedAgentsModel(BaseModel):
         return self._agent_keys
 
     @classmethod
-    def from_keys(cls, agent_keys: set[str] | list[str]):
-        return cls(tagged_agents=[TaggedAgentModel(agent_key=key) for key in agent_keys])
+    def from_keys(cls, tagging_agent_key: str, tagged_agent_keys: set[str] | list[str]):
+        tag_models = []
+        for key in tagged_agent_keys:
+            assert key != tagging_agent_key, "tagging agent key must be different from tagged agent key"
+            tag_models.append(TaggedAgentModel(tagging_agent_key=tagging_agent_key, tagged_agent_key=key))
+        return cls(tag_models=tag_models)
 
     def append(self, tagged_agent: TaggedAgentModel):
         self.tag_models.append(tagged_agent)
@@ -105,7 +110,7 @@ class TaggedAgentsModel(BaseModel):
 
     def extend(self, tagged_agents: List[TaggedAgentModel]):
         self.tag_models.extend(tagged_agents)
-        tagged_agent_keys_set = {a.agent_key for a in tagged_agents}
+        tagged_agent_keys_set = {a.tagged_agent_key for a in tagged_agents}
         assert self.agent_keys - tagged_agent_keys_set == set(), \
             "each agent can only be tagged once in a message"
         self.agent_keys.update(tagged_agent_keys_set)
