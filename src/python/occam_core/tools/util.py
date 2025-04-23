@@ -28,7 +28,7 @@ class ToolInstanceContext(BaseModel):
     # This is track the init instance
     # for checkpointing and tracking.
     instance_id: Optional[str] = None
-    _instance_type: ToolInstanceType = None
+    instance_type: ToolInstanceType = None
     workspace_id: Optional[str] = None
     workspace_permissions: Optional[List[ChatPermissions]] = None
 
@@ -70,16 +70,22 @@ class ToolInstanceContext(BaseModel):
 
     def check_instance_type(self):
         if self.workspace_id is not None:
-            self._instance_type = ToolInstanceType.WORKSPACE
+            assert self.agent_key is not None, \
+                "agent key must be set if workspace id is set"
+            assert self.instance_type in [ToolInstanceType.AGENT, None], \
+                "instance type must be set to AGENT or None if workspace id is set"
+            self.instance_type = ToolInstanceType.AGENT
         elif self.agent_key is not None:
-            self._instance_type = ToolInstanceType.AGENT
+            assert self.instance_type in [None, ToolInstanceType.WORKSPACE, ToolInstanceType.AGENT], \
+                "instance type must be set to TOOL if agent key is set"
+            # knowledge of instance type being a workspace lands externally (relies on agent key)
+            # so here we only label it as agent if not speified.
+            self.instance_type = self.instance_type or ToolInstanceType.AGENT
         else:
-            self._instance_type = ToolInstanceType.TOOL
+            assert self.instance_type in [None, ToolInstanceType.TOOL], \
+                "instance type must be set to TOOL if agent key is not set"
+            self.instance_type = ToolInstanceType.TOOL
 
     def check_workspace_permissions(self):
-        if self.instance_type == ToolInstanceType.WORKSPACE and not self.workspace_permissions:
+        if self.workspace_id is not None and not self.workspace_permissions:
             self.workspace_permissions = [ChatPermissions.WRITE]
-
-    @property
-    def instance_type(self) -> ToolInstanceType:
-        return self._instance_type
