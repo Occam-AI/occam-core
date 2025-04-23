@@ -11,9 +11,19 @@ def remove_extra_spaces(original_text):
     return re.sub(r'\s{2,}', ' ', original_text)
 
 
+def replace_key_characters(original_text):
+    return original_text.\
+        replace(' ', '_').\
+        replace('.', '_').\
+        replace('(', '-').\
+        replace(')', '-').\
+        replace(':', '--')
+
+
 def format_llm_messenger_name(name: str):
     if name:
         name = remove_extra_spaces(name)
+        name = replace_key_characters(name)
         pat = r'[^a-zA-Z0-9_-]'
         return re.sub(pat, '', name)
 
