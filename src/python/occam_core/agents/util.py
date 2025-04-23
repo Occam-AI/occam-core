@@ -108,7 +108,6 @@ class TaggedAgentsModel(BaseModel):
             self._tagged_agent_keys = set()
         return self._tagged_agent_keys
 
-
     @model_validator(mode="after")
     def validate_tag_pairs(self):
 
@@ -139,6 +138,9 @@ class TaggedAgentsModel(BaseModel):
             "tagged agent must be a TaggedAgentModel"
         assert tagged_agent.tagged_agent_key not in self.tagged_agent_keys, \
             "each agent can only be tagged once in a tagged agents list"
+        assert tagged_agent.tagged_agent_key != self.tagging_agent_key, \
+            "tagged agent key must be different from tagging agent key." \
+            f"tagging key: {self.tagging_agent_key} matches tagged key."
         self.tagged_agent_keys.add(tagged_agent.tagged_agent_key)
         self.tag_models.append(tagged_agent)
 
@@ -152,6 +154,7 @@ class TaggedAgentsModel(BaseModel):
     def clear(self):
         self.tag_models.clear()
         self.tagged_agent_keys.clear()
+        self.tagging_agent_key = None
 
     def __len__(self):
         return len(self.tag_models)
@@ -166,7 +169,10 @@ class TaggedAgentsModel(BaseModel):
         return agent_key in self.tagged_agent_keys
 
     def __str__(self):
-        return str(self.tagged_agent_keys)
+        return '\n\t'.join([
+            f"tagging agent key: {self.tagging_agent_key}",
+            f"tagged agent keys: {self.tagged_agent_keys}"
+        ])
 
     def __iadd__(self, other: "TaggedAgentsModel"):
         assert isinstance(other, TaggedAgentsModel), \
@@ -201,7 +207,7 @@ class OccamLLMMessage(BaseModel):
             f"Messenger: {self.name}",
             f"Role: {self.role}",
             f"Content: {self.content}",
-            f"Tagged Agents: {self.tagged_agents}" if self.tagged_agents else "",
+            f"Tagged Agents: \n\t{self.tagged_agents}" if self.tagged_agents else "",
         ]).strip()
 
     class Config:
