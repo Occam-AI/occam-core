@@ -28,7 +28,7 @@ class ToolInstanceContext(BaseModel):
     # This is track the init instance
     # for checkpointing and tracking.
     instance_id: Optional[str] = None
-    instance_type: ToolInstanceType = None
+    instance_type: Optional[ToolInstanceType] = None
     workspace_id: Optional[str] = None
     workspace_permissions: Optional[List[ChatPermissions]] = None
 
