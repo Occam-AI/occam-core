@@ -84,7 +84,7 @@ class TaggedAgentModel(BaseModel):
 
 
 class TaggedAgentsModel(BaseModel):
-    tagged_agents: List[TaggedAgentModel] = Field(default_factory=list)
+    tag_models: List[TaggedAgentModel] = Field(default_factory=list)
     _agent_keys: set[str] = None
 
     @property
@@ -98,30 +98,30 @@ class TaggedAgentsModel(BaseModel):
         return cls(tagged_agents=[TaggedAgentModel(agent_key=key) for key in agent_keys])
 
     def append(self, tagged_agent: TaggedAgentModel):
-        self.tagged_agents.append(tagged_agent)
+        self.tag_models.append(tagged_agent)
         assert tagged_agent.agent_key not in self.agent_keys, \
             "each agent can only be tagged once in a tagged agents list"
         self.agent_keys.add(tagged_agent.agent_key)
 
     def extend(self, tagged_agents: List[TaggedAgentModel]):
-        self.tagged_agents.extend(tagged_agents)
+        self.tag_models.extend(tagged_agents)
         tagged_agent_keys_set = {a.agent_key for a in tagged_agents}
         assert self.agent_keys - tagged_agent_keys_set == set(), \
             "each agent can only be tagged once in a message"
         self.agent_keys.update(tagged_agent_keys_set)
 
     def clear(self):
-        self.tagged_agents.clear()
+        self.tag_models.clear()
         self.agent_keys.clear()
 
     def __len__(self):
-        return len(self.tagged_agents)
+        return len(self.tag_models)
 
     def __getitem__(self, idx):
-        return self.tagged_agents[idx]
+        return self.tag_models[idx]
 
     def __iter__(self):
-        return iter(self.tagged_agents)
+        return iter(self.tag_models)
 
     def __contains__(self, agent_key: str):
         return agent_key in self.agent_keys
@@ -130,7 +130,7 @@ class TaggedAgentsModel(BaseModel):
         return str(self.agent_keys)
 
     def __iadd__(self, other: "TaggedAgentsModel"):
-        self.extend(other.tagged_agents)
+        self.extend(other.tag_models)
         return self
 
 
