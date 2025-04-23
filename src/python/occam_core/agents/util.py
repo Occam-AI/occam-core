@@ -88,46 +88,70 @@ class AgentContactType(str, enum.Enum):
 
 
 class TaggedAgentModel(BaseModel):
-    tagging_agent_key: str
     tagged_agent_key: str
-    tag_type: AgentContactType = AgentContactType.GENERAL
+    tag_type: AgentContactType = AgentContactType.RUN
     tag_message: Optional[str] = None
 
 
 class TaggedAgentsModel(BaseModel):
+    """
+    A list of tagged agents.
+    """
+
     tag_models: List[TaggedAgentModel] = Field(default_factory=list)
-    _agent_keys: set[str] = None
+    tagging_agent_key: str
+    _tagged_agent_keys: set[str] = None
 
     @property
-    def agent_keys(self):
-        if not self._agent_keys:
-            self._agent_keys = set()
-        return self._agent_keys
+    def tagged_agent_keys(self):
+        if not self._tagged_agent_keys:
+            self._tagged_agent_keys = set()
+        return self._tagged_agent_keys
+
+
+    @model_validator(mode="after")
+    def validate_tag_pairs(self):
+
+        assert len(self.tag_models) > 0, "tag models must not be empty"
+        for tag_model in self.tag_models:
+            assert self.tagging_agent_key != tag_model.tagged_agent_key, \
+                f"tagging agent key must be different from tagged agent key: " \
+                f"tagging key: {self.tagging_agent_key} matches tagged key."
+            assert tag_model.tagged_agent_key not in self.tagged_agent_keys, \
+                f"tagged agent key must be unique. Got {tag_model.tagged_agent_key} " \
+                f"more than once."
+            self.tagged_agent_keys.add(tag_model.tagged_agent_key)
+
+        return self
 
     @classmethod
     def from_keys(cls, tagging_agent_key: str, tagged_agent_keys: set[str] | list[str]):
+
         tag_models = []
         for key in tagged_agent_keys:
-            assert key != tagging_agent_key, "tagging agent key must be different from tagged agent key"
-            tag_models.append(TaggedAgentModel(tagging_agent_key=tagging_agent_key, tagged_agent_key=key))
-        return cls(tag_models=tag_models)
+            assert isinstance(key, str), \
+                f"tagged agent key must be a string. Got {type(key)}."
+            tag_models.append(TaggedAgentModel(tagged_agent_key=key))
+        return cls(tagging_agent_key=tagging_agent_key, tag_models=tag_models)
 
     def append(self, tagged_agent: TaggedAgentModel):
-        self.tag_models.append(tagged_agent)
-        assert tagged_agent.agent_key not in self.agent_keys, \
+        assert isinstance(tagged_agent, TaggedAgentModel), \
+            "tagged agent must be a TaggedAgentModel"
+        assert tagged_agent.tagged_agent_key not in self.tagged_agent_keys, \
             "each agent can only be tagged once in a tagged agents list"
-        self.agent_keys.add(tagged_agent.agent_key)
+        self.tagged_agent_keys.add(tagged_agent.tagged_agent_key)
+        self.tag_models.append(tagged_agent)
 
     def extend(self, tagged_agents: List[TaggedAgentModel]):
-        self.tag_models.extend(tagged_agents)
         tagged_agent_keys_set = {a.tagged_agent_key for a in tagged_agents}
-        assert self.agent_keys - tagged_agent_keys_set == set(), \
-            "each agent can only be tagged once in a message"
-        self.agent_keys.update(tagged_agent_keys_set)
-
+        assert not (self.tagged_agent_keys & tagged_agent_keys_set), \
+            "each agent can only be tagged once in a message."
+        self.tagged_agent_keys.update(tagged_agent_keys_set)
+        self.tag_models.extend(tagged_agents)
+ 
     def clear(self):
         self.tag_models.clear()
-        self.agent_keys.clear()
+        self.tagged_agent_keys.clear()
 
     def __len__(self):
         return len(self.tag_models)
@@ -139,12 +163,17 @@ class TaggedAgentsModel(BaseModel):
         return iter(self.tag_models)
 
     def __contains__(self, agent_key: str):
-        return agent_key in self.agent_keys
+        return agent_key in self.tagged_agent_keys
 
     def __str__(self):
-        return str(self.agent_keys)
+        return str(self.tagged_agent_keys)
 
     def __iadd__(self, other: "TaggedAgentsModel"):
+        assert isinstance(other, TaggedAgentsModel), \
+            f"other must be a TaggedAgentsModel. Got {type(other)}."
+        assert other.tagging_agent_key == self.tagging_agent_key, \
+            f"tagging agent key must be the same for all tag models: " \
+            f"{self.tagging_agent_key} != {other.tagging_agent_key}"
         self.extend(other.tag_models)
         return self
 
