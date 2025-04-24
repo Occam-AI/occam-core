@@ -73,12 +73,18 @@ class ToolInstanceContext(BaseModel):
     Whether the tool is allowed to control the state of the agent.
     """
 
-    last_channel_read_times: Optional[Dict[str, datetime]] = None
+    last_message_times_by_sender_id: Optional[Dict[str, datetime]] = None
     """
     A log of the last times that the tool instance has
     received a message, indexed on the instance id of the
     sender of the message. Use for checkpointing communication
     with other tools. i.e. not having memory loss.
+    """
+
+    last_channel_message_time: datetime = Field(default_factory=datetime.now)
+    """
+    The last time that the tool instance has received a message
+    through any channel.
     """
 
     extra: Optional[Any] = None
