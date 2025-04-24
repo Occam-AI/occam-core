@@ -85,6 +85,9 @@ class AgentContactType(str, enum.Enum):
     OTHER = "OTHER"
     """Other data sent back from the agent."""
 
+    USER_SCREEN = "USER_SCREEN"
+    """User screen data sent back from the agent."""
+
 
 
 class TaggedAgentModel(BaseModel):
