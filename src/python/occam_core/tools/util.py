@@ -1,6 +1,6 @@
 import enum
 import uuid
-from typing import Any, List, Optional
+from typing import Any, Dict, List, Optional
 
 from occam_core.chat.model import ChatPermissions
 from pydantic import BaseModel, Field, model_validator
@@ -25,29 +25,60 @@ class ToolInstanceType(str, enum.Enum):
 
 class ToolInstanceContext(BaseModel):
 
-    # This is track the init instance
-    # for checkpointing and tracking.
     instance_id: Optional[str] = None
+    """
+    The id of the instance for checkpointing and tracking.
+    """
+
     instance_type: Optional[ToolInstanceType] = None
+    """
+    The type of the instance, whether it's a tool, agent or workspace.
+    """
+
     workspace_id: Optional[str] = None
+    """
+    The id of the workspace that the tool is associated with.
+    Tool has to be instantiated as an agent in a workspace.
+    """
+
     workspace_permissions: Optional[List[ChatPermissions]] = None
+    """
+    The permissions for the workspace, whether an
+    agent can write, end the workspace etc.
+    """
 
-    # This is to track the channel
-    # in which tool activity ends up
     session_id: Optional[str] = None
+    """
+    The session id for the tool. Session id signifies
+    an incubator that the tool's work into. This can
+    span across many different runs and tools. As such
+    is a more general concept than an instance id.
+    """
 
-    # Ths is in case this is an agentic tool
-    # and it's being launched by agent
-    # agent_key. otherwise there's no
-    # way for us to tell who the agent is.
     agent_key: Optional[str] = None
+    """
+    The key for the agent that is controlling the tool.
+    """
 
-    # this is the link for tracking the agent as it works.
     run_link: Optional[str] = None
+    """
+    The link for tracking the agent as it works.
+    """
 
     # this is to allow the tool to control the
     # state of the agent if allowed to do so.
     allow_external_state_control: bool = False
+    """
+    Whether the tool is allowed to control the state of the agent.
+    """
+
+    last_channel_read_times: Optional[Dict[str, float]] = None
+    """
+    A log of the last times that the tool instance has
+    received a message, indexed on the instance id of the
+    sender of the message. Use for checkpointing communication
+    with other tools. i.e. not having memory loss.
+    """
 
     extra: Optional[Any] = None
 
