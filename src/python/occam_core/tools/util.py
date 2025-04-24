@@ -1,5 +1,6 @@
 import enum
 import uuid
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 from occam_core.chat.model import ChatPermissions
@@ -72,7 +73,7 @@ class ToolInstanceContext(BaseModel):
     Whether the tool is allowed to control the state of the agent.
     """
 
-    last_channel_read_times: Optional[Dict[str, float]] = None
+    last_channel_read_times: Optional[Dict[str, datetime]] = None
     """
     A log of the last times that the tool instance has
     received a message, indexed on the instance id of the
