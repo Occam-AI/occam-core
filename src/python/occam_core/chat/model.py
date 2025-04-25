@@ -34,22 +34,44 @@ class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
     for the front-end in the same DB.
     """
 
-    # instance is run specific
     instance_id: str
-    # session can span across independent multi-agent chats
-    # runs that we throw in the same place.
+    """
+    the id of the agent instance that generated the message
+    """
+
     session_id: str
+    """
+    the id of the session in which the message was sent. This
+    can span multiple workspaces.
+    """
 
-    # Key of the agent that sent the message
-    # this is only passed for users, not the chat
-    # manager.
+    workspace_id: str
+    """
+    the id of the workspace in which the message was sent.
+    """
+
     agent_key: Optional[str] = None
+    """
+    the key of the agent that sent the message.
+    """
 
-    # chat status can occur for human agents and chat managers.
     chat_status: ChatStatus = ChatStatus.ACTIVE
+    """
+    the status of the chat designated by the communicating agent
+    (if they are provided with the permissions to do so)
+    """
 
     message_index: Optional[int] = None
-    message_time: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    """
+    the index of the message in the chat.
+    """
 
-    # includes content, plus any extra structured data added to the message.
+    message_time: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    """
+    the time the message was sent.
+    """
+
     full_content: Optional[str] = None
+    """
+    the full text content of the message.
+    """
