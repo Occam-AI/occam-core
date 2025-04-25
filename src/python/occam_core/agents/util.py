@@ -123,7 +123,7 @@ class TaggedAgentsModel(BaseModel):
                 f"tagged agent key must be unique. Got {tag_model.tagged_agent_key} " \
                 f"more than once."
             _tagged_agent_keys.add(tag_model.tagged_agent_key)
-        self.tagged_agent_keys = _tagged_agent_keys
+        self._tagged_agent_keys = _tagged_agent_keys
 
         return self
 
