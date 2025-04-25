@@ -73,7 +73,7 @@ class ToolInstanceContext(BaseModel):
     Whether the tool is allowed to control the state of the agent.
     """
 
-    last_message_times_by_sender_id: Optional[Dict[str, datetime]] = None
+    last_message_times_by_sender_id: Optional[Dict[str, datetime]] = Field(default_factory=dict)
     """
     A log of the last times that the tool instance has
     received a message, indexed on the instance id of the
