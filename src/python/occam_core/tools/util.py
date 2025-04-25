@@ -1,5 +1,6 @@
 import enum
 import uuid
+from collections import defaultdict
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
@@ -73,7 +74,7 @@ class ToolInstanceContext(BaseModel):
     Whether the tool is allowed to control the state of the agent.
     """
 
-    last_message_times_by_sender_id: Optional[Dict[str, datetime]] = Field(default_factory=lambda: defaultdict(datetime.min))
+    last_message_times_by_sender_id: Optional[Dict[str, datetime]] = None
     """
     A log of the last times that the tool instance has
     received a message, indexed on the instance id of the
@@ -95,6 +96,8 @@ class ToolInstanceContext(BaseModel):
 
     @model_validator(mode="after")
     def validators(self):
+        if not self.last_message_times_by_sender_id:
+            self.last_message_times_by_sender_id = defaultdict(lambda: datetime.min)
         self.set_ids()
         self.check_instance_type()
         self.check_workspace_permissions()
