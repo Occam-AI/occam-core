@@ -113,6 +113,7 @@ class TaggedAgentsModel(BaseModel):
 
     @model_validator(mode="after")
     def validate_tag_pairs(self):
+        self._tagged_agent_keys.clear()
 
         assert len(self.tag_models) > 0, "tag models must not be empty"
         for tag_model in self.tag_models:
