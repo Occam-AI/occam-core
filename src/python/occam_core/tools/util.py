@@ -81,7 +81,7 @@ class ToolInstanceContext(BaseModel):
     with other tools. i.e. not having memory loss.
     """
 
-    last_channel_message_time: datetime = Field(default_factory=datetime.now)
+    last_channel_message_time: datetime = Field(default_factory=datetime.min)
     """
     The last time that the tool instance has received a message
     through any channel.
