@@ -39,7 +39,7 @@ class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
     the id of the agent instance that generated the message
     """
 
-    session_id: str
+    session_id: str = None
     """
     the id of the session in which the message was sent. This
     can span multiple workspaces.
