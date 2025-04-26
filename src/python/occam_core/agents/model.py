@@ -13,6 +13,7 @@ class AgentType(str, Enum):
     Browser_Based_AI_Agent = "Browser_Based_AI_Agent"
     Human = "Human"
     External_Worker = "External_Worker"
+    Workspace = "Workspace"
 
 
 class OccamCategory(str, Enum):
