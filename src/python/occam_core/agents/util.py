@@ -70,6 +70,12 @@ class AgentContactType(str, enum.Enum):
     RESUMED = "RESUMED"
     """Data sent back when the agent announces that it's resumed"""
 
+    STOPPED = "STOPPED"
+    """
+    Data sent back when the agent announces that it's stopped
+    due to a termination request.
+    """
+
     RUN_STEP_COMPLETED = "RUN_STEP_COMPLETED"
     """Data sent back when the agent announces that a batch step has completed."""
 
