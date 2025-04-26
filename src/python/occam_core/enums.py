@@ -88,6 +88,10 @@ class ToolDataType(str, Enum):
     RESUMED = "RESUMED"
     """Data sent back when the tool announces that it's resumed"""
 
+    STOPPED = "STOPPED"
+    """Data sent back when the tool announces that it's stopped
+    due to a termination request."""
+
 
 class BatchStepDataType(str, Enum):
     """
@@ -100,6 +104,10 @@ class BatchStepDataType(str, Enum):
 
     PAUSED = "PAUSED"
     """Data sent back when the tool announces that it's paused"""
+
+    STOPPED = "STOPPED"
+    """Data sent back when the tool announces that it's stopped
+    due to a termination request."""
 
 
 class StreamingStepDataType(str, Enum):
@@ -116,3 +124,9 @@ class StreamingStepDataType(str, Enum):
 
     PAUSED = "PAUSED"
     """Data sent back when the tool announces that it's paused"""
+
+    STOPPED = "STOPPED"
+    """
+    Data sent back when the tool announces that it's stopped
+    due to a termination request.
+    """
