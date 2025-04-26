@@ -62,9 +62,14 @@ class ToolInstanceContext(BaseModel):
     The key for the agent that is controlling the tool.
     """
 
+    instance_link: Optional[str] = None
+    """
+    The base link for the tool instance.
+    """
+
     run_link: Optional[str] = None
     """
-    The link for tracking the agent as it works.
+    The link for tracking the tool as it works.
     """
 
     # this is to allow the tool to control the
