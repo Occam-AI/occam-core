@@ -130,3 +130,6 @@ class ToolInstanceContext(BaseModel):
     def check_workspace_permissions(self):
         if self.workspace_id is not None and not self.workspace_permissions:
             self.workspace_permissions = [ChatPermissions.WRITE]
+
+    def update_run_link(self, run_link: str):
+        self.run_link = run_link
