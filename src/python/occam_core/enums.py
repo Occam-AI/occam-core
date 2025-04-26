@@ -85,6 +85,9 @@ class ToolDataType(str, Enum):
     PAUSED = "PAUSED"
     """Data sent back when the tool announces that it's paused"""
 
+    RESUMED = "RESUMED"
+    """Data sent back when the tool announces that it's resumed"""
+
 
 class BatchStepDataType(str, Enum):
     """
@@ -102,7 +105,7 @@ class BatchStepDataType(str, Enum):
 class StreamingStepDataType(str, Enum):
     """
     This list defines the different types of data
-    that a tool can send.
+    that a tool can send in streaming mode.
     """
 
     STREAMING_UPDATES = "STREAMING_UPDATES"
