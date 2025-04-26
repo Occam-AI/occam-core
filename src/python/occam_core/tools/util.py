@@ -138,3 +138,6 @@ class ToolInstanceContext(BaseModel):
 
     def update_run_link(self, run_link: str):
         self.run_link = run_link
+    
+    def update_instance_link(self, instance_link: str):
+        self.instance_link = instance_link
