@@ -238,10 +238,20 @@ class OccamDataType(BaseModel):
     def get_field_keys(cls) -> set[str]:
         return cls.model_fields.keys()
 
-    def get_data_dict(self) -> dict[str, Any]:
+    def get_data_dict(self, set_fields_only: bool = False) -> dict[str, Any]:
+        if set_fields_only:
+            # Pydantic keeps track of which fields were explicitly set
+            explicitly_set_fields = self.__pydantic_fields_set__
+
+            return {
+                field: getattr(self, field)
+                for field in explicitly_set_fields
+            }
         return self.__dict__ | (self.model_extra or {})
 
-    def get_data_keys(self) -> set[str]:
+    def get_data_keys(self, set_fields_only: bool = False) -> set[str]:
+        if set_fields_only:
+            return self.__pydantic_fields_set__
         return (self.__dict__ | (self.model_extra or {})).keys()
 
     @classmethod
