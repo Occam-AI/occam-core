@@ -77,7 +77,7 @@ class AgentIOModel(LLMIOModel):
 
     @property
     def last_message(self) -> OccamLLMMessage:
-        return self.chat_messages[-1]
+        return self.chat_messages[-1] if self.chat_messages else None
 
     @property
     def text(self) -> str:
