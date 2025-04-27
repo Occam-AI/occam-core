@@ -87,7 +87,7 @@ class ToolInstanceContext(BaseModel):
     with other tools. i.e. not having memory loss.
     """
 
-    last_channel_sent_time: datetime = Field(default_factory=lambda: datetime.now(UTC))
+    last_channel_sent_time: datetime = None
     """
     The last time that the tool instance has received a message
     through any channel.
@@ -101,8 +101,6 @@ class ToolInstanceContext(BaseModel):
 
     @model_validator(mode="after")
     def validators(self):
-        if not self.last_sent_times_by_sender_id:
-            self.last_sent_times_by_sender_id = defaultdict(lambda: datetime.now(UTC))
         self.set_ids()
         self.check_instance_type()
         self.check_workspace_permissions()
