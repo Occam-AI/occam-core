@@ -313,9 +313,9 @@ class LLMIOModel(IOModel):
     """
     chat_messages: Union[
         None,
-        IOccamLLMMessage,
-        ChatManagerOutputMessageModel,
-        ChatCreatorOutputMessageModel
+        List[IOccamLLMMessage],
+        List[ChatManagerOutputMessageModel],
+        List[ChatCreatorOutputMessageModel]
     ] = None
 
     # intermediate prompt that can be used to guide interpretation
