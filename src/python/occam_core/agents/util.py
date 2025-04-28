@@ -1,6 +1,6 @@
 import enum
 import re
-from typing import Any, Dict, List, Optional, Type, TypeVar, Union
+from typing import Any, Dict, List, Literal, Optional, Type, TypeVar, Union
 
 from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
@@ -209,6 +209,8 @@ class ChatStatus(str, enum.Enum):
 
 
 class OccamLLMMessage(BaseModel):
+
+    type: Literal["base"] = "base"
     content: str | list[dict[str, Any]]
     role: LLMRole # system vs user vs assistant
     name: Optional[str] = None # this allows us to distinguish users in a multi-user chat
@@ -263,6 +265,7 @@ class ChatManagerOutputMessageModelTemplate(OccamLLMMessage):
 
 
 class ChatCreatorOutputMessageModel(OccamLLMMessage):
+    type: Literal["creator"] = "creator"
     content: str
     role: LLMRole = LLMRole.assistant
     # this is only expected if the next agent is a human.
@@ -277,6 +280,8 @@ class ChatManagerOutputMessageModel(ChatManagerOutputMessageModelTemplate):
     # at the beginning of the _run, we initialize them
     # with mock values till they're updated through the
     # run.
+    type: Literal["manager"] = "manager"
+
     chat_status: ChatStatus
     share_a_message_to_chat: bool
 
