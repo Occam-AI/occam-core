@@ -2,7 +2,6 @@ import enum
 import re
 from typing import Any, Dict, List, Optional, Type, TypeVar
 
-from occam_core.chat.model import ChatStatus
 from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -197,6 +196,17 @@ class TaggedAgentsModel(BaseModel):
         self.extend(other.tag_models)
         return self
 
+class ChatStatus(str, enum.Enum):
+    # the chat is continuing.
+    ACTIVE = "ACTIVE"
+    # this is the state while the user is being asked for their chat details.
+    CREATING_WORKSPACE = "CREATING_WORKSPACE"
+
+    # the chat is transitioning.
+    SPIN_UP_REQUESTED = "SPIN_UP_REQUESTED"
+    SUCCESS = "SUCCESS"
+    FAILURE = "FAILURE"
+
 
 class OccamLLMMessage(BaseModel):
     content: str | list[dict[str, Any]]
@@ -230,6 +240,7 @@ class OccamLLMMessage(BaseModel):
 
 
 IOccamLLMMessage = TypeVar("IOccamLLMMessage", bound=OccamLLMMessage)
+
 
 
 class ChatManagerOutputMessageModelTemplate(OccamLLMMessage):

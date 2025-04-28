@@ -6,25 +6,13 @@ import enum
 from datetime import UTC, datetime
 from typing import Optional
 
-from occam_core.agents.util import OccamLLMMessage
+from occam_core.agents.util import ChatStatus, OccamLLMMessage
 from pydantic import Field
 
 
 class ChatPermissions(enum.Enum):
     WRITE = "write"
     END_CHAT = "end_chat"
-
-
-class ChatStatus(str, enum.Enum):
-    # the chat is continuing.
-    ACTIVE = "ACTIVE"
-    # this is the state while the user is being asked for their chat details.
-    CREATING_WORKSPACE = "CREATING_WORKSPACE"
-
-    # the chat is transitioning.
-    SPIN_UP_REQUESTED = "SPIN_UP_REQUESTED"
-    SUCCESS = "SUCCESS"
-    FAILURE = "FAILURE"
 
 
 class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
