@@ -1,6 +1,6 @@
 import enum
 import re
-from typing import Any, Dict, List, Optional, Type, TypeVar
+from typing import Any, Dict, List, Optional, Type, TypeVar, Union
 
 from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
@@ -306,7 +306,8 @@ class LLMIOModel(IOModel):
     agent in a conversation, with the convo being the chat messages
     list.
     """
-    chat_messages: Optional[
+    chat_messages: Union[
+        None | 
         IOccamLLMMessage |
         ChatManagerOutputMessageModel |
         ChatCreatorOutputMessageModel
