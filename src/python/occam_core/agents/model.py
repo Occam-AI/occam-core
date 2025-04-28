@@ -13,7 +13,6 @@ class AgentType(str, Enum):
     Browser_Based_AI_Agent = "Browser_Based_AI_Agent"
     Human = "Human"
     External_Worker = "External_Worker"
-    Workspace = "Workspace"
 
 
 class OccamCategory(str, Enum):
@@ -31,6 +30,7 @@ class OccamCategory(str, Enum):
     USER_AGENT = "USER_AGENT"
     FILE_SYSTEM = "FILE_SYSTEM"
     DATABASE = "DATABASE"
+    WORKSPACE = "WORKSPACE"
 
 
 class AgentIdentityCoreModel(BaseModel):
