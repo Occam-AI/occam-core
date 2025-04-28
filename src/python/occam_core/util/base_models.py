@@ -28,17 +28,17 @@ class IOModel(OccamDataType):
         for field_name, field_type in cls.__annotations__.items():
             origin = get_origin(field_type)
             args = get_args(field_type)
-            if (
-                type(field_type) is types.UnionType
-                or origin == typing.Union
-            ) and (
-                # we only allow unions of the form
-                # Union[None, Type], which is the case
-                # for Optional[Type]
-                len(args) > 2
-                or types.NoneType not in args
-            ):
-                raise TypeError(f"IOModel field {field_name} cannot be a union of different types.")
+        #     if (
+        #         type(field_type) is types.UnionType
+        #         or origin == typing.Union
+        #     ) and (
+        #         # we only allow unions of the form
+        #         # Union[None, Type], which is the case
+        #         # for Optional[Type]
+        #         len(args) > 2
+        #         or types.NoneType not in args
+        #     ):
+        #         raise TypeError(f"IOModel field {field_name} cannot be a union of different types.")
         super().__init_subclass__(**kwargs)
 
     # assigns empty lists and dicts to non-assigned list
@@ -124,6 +124,7 @@ class IOModel(OccamDataType):
 
     def set_originator_index(self, originator_index: int):
         self.originator_index = originator_index
+
 
 
 class InputsModel(IOModel):
