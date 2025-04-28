@@ -1,10 +1,12 @@
 import enum
 import re
-from typing import Any, List, Optional, Type, TypeVar
+from typing import Any, Dict, List, Optional, Type, TypeVar
 
 from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, Field, field_validator, model_validator
+
+from python.occam_core.chat.model import ChatStatus
 
 
 def remove_extra_spaces(original_text):
@@ -231,6 +233,55 @@ class OccamLLMMessage(BaseModel):
 IOccamLLMMessage = TypeVar("IOccamLLMMessage", bound=OccamLLMMessage)
 
 
+class ChatManagerOutputMessageModelTemplate(OccamLLMMessage):
+    """
+    This is to be used at the beginning of the _run of the
+    chat manager and to be updated with values as the chat
+    manager progresses.
+    """
+
+    content: str = ""
+    role: LLMRole = LLMRole.assistant
+
+    # this is only expected if the next agent is a human.
+    additional_content: Optional[Dict[str, Any]] = None
+
+    # this is to indicate whether the chat manager is sharing a message
+    # in the chat or not.
+    share_a_message_to_chat: bool = False
+    chat_status: ChatStatus = ChatStatus.SUCCESS
+
+
+class ChatCreatorOutputMessageModel(OccamLLMMessage):
+    content: str
+    role: LLMRole = LLMRole.assistant
+    # this is only expected if the next agent is a human.
+    additional_content: Optional[Dict[str, Any]] = None
+    chat_status: ChatStatus = ChatStatus.CREATING_WORKSPACE
+
+
+class ChatManagerOutputMessageModel(ChatManagerOutputMessageModelTemplate):
+
+    # these fields are optional in the template but
+    # are required to be set in the output.
+    # at the beginning of the _run, we initialize them
+    # with mock values till they're updated through the
+    # run.
+    chat_status: ChatStatus
+    share_a_message_to_chat: bool
+
+    @model_validator(mode='after')
+    def validate_additional_content(self):
+
+        if self.chat_status != ChatStatus.ACTIVE and self.tagged_agents:
+            raise ValueError(f"Chat manager has terminated the chat but specified a next agent: {self.tagged_agents}.")
+        elif self.chat_status != ChatStatus.ACTIVE and self.additional_content:
+            raise ValueError("Chat manager has terminated the chat but specified agent selections.")
+        if self.share_a_message_to_chat and not self.content:
+            raise ValueError("Chat manager has specified to share a message to the chat but has not provided a message.")
+        return self
+
+
 class LLMIOModel(IOModel):
     """
     Input model for LLM tools.
@@ -245,7 +296,11 @@ class LLMIOModel(IOModel):
     agent in a conversation, with the convo being the chat messages
     list.
     """
-    chat_messages: Optional[list[IOccamLLMMessage]] = None
+    chat_messages: Optional[
+        IOccamLLMMessage |
+        ChatManagerOutputMessageModel |
+        ChatCreatorOutputMessageModel
+    ] = None
 
     # intermediate prompt that can be used to guide interpretation
     # of the message to follow.
