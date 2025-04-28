@@ -313,7 +313,7 @@ class LLMIOModel(IOModel):
     """
     chat_messages: Union[
         None | 
-        IOccamLLMMessage |
+        OccamLLMMessage |
         ChatManagerOutputMessageModel |
         ChatCreatorOutputMessageModel
     ] = None
