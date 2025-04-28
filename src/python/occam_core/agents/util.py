@@ -2,11 +2,10 @@ import enum
 import re
 from typing import Any, Dict, List, Optional, Type, TypeVar
 
+from occam_core.chat.model import ChatStatus
 from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, Field, field_validator, model_validator
-
-from python.occam_core.chat.model import ChatStatus
 
 
 def remove_extra_spaces(original_text):
