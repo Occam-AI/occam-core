@@ -234,8 +234,16 @@ class OccamLLMMessage(BaseModel):
 
     @model_validator(mode="after")
     def validate_messages(self):
+        # TODO: Fill _content_messages with content from attachments. Type of each message is AttachmentModel.
+        ...
         self.name = format_llm_messenger_name(self.name)
         return self
+
+    # TODO: Uncomment when we handle attachments in OccamLLMMessage. Acts like a content property.
+    # def get_content(self):
+    #     if self.type == "image":
+    #         return self.get_attachment_content(self.attachments[0])
+    #     return self.content
 
     def to_str(self, message_index: int | None = None):
         return "\n".join([
@@ -246,40 +254,43 @@ class OccamLLMMessage(BaseModel):
             f"Tagged Agents: \n\t{self.tagged_agents}" if self.tagged_agents else "",
         ]).strip()
 
-    @classmethod
-    def flatten(cls, message: Self) -> List[Self]:
-        if message.attachments:
-            if not message.content_messages:
-                content_messages = []
-                for attachment in message.attachments:
-                    content_messages.append(
-                        OccamLLMMessage(
-                            type="base",
-                            content=attachment.name,
-                            role=LLMRole.assistant,
-                            name=attachment.name,
-                            attachments=[attachment]
-                        )
-                    )
-                message.content_messages = content_messages
-            return [message] + message.content_messages
-        return [message]
+    # TODO: Uncomment when we handle attachments in OccamLLMMessage
+    # @classmethod
+    # def flatten(cls, message: Self) -> List[Self]:
+    #     if message.attachments:
+    #         if not message.content_messages:
+    #             content_messages = []
+    #             for attachment in message.attachments:
+    #                 content_messages.append(
+    #                     OccamLLMMessage(
+    #                         type="base",
+    #                         content=attachment.name,
+    #                         role=LLMRole.assistant,
+    #                         name=attachment.name,
+    #                         attachments=[attachment]
+    #                     )
+    #                 )
+    #             message.content_messages = content_messages
 
-    def extract_attachment_content(attachment, parent_message: Self):
+    #     # message.content_messages = content_messages
+    #         return [message] + message.content_messages
+    #     return [message]
 
-        if is_image_file(attachment):
-            image_data = base64_encode_file(path)
-            content = {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_data}"}}
-            )
-            # print(f"Image data: {image_data}")
-        elif is_readable_file(path):
-            content = get_file_data(path)
+    # TODO: Uncomment once we handle attachments in OccamLLMMessage    
+    # def get_attachment_content(self, attachment: MessageAttachmentModel):
 
-        return OccamLLMMessage(
-            content=content,
-            role=parent_message.role,
-            name=parent_message.name
-        )
+    #     if is_image_file(attachment):
+    #         image_data = base64_encode_file(path)
+    #         content = {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_data}"}}
+    #         # print(f"Image data: {image_data}")
+    #     elif is_readable_file(path):
+    #         content = get_file_data(path)
+
+    #     return OccamLLMMessage(
+    #         content=content,
+    #         role=parent_message.role,
+    #         name=parent_message.name
+    #     )
 
     class Config:
         arbitrary_types_allowed = True
@@ -287,7 +298,6 @@ class OccamLLMMessage(BaseModel):
 
 
 IOccamLLMMessage = TypeVar("IOccamLLMMessage", bound=OccamLLMMessage)
-
 
 
 class ChatManagerOutputMessageModelTemplate(OccamLLMMessage):
