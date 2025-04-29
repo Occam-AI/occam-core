@@ -208,6 +208,13 @@ class ChatStatus(str, enum.Enum):
     FAILURE = "FAILURE"
 
 
+class MessageAttachmentModel(BaseModel):
+    name: str
+    url: str
+    file_key: str
+    dataset_uuid: str
+
+
 class OccamLLMMessage(BaseModel):
 
     type: Literal["base"] = "base"
@@ -221,6 +228,7 @@ class OccamLLMMessage(BaseModel):
     parsed: Optional[Any] = None
 
     tagged_agents: Optional[TaggedAgentsModel] = None
+    attachments: Optional[list[MessageAttachmentModel]] = None
 
     @model_validator(mode="after")
     def validate_messages(self):
