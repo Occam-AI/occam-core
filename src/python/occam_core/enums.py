@@ -109,6 +109,9 @@ class BatchStepDataType(str, Enum):
     """Data sent back when the tool announces that it's stopped
     due to a termination request."""
 
+    RESUMED = "RESUMED"
+    """Data sent back when the tool announces that it's resumed"""
+
 
 class StreamingStepDataType(str, Enum):
     """
@@ -130,3 +133,6 @@ class StreamingStepDataType(str, Enum):
     Data sent back when the tool announces that it's stopped
     due to a termination request.
     """
+
+    RESUMED = "RESUMED"
+    """Data sent back when the tool announces that it's resumed"""
