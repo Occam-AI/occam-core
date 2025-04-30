@@ -261,7 +261,7 @@ class OccamLLMMessage(BaseModel):
     attachments: Optional[list[MessageAttachmentModel]] = None
     """Attachments are files that can be attached to a message."""
 
-    content_messages: Optional[list['OccamLLMMessage']] = None
+    content_from_attachments: Optional[list['OccamLLMMessage']] = None
     """Content messages are messages extracted from attachments."""
 
     @field_serializer('content')
@@ -277,9 +277,9 @@ class OccamLLMMessage(BaseModel):
                 raise ValueError("Messages that represent a single attachment are not expected to have other attachments.")
             if not self.source_attachment:
                 raise ValueError("Messages that represent a single attachment must have a source attachment.")
-        elif self.attachments and not self.content_messages:
+        elif self.attachments and not self.content_from_attachments:
             for attachment in self.attachments:
-                self.content_messages.append(OccamLLMMessage.from_attachment(self, attachment))
+                self.content_from_attachments.append(OccamLLMMessage.from_attachment(self, attachment))
         self.name = format_llm_messenger_name(self.name)
         return self
 
