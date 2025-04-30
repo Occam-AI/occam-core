@@ -388,9 +388,6 @@ class LLMIOModel(IOModel):
     # each message has its own quadruple.
     name: Optional[str] = None
 
-    # file paths to be used for vision models
-    file_paths: Optional[list[str]] = None
-
     # we dont' save as TypeVar IBaseModel as it can't be
     # loaded back and beaks validation as a result.
     response_format: Optional[Any] = None
