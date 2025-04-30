@@ -262,7 +262,7 @@ class OccamLLMMessage(BaseModel):
     """Attachments are files that can be attached to a message."""
 
     content_messages: Optional[list['OccamLLMMessage']] = None
-    """Content messages are messages that can be attached to a message."""
+    """Content messages are messages extracted from attachments."""
 
     @field_serializer('content')
     def serialize_content(self, v, _info):
