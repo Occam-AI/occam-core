@@ -5,8 +5,8 @@ from typing import (Any, Dict, List, Literal, Optional, Self, Type, TypeVar,
 
 from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
-from pydantic import (BaseModel, ConfigDict, Field, field_validator,
-                      model_validator)
+from pydantic import (BaseModel, ConfigDict, Field, field_serializer,
+                      field_validator, model_validator)
 
 
 def remove_extra_spaces(original_text):
@@ -219,34 +219,69 @@ class MessageAttachmentModel(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
 
+class MessageType(str, enum.Enum):
+    BASE = "base"
+    ATTACHMENT = "attachment"
+    CREATOR = "creator"
+    MANAGER = "manager"
+
+
 class OccamLLMMessage(BaseModel):
 
     type: Literal["base"] = "base"
-    content: str | list[dict[str, Any]]
+    """
+    This is the type of the message. Used for model validators
+    to know how to distinguish between a union of types.
+    """
+
+    content: Optional[str | list[dict[str, Any]]]
+    """
+    This is the content of the message.
+    """
+
+    source_attachment: Optional[MessageAttachmentModel] = None
+    """
+    This is the attachment that was used to generate
+    the message, if any exists.
+    """
+
     role: LLMRole # system vs user vs assistant
-    name: Optional[str] = None # this allows us to distinguish users in a multi-user chat
-    # Note: this is a pydantic model of the sturcture output if available.
-    # at present this means that we can't load this structured output back
-    # from the DB as we don't know what the model is.
-    # even if we store it as IBaseModel, we have the same issue.
+    name: Optional[str] = None
+
     parsed: Optional[Any] = None
+    """
+    Note: this is a pydantic model of the sturcture output if available.
+    this means that it can't be loaded back from a dump, unless the consumer knows
+    what the source model is.
+    """
 
     tagged_agents: Optional[TaggedAgentsModel] = None
+    """Agents can tag each other in a message."""
+
     attachments: Optional[list[MessageAttachmentModel]] = None
-    content_messages: Optional[list[Any]] = None
+    """Attachments are files that can be attached to a message."""
+
+    content_messages: Optional[list['OccamLLMMessage']] = None
+    """Content messages are messages that can be attached to a message."""
+
+    @field_serializer('content')
+    def serialize_content(self, v, _info):
+        if self.type == MessageType.ATTACHMENT.value:
+            return None
+        return v
 
     @model_validator(mode="after")
     def validate_messages(self):
-        # TODO: Fill _content_messages with content from attachments. Type of each message is AttachmentModel.
-        ...
+        if self.type == MessageType.ATTACHMENT.value:
+            if self.attachments:
+                raise ValueError("Messages that represent a single attachment are not expected to have other attachments.")
+            if not self.source_attachment:
+                raise ValueError("Messages that represent a single attachment must have a source attachment.")
+        elif self.attachments and not self.content_messages:
+            for attachment in self.attachments:
+                self.content_messages.append(OccamLLMMessage.from_attachment(self, attachment))
         self.name = format_llm_messenger_name(self.name)
         return self
-
-    # TODO: Uncomment when we handle attachments in OccamLLMMessage. Acts like a content property.
-    # def get_content(self):
-    #     if self.type == "image":
-    #         return self.get_attachment_content(self.attachments[0])
-    #     return self.content
 
     def to_str(self, message_index: int | None = None):
         return "\n".join([
@@ -257,43 +292,15 @@ class OccamLLMMessage(BaseModel):
             f"Tagged Agents: \n\t{self.tagged_agents}" if self.tagged_agents else "",
         ]).strip()
 
-    # TODO: Uncomment when we handle attachments in OccamLLMMessage
-    # @classmethod
-    # def flatten(cls, message: Self) -> List[Self]:
-    #     if message.attachments:
-    #         if not message.content_messages:
-    #             content_messages = []
-    #             for attachment in message.attachments:
-    #                 content_messages.append(
-    #                     OccamLLMMessage(
-    #                         type="base",
-    #                         content=attachment.name,
-    #                         role=LLMRole.assistant,
-    #                         name=attachment.name,
-    #                         attachments=[attachment]
-    #                     )
-    #                 )
-    #             message.content_messages = content_messages
-
-    #     # message.content_messages = content_messages
-    #         return [message] + message.content_messages
-    #     return [message]
-
-    # TODO: Uncomment once we handle attachments in OccamLLMMessage    
-    # def get_attachment_content(self, attachment: MessageAttachmentModel):
-
-    #     if is_image_file(attachment):
-    #         image_data = base64_encode_file(path)
-    #         content = {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_data}"}}
-    #         # print(f"Image data: {image_data}")
-    #     elif is_readable_file(path):
-    #         content = get_file_data(path)
-
-    #     return OccamLLMMessage(
-    #         content=content,
-    #         role=parent_message.role,
-    #         name=parent_message.name
-    #     )
+    @classmethod
+    def from_attachment(cls, parent_message: Self, attachment: MessageAttachmentModel):
+        return cls(
+            type=MessageType.ATTACHMENT.value,
+            content=None,
+            role=parent_message.role,
+            name=attachment.name,
+            attachments=[attachment]
+        )
 
     class Config:
         arbitrary_types_allowed = True
