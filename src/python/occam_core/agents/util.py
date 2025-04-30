@@ -5,7 +5,8 @@ from typing import (Any, Dict, List, Literal, Optional, Self, Type, TypeVar,
 
 from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
-from pydantic import BaseModel, Field, field_validator, model_validator
+from pydantic import (BaseModel, ConfigDict, Field, field_validator,
+                      model_validator)
 
 
 def remove_extra_spaces(original_text):
@@ -214,6 +215,8 @@ class MessageAttachmentModel(BaseModel):
     url: str
     file_key: str
     dataset_uuid: str
+
+    model_config = ConfigDict(extra="ignore")
 
 
 class OccamLLMMessage(BaseModel):
