@@ -125,7 +125,8 @@ class TaggedAgentsModel(BaseModel):
     @model_validator(mode="after")
     def validate_tag_pairs(self):
         _tagged_agent_keys = set()
-        assert len(self.tag_models) > 0, "tag models must not be empty"
+        # FIXME: @medhat not sure if this assertion is always true. Seems we get empty tag_models on spin-up.
+        # assert len(self.tag_models) > 0, "tag models must not be empty"
         for tag_model in self.tag_models:
             assert self.tagging_agent_key != tag_model.tagged_agent_key, \
                 f"tagging agent key must be different from tagged agent key: " \
