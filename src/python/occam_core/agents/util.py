@@ -211,14 +211,22 @@ class ChatStatus(str, enum.Enum):
     FAILURE = "FAILURE"
 
 
-class MessageAttachmentModel(BaseModel):
+class FileMetadataModel(BaseModel):
     name: str
     url: str
     file_key: str
     dataset_uuid: str
-    content: Optional[str | bytes] = None
+    workspace_id: Optional[str] = None
 
     model_config = ConfigDict(extra="ignore")
+
+
+class ReferenceMetadataModel(FileMetadataModel):
+    ...
+
+
+class MessageAttachmentModel(FileMetadataModel):
+    content: Optional[str | bytes] = None
 
     @field_serializer('content')
     def serialize_content(self, v, _info):
@@ -269,7 +277,7 @@ class OccamLLMMessage(BaseModel):
     attachments: Optional[list[MessageAttachmentModel]] = None
     """Attachments are files that can be attached to a message."""
 
-    references: Optional[list[MessageAttachmentModel]] = None
+    references: Optional[list[ReferenceMetadataModel]] = None
     """References to attachments used to generate the message."""
 
     content_from_attachments: Optional[list['OccamLLMMessage']] = None
@@ -299,7 +307,7 @@ class OccamLLMMessage(BaseModel):
         self.attachments = attachments
         self.content_from_attachments = [OccamLLMMessage.from_attachment(self, attachment) for attachment in attachments]
 
-    def set_references(self, references: list[MessageAttachmentModel]):
+    def set_references(self, references: list[ReferenceMetadataModel]):
         self.references = references
 
     def to_str(self, message_index: int | None = None):
