@@ -216,10 +216,15 @@ class MessageAttachmentModel(BaseModel):
     url: str
     file_key: str
     dataset_uuid: str
-    preview: Optional[str | bytes] = None
-    preview_url: Optional[str] = None
+    content: Optional[str | bytes] = None
 
     model_config = ConfigDict(extra="ignore")
+
+    @field_serializer('content')
+    def serialize_content(self, v, _info):
+        if self.content:
+            return None
+        return v
 
 
 class MessageType(str, enum.Enum):
@@ -289,6 +294,10 @@ class OccamLLMMessage(BaseModel):
         self.name = format_llm_messenger_name(self.name)
         return self
 
+    def set_attachments(self, attachments: list[MessageAttachmentModel]):
+        self.attachments = attachments
+        self.content_from_attachments = [OccamLLMMessage.from_attachment(self, attachment) for attachment in attachments]
+
     def to_str(self, message_index: int | None = None):
         return "\n".join([
             f"Message Index: {message_index}" if message_index is not None else "",
@@ -302,7 +311,7 @@ class OccamLLMMessage(BaseModel):
     def from_attachment(cls, parent_message: Self, attachment: MessageAttachmentModel):
         return cls(
             type=MessageType.ATTACHMENT.value,
-            content=None,
+            content=attachment.content,
             role=parent_message.role,
             name=attachment.name,
             attachments=[attachment]
