@@ -288,6 +288,10 @@ class OccamLLMMessage(BaseModel):
         self.name = format_llm_messenger_name(self.name)
         return self
 
+    def set_attachments(self, attachments: list[MessageAttachmentModel]):
+        self.attachments = attachments
+        self.content_from_attachments = [OccamLLMMessage.from_attachment(self, attachment) for attachment in attachments]
+
     def to_str(self, message_index: int | None = None):
         return "\n".join([
             f"Message Index: {message_index}" if message_index is not None else "",
