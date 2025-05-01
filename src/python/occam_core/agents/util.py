@@ -216,6 +216,8 @@ class MessageAttachmentModel(BaseModel):
     url: str
     file_key: str
     dataset_uuid: str
+    preview: Optional[str | bytes] = None
+    preview_url: Optional[str] = None
 
     model_config = ConfigDict(extra="ignore")
 
@@ -261,6 +263,9 @@ class OccamLLMMessage(BaseModel):
 
     attachments: Optional[list[MessageAttachmentModel]] = None
     """Attachments are files that can be attached to a message."""
+
+    references: Optional[list[MessageAttachmentModel]] = None
+    """References to attachments used to generate the message."""
 
     content_from_attachments: Optional[list['OccamLLMMessage']] = None
     """Content messages are messages extracted from attachments."""
