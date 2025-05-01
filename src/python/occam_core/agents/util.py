@@ -301,7 +301,7 @@ class OccamLLMMessage(BaseModel):
     def from_attachment(cls, parent_message: Self, attachment: MessageAttachmentModel):
         return cls(
             type=MessageType.ATTACHMENT.value,
-            content=None,
+            content=attachment.content,
             role=parent_message.role,
             name=attachment.name,
             attachments=[attachment]
