@@ -231,7 +231,7 @@ class MessageType(str, enum.Enum):
 
 class OccamLLMMessage(BaseModel):
 
-    type: Literal["base"] = "base"
+    type: MessageType = MessageType.BASE
     """
     This is the type of the message. Used for model validators
     to know how to distinguish between a union of types.
