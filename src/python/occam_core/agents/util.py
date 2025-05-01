@@ -299,13 +299,13 @@ class OccamLLMMessage(BaseModel):
         elif self.attachments and not self.content_from_attachments:
             self.content_from_attachments = []
             for attachment in self.attachments:
-                self.content_from_attachments.append(OccamLLMMessage.from_attachment(self, attachment))
+                self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, attachment))
         self.name = format_llm_messenger_name(self.name)
         return self
 
     def set_attachments(self, attachments: list[MessageAttachmentModel]):
         self.attachments = attachments
-        self.content_from_attachments = [OccamLLMMessage.from_attachment(self, attachment) for attachment in attachments]
+        self.content_from_attachments = [OccamLLMMessage.from_attachment(self.role, attachment) for attachment in attachments]
 
     def set_references(self, references: list[ReferenceMetadataModel]):
         self.references = references
@@ -320,13 +320,14 @@ class OccamLLMMessage(BaseModel):
         ]).strip()
 
     @classmethod
-    def from_attachment(cls, parent_message: Self, attachment: MessageAttachmentModel) -> Self:
+    def from_attachment(cls, role: LLMRole, attachment: MessageAttachmentModel) -> Self:
         content = attachment.content
         attachment.content = None
         return cls(
             type=MessageType.ATTACHMENT.value,
             content=content,
-            role=parent_message.role,
+            # TODO: Verify correctness of role and name
+            role=role,
             name=attachment.name,
             source_attachment=attachment
         )
