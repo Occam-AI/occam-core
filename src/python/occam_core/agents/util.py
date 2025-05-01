@@ -299,6 +299,9 @@ class OccamLLMMessage(BaseModel):
         self.attachments = attachments
         self.content_from_attachments = [OccamLLMMessage.from_attachment(self, attachment) for attachment in attachments]
 
+    def set_references(self, references: list[MessageAttachmentModel]):
+        self.references = references
+
     def to_str(self, message_index: int | None = None):
         return "\n".join([
             f"Message Index: {message_index}" if message_index is not None else "",
@@ -309,13 +312,13 @@ class OccamLLMMessage(BaseModel):
         ]).strip()
 
     @classmethod
-    def from_attachment(cls, parent_message: Self, attachment: MessageAttachmentModel):
+    def from_attachment(cls, parent_message: Self, attachment: MessageAttachmentModel) -> Self:
         return cls(
             type=MessageType.ATTACHMENT.value,
             content=attachment.content,
             role=parent_message.role,
             name=attachment.name,
-            attachments=[attachment]
+            source_attachment=attachment
         )
 
     class Config:
