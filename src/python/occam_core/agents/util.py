@@ -220,6 +220,12 @@ class MessageAttachmentModel(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
+    @field_serializer('content')
+    def serialize_content(self, v, _info):
+        if self.content:
+            return None
+        return v
+
 
 class MessageType(str, enum.Enum):
     BASE = "base"
