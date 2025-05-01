@@ -216,8 +216,7 @@ class MessageAttachmentModel(BaseModel):
     url: str
     file_key: str
     dataset_uuid: str
-    preview: Optional[str | bytes] = None
-    preview_url: Optional[str] = None
+    content: Optional[str | bytes] = None
 
     model_config = ConfigDict(extra="ignore")
 
