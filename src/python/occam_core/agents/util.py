@@ -289,6 +289,7 @@ class OccamLLMMessage(BaseModel):
             if not self.source_attachment:
                 raise ValueError("Messages that represent a single attachment must have a source attachment.")
         elif self.attachments and not self.content_from_attachments:
+            self.content_from_attachments = []
             for attachment in self.attachments:
                 self.content_from_attachments.append(OccamLLMMessage.from_attachment(self, attachment))
         self.name = format_llm_messenger_name(self.name)
