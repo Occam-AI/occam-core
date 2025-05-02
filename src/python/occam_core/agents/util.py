@@ -5,10 +5,9 @@ from typing import (Any, Dict, List, Literal, Optional, Self, Type, TypeVar,
 
 from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
+from occam_core.util.data_types.occam import OccamDataType
 from pydantic import (BaseModel, ConfigDict, Field, field_serializer,
                       field_validator, model_validator)
-
-from python.occam_core.util.data_types.occam import OccamDataType
 
 
 def remove_extra_spaces(original_text):
