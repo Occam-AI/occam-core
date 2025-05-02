@@ -8,6 +8,8 @@ from occam_core.util.base_models import IOModel
 from pydantic import (BaseModel, ConfigDict, Field, field_serializer,
                       field_validator, model_validator)
 
+from python.occam_core.util.data_types.occam import OccamDataType
+
 
 def remove_extra_spaces(original_text):
     return re.sub(r'\s{2,}', ' ', original_text)
@@ -242,7 +244,7 @@ class MessageType(str, enum.Enum):
     MANAGER = "manager"
 
 
-class OccamLLMMessage(BaseModel):
+class OccamLLMMessage(OccamDataType):
 
     type: MessageType = MessageType.BASE
     """
