@@ -335,9 +335,9 @@ class OccamLLMMessage(OccamDataType):
 
 
 IOccamLLMMessage = TypeVar("IOccamLLMMessage", bound=OccamLLMMessage)
+IBaseModel = TypeVar("IBaseModel", bound=BaseModel)
 
-
-class ChatManagerOutputMessageModel(OccamLLMMessage):
+class WorkspaceManagerOutputMessageModel(OccamLLMMessage):
     """
     This is to be used at the beginning of the _run of the
     chat manager and to be updated with values as the chat
@@ -348,8 +348,7 @@ class ChatManagerOutputMessageModel(OccamLLMMessage):
     content: str = ""
     role: LLMRole = LLMRole.assistant
 
-    # this is only expected if the next agent is a human.
-    additional_content: Optional[Dict[str, Any]] = None
+    additional_content: Optional[IBaseModel] = None
 
 
 class LLMIOModel(IOModel):
@@ -369,7 +368,7 @@ class LLMIOModel(IOModel):
     chat_messages: Union[
         None,
         List[IOccamLLMMessage],
-        List[ChatManagerOutputMessageModel],
+        List[WorkspaceManagerOutputMessageModel],
     ] = None
 
     # intermediate prompt that can be used to guide interpretation
