@@ -284,8 +284,8 @@ class OccamLLMMessage(BaseModel):
     """Content messages are messages extracted from attachments."""
 
     @field_serializer('content')
-    def serialize_content(self, v, _info):
-        if self.type == MessageType.ATTACHMENT.value:
+    def serialize_content(self, v, info):
+        if self.type == MessageType.ATTACHMENT.value and not getattr(info.context, 'keep_content', False):
             return None
         return v
 
