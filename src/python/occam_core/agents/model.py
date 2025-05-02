@@ -33,6 +33,21 @@ class OccamCategory(str, Enum):
     WORKSPACE = "WORKSPACE"
 
 
+
+class PriceTypes(str, Enum):
+    INPUT_TOKEN = "INPUT_TOKEN"
+    OUTPUT_TOKEN = "OUTPUT_TOKEN"
+    HOUR = "HOUR"
+
+
+class PriceModel(BaseModel):
+    type_: PriceTypes
+    unit: str
+    minimum_charge: float
+    macro: str = "{unit}"
+    price_per_unit: float
+
+
 class AgentIdentityCoreModel(BaseModel):
     """
     This model enforces field requirements based on AgentType.
@@ -59,6 +74,7 @@ class AgentIdentityCoreModel(BaseModel):
     price_per_output_token: Optional[float] = None
     price_per_hour: Optional[float] = None
     minimum_charge: Optional[float] = None
+    #price_model: Optional[PriceModel] = None
     is_bot: bool = True
 
     # for loading the params model

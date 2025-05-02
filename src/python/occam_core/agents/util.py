@@ -341,56 +341,19 @@ class OccamLLMMessage(OccamDataType):
 IOccamLLMMessage = TypeVar("IOccamLLMMessage", bound=OccamLLMMessage)
 
 
-class ChatManagerOutputMessageModelTemplate(OccamLLMMessage):
+class ChatManagerOutputMessageModel(OccamLLMMessage):
     """
     This is to be used at the beginning of the _run of the
     chat manager and to be updated with values as the chat
     manager progresses.
     """
+    type: Literal["manager"] = "manager"
 
     content: str = ""
     role: LLMRole = LLMRole.assistant
 
     # this is only expected if the next agent is a human.
     additional_content: Optional[Dict[str, Any]] = None
-
-    # this is to indicate whether the chat manager is sharing a message
-    # in the chat or not.
-    share_a_message_to_chat: bool = False
-    chat_status: ChatStatus = ChatStatus.SUCCESS
-
-
-class ChatCreatorOutputMessageModel(OccamLLMMessage):
-    type: Literal["creator"] = "creator"
-    content: str
-    role: LLMRole = LLMRole.assistant
-    # this is only expected if the next agent is a human.
-    additional_content: Optional[Dict[str, Any]] = None
-    chat_status: ChatStatus = ChatStatus.CREATING_WORKSPACE
-
-
-class ChatManagerOutputMessageModel(ChatManagerOutputMessageModelTemplate):
-
-    # these fields are optional in the template but
-    # are required to be set in the output.
-    # at the beginning of the _run, we initialize them
-    # with mock values till they're updated through the
-    # run.
-    type: Literal["manager"] = "manager"
-
-    chat_status: ChatStatus
-    share_a_message_to_chat: bool
-
-    @model_validator(mode='after')
-    def validate_additional_content(self):
-
-        if self.chat_status != ChatStatus.ACTIVE and self.tagged_agents:
-            raise ValueError(f"Chat manager has terminated the chat but specified a next agent: {self.tagged_agents}.")
-        elif self.chat_status != ChatStatus.ACTIVE and self.additional_content:
-            raise ValueError("Chat manager has terminated the chat but specified agent selections.")
-        if self.share_a_message_to_chat and not self.content:
-            raise ValueError("Chat manager has specified to share a message to the chat but has not provided a message.")
-        return self
 
 
 class LLMIOModel(IOModel):
@@ -411,7 +374,6 @@ class LLMIOModel(IOModel):
         None,
         List[IOccamLLMMessage],
         List[ChatManagerOutputMessageModel],
-        List[ChatCreatorOutputMessageModel]
     ] = None
 
     # intermediate prompt that can be used to guide interpretation
