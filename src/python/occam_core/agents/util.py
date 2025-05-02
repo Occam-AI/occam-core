@@ -201,15 +201,11 @@ class TaggedAgentsModel(BaseModel):
         return self
 
 class ChatStatus(str, enum.Enum):
+    TEMPLATE = "TEMPLATE"
     # the chat is continuing.
     ACTIVE = "ACTIVE"
     # this is the state while the user is being asked for their chat details.
-    CREATING_WORKSPACE = "CREATING_WORKSPACE"
-
-    # the chat is transitioning.
-    SPIN_UP_REQUESTED = "SPIN_UP_REQUESTED"
-    SUCCESS = "SUCCESS"
-    FAILURE = "FAILURE"
+    ARCHIVED = "ARCHIVED"
 
 
 class FileMetadataModel(BaseModel):
