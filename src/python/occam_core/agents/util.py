@@ -239,6 +239,9 @@ class MessageType(str, enum.Enum):
     MANAGER = "manager"
 
 
+IBaseModel = TypeVar("IBaseModel", bound=BaseModel)
+
+
 class OccamLLMMessage(OccamDataType):
 
     type: MessageType = MessageType.BASE
@@ -247,9 +250,15 @@ class OccamLLMMessage(OccamDataType):
     to know how to distinguish between a union of types.
     """
 
-    content: Optional[str | list[dict[str, Any]]]
+    content: Optional[str | list[dict[str, Any]]] = None
     """
     This is the content of the message.
+    """
+
+    structured_requests_content: Optional[IBaseModel | Dict[str, Any]] = None
+    """
+    This covers things like multiple choice questions, connection
+    wizards, etc.
     """
 
     source_attachment: Optional[MessageAttachmentModel] = None
@@ -335,21 +344,6 @@ class OccamLLMMessage(OccamDataType):
 
 
 IOccamLLMMessage = TypeVar("IOccamLLMMessage", bound=OccamLLMMessage)
-IBaseModel = TypeVar("IBaseModel", bound=BaseModel)
-
-class WorkspaceManagerOutputMessageModel(OccamLLMMessage):
-    """
-    This is to be used at the beginning of the _run of the
-    chat manager and to be updated with values as the chat
-    manager progresses.
-    """
-    type: Literal["manager"] = "manager"
-
-    content: str = ""
-    role: LLMRole = LLMRole.assistant
-
-    additional_content: Optional[IBaseModel | Dict[str, Any]] = None
-
 
 class LLMIOModel(IOModel):
     """
@@ -365,11 +359,7 @@ class LLMIOModel(IOModel):
     agent in a conversation, with the convo being the chat messages
     list.
     """
-    chat_messages: Union[
-        None,
-        List[IOccamLLMMessage],
-        List[WorkspaceManagerOutputMessageModel],
-    ] = None
+    chat_messages: Optional[List[IOccamLLMMessage]] = None
 
     # intermediate prompt that can be used to guide interpretation
     # of the message to follow.
