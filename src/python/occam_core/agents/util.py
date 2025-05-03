@@ -348,7 +348,7 @@ class WorkspaceManagerOutputMessageModel(OccamLLMMessage):
     content: str = ""
     role: LLMRole = LLMRole.assistant
 
-    additional_content: Optional[IBaseModel] = None
+    additional_content: Optional[IBaseModel | Dict[str, Any]] = None
 
 
 class LLMIOModel(IOModel):
