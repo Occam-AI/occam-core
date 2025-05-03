@@ -58,6 +58,15 @@ class ToolRunState(str, Enum):
     STOPPED = "STOPPED"
 
 
+class StableToolState(str, Enum):
+    ALIVE = "ALIVE"
+    SLEEPING = "SLEEPING"
+    PAUSED = "PAUSED"
+    BATCH_COMPLETED = "BATCH_COMPLETED"
+    FAILED = "FAILED"
+    STOPPED = "STOPPED"
+
+
 class ToolRunSubStatus(str, Enum):
     # TODO: Implement
     ...
