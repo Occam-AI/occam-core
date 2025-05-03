@@ -17,13 +17,13 @@ class ToolState(str, Enum):
     # Request States
     PAUSE_REQUESTED = "PAUSE_REQUESTED"
     RESUME_REQUESTED = "RESUME_REQUESTED"
-    TERMINATE_REQUESTED = "TERMINATE_REQUESTED"
+    STOP_REQUESTED = "STOP_REQUESTED"
     """These are requests that can be sent to the tool to interrupt a run."""
 
     # Request in progress states
     PAUSE_IN_PROGRESS = "PAUSE_IN_PROGRESS"
     RESUME_IN_PROGRESS = "RESUME_IN_PROGRESS"
-    TERMINATE_IN_PROGRESS = "TERMINATE_IN_PROGRESS"
+    STOP_IN_PROGRESS = "STOP_IN_PROGRESS"
     """Once a tool receives a request, it will transition to the appropriate in progress state."""
 
     # Run related states
@@ -33,7 +33,7 @@ class ToolState(str, Enum):
 
     BATCH_COMPLETED = "BATCH_COMPLETED"
     FAILED = "FAILED"
-    TERMINATED = "TERMINATED"
+    STOPPED = "STOPPED"
     """These are terminal states that a tool can be in."""
 
 
@@ -44,18 +44,18 @@ class ToolRunState(str, Enum):
 
     PAUSE_REQUESTED = "PAUSE_REQUESTED"
     RESUME_REQUESTED = "RESUME_REQUESTED"
-    TERMINATE_REQUESTED = "TERMINATE_REQUESTED"
+    STOP_REQUESTED = "STOP_REQUESTED"
 
     PAUSE_IN_PROGRESS = "PAUSE_IN_PROGRESS"
     RESUME_IN_PROGRESS = "RESUME_IN_PROGRESS"
-    TERMINATE_IN_PROGRESS = "TERMINATE_IN_PROGRESS"
+    STOP_IN_PROGRESS = "STOP_IN_PROGRESS"
 
     RUNNING = "RUNNING"
     PAUSED = "PAUSED"
 
     BATCH_COMPLETED = "BATCH_COMPLETED"
     FAILED = "FAILED"
-    TERMINATED = "TERMINATED"
+    STOPPED = "STOPPED"
 
 
 class ToolRunSubStatus(str, Enum):
