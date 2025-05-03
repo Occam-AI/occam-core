@@ -43,12 +43,6 @@ class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
     the key of the agent that sent the message.
     """
 
-    chat_status: ChatStatus = ChatStatus.ACTIVE
-    """
-    the status of the chat designated by the communicating agent
-    (if they are provided with the permissions to do so)
-    """
-
     message_index: Optional[int] = None
     """
     the index of the message in the chat.
