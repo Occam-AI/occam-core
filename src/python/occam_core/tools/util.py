@@ -5,6 +5,7 @@ from datetime import UTC, datetime
 from typing import Any, Dict, List, Optional
 
 from occam_core.chat.model import ChatPermissions
+from occam_core.enums import ToolRunState, ToolState
 from pydantic import BaseModel, Field, model_validator
 
 
@@ -71,6 +72,18 @@ class ToolInstanceContext(BaseModel):
     """
     The link for tracking the tool as it works.
     """
+
+    state: Optional[ToolState] = None
+    """
+    The state of the tool.
+    """
+
+    run_state: Optional[ToolRunState] = None
+    """
+    The state of the tool run.
+    """
+
+
 
     # this is to allow the tool to control the
     # state of the agent if allowed to do so.
