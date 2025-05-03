@@ -83,8 +83,6 @@ class ToolInstanceContext(BaseModel):
     The state of the tool run.
     """
 
-
-
     # this is to allow the tool to control the
     # state of the agent if allowed to do so.
     allow_external_state_control: bool = False
@@ -153,3 +151,9 @@ class ToolInstanceContext(BaseModel):
     
     def update_instance_link(self, instance_link: str):
         self.instance_link = instance_link
+    
+    def update_state(self, state: ToolState):
+        self.state = state
+    
+    def update_run_state(self, run_state: ToolRunState):
+        self.run_state = run_state
