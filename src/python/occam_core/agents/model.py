@@ -33,12 +33,16 @@ class OccamCategory(str, Enum):
     WORKSPACE = "WORKSPACE"
 
 
-
 class PriceTypes(str, Enum):
-    INPUT_TOKEN = "INPUT_TOKEN"
-    OUTPUT_TOKEN = "OUTPUT_TOKEN"
+    INPUT_TOKENS = "INPUT_TOKENS"
+    OUTPUT_TOKENS = "OUTPUT_TOKENS"
     HOURLY_RATE = "HOURLY_RATE"
     FREE = "FREE"
+    WEB_SEARCH = "WEB_SEARCH"
+    INTERNAL_REASONING = "INTERNAL_REASONING"
+    IMAGE = "IMAGE"
+    REQUEST = "REQUEST"
+    INPUT_CACHE_READ = "INPUT_CACHE_READ"
 
 
 class AgentPriceModel(BaseModel):
