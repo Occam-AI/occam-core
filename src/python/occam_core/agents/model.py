@@ -58,8 +58,8 @@ price_type_to_macro_switch = {
 
 class AgentPriceModel(BaseModel):
     type_: PriceTypes
-    minimum_charge: float = None
-    price_display: str = None
+    minimum_charge: Optional[float] = None
+    price_display: Optional[str] = None
     price_per_unit: float
 
     @model_validator(mode="after")
