@@ -37,7 +37,7 @@ class OccamCategory(str, Enum):
 class PriceTypes(str, Enum):
     INPUT_TOKEN = "INPUT_TOKEN"
     OUTPUT_TOKEN = "OUTPUT_TOKEN"
-    HOUR = "HOUR"
+    HOURLY_RATE = "HOURLY_RATE"
     FREE = "FREE"
 
 
