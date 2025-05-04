@@ -45,7 +45,7 @@ class AgentPriceModel(BaseModel):
     type_: PriceTypes
     unit: str
     minimum_charge: float = 0.0
-    macro: str = "{unit}"
+    macro: str = "${unit}"
     price_per_unit: float
 
 
