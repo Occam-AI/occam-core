@@ -51,7 +51,7 @@ price_type_to_macro_switch = {
     PriceTypes.INTERNAL_REASONING: "${price_per_unit} / 1M",
     PriceTypes.IMAGE: "${price_per_unit} / 1M",
     PriceTypes.INPUT_CACHE_READ: "${price_per_unit} / 1M",
-    PriceTypes.HOURLY_RATE: "${unit} / hour",
+    PriceTypes.HOURLY_RATE: "${price_per_unit} / hour",
     PriceTypes.REQUESTS: "${price_per_unit} / request",
 }
 
