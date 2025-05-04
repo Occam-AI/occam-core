@@ -53,6 +53,10 @@ class AgentPriceModel(BaseModel):
     price_per_unit: float
 
 
+class AgentPriceModels(BaseModel):
+    models: List[AgentPriceModel]
+
+
 class AgentIdentityCoreModel(BaseModel):
     """
     This model enforces field requirements based on AgentType.
@@ -75,7 +79,7 @@ class AgentIdentityCoreModel(BaseModel):
     agent_embedding_vector: Optional[List[float]] = None
     short_description: Optional[str] = None
     long_description: Optional[str] = None
-    price_models: Optional[List[AgentPriceModel]] = None
+    price_models: Optional[AgentPriceModels] = None
     is_bot: bool = True
 
     # for loading the params model
