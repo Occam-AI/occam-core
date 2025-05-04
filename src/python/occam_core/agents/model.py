@@ -38,12 +38,13 @@ class PriceTypes(str, Enum):
     INPUT_TOKEN = "INPUT_TOKEN"
     OUTPUT_TOKEN = "OUTPUT_TOKEN"
     HOUR = "HOUR"
+    FREE = "FREE"
 
 
 class AgentPriceModel(BaseModel):
     type_: PriceTypes
     unit: str
-    minimum_charge: float
+    minimum_charge: float = 0.0
     macro: str = "{unit}"
     price_per_unit: float
 
