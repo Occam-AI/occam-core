@@ -40,7 +40,7 @@ class PriceTypes(str, Enum):
     HOUR = "HOUR"
 
 
-class PriceModel(BaseModel):
+class AgentPriceModel(BaseModel):
     type_: PriceTypes
     unit: str
     minimum_charge: float
@@ -70,11 +70,7 @@ class AgentIdentityCoreModel(BaseModel):
     agent_embedding_vector: Optional[List[float]] = None
     short_description: Optional[str] = None
     long_description: Optional[str] = None
-    price_per_input_token: Optional[float] = None
-    price_per_output_token: Optional[float] = None
-    price_per_hour: Optional[float] = None
-    minimum_charge: Optional[float] = None
-    #price_model: Optional[PriceModel] = None
+    price_model: Optional[AgentPriceModel] = None
     is_bot: bool = True
 
     # for loading the params model
