@@ -224,6 +224,7 @@ class ReferenceMetadataModel(FileMetadataModel):
 
 class MessageAttachmentModel(FileMetadataModel):
     content: Optional[str | bytes] = None
+    content_type: Optional[str] = None
 
     @field_serializer('content')
     def serialize_content(self, v, _info):
