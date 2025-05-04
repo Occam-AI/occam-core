@@ -37,7 +37,6 @@ class PriceTypes(str, Enum):
     INPUT_TOKENS = "INPUT_TOKENS"
     OUTPUT_TOKENS = "OUTPUT_TOKENS"
     HOURLY_RATE = "HOURLY_RATE"
-    FREE = "FREE"
     WEB_SEARCH = "WEB_SEARCH"
     INTERNAL_REASONING = "INTERNAL_REASONING"
     IMAGE = "IMAGE"
@@ -45,12 +44,35 @@ class PriceTypes(str, Enum):
     INPUT_CACHE_READ = "INPUT_CACHE_READ"
 
 
+price_type_to_macro_switch = {
+    PriceTypes.INPUT_TOKENS: "${price_per_unit} / 1M",
+    PriceTypes.OUTPUT_TOKENS: "${price_per_unit} / 1M",
+    PriceTypes.WEB_SEARCH: "${price_per_unit} / 1M",
+    PriceTypes.INTERNAL_REASONING: "${price_per_unit} / 1M",
+    PriceTypes.IMAGE: "${price_per_unit} / 1M",
+    PriceTypes.INPUT_CACHE_READ: "${price_per_unit} / 1M",
+    PriceTypes.HOURLY_RATE: "${unit} / hour",
+    PriceTypes.REQUESTS: "${price_per_unit} / request",
+}
+
+
 class AgentPriceModel(BaseModel):
     type_: PriceTypes
-    unit: str
-    minimum_charge: float = 0.0
-    macro: str = "${unit}"
+    minimum_charge: float = None
+    price_display: str = None
     price_per_unit: float
+
+    @model_validator(mode="after")
+    def set_price_display(self) -> Self:
+        if self.price_display:
+            raise ValueError("price_display is not allowed to be set")
+        if self.price_per_unit is None:
+            self.price_display = "FREE"
+        else:
+            self.price_display = price_type_to_macro_switch[self.type_].format(
+                price_per_unit=self.price_per_unit
+            )
+        return self
 
 
 class AgentPriceModels(BaseModel):
