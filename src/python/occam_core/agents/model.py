@@ -79,7 +79,7 @@ class AgentIdentityCoreModel(BaseModel):
     agent_embedding_vector: Optional[List[float]] = None
     short_description: Optional[str] = None
     long_description: Optional[str] = None
-    price_models: Optional[AgentPriceModels] = None
+    price_models: AgentPriceModels = Field(default_factory=lambda: AgentPriceModels(models=[]))
     is_bot: bool = True
 
     # for loading the params model
