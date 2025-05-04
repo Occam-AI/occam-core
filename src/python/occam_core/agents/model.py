@@ -71,7 +71,7 @@ class AgentIdentityCoreModel(BaseModel):
     agent_embedding_vector: Optional[List[float]] = None
     short_description: Optional[str] = None
     long_description: Optional[str] = None
-    price_model: Optional[AgentPriceModel] = None
+    price_models: Optional[List[AgentPriceModel]] = None
     is_bot: bool = True
 
     # for loading the params model
