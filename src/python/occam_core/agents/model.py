@@ -64,8 +64,8 @@ class AgentPriceModel(BaseModel):
 
     @model_validator(mode="after")
     def set_price_display(self) -> Self:
-        if self.price_display:
-            raise ValueError("price_display is not allowed to be set")
+        if self.price_display is not None:
+            return self
         if self.price_per_unit is None:
             self.price_display = "FREE"
         else:
