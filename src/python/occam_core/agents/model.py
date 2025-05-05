@@ -66,7 +66,7 @@ class AgentPriceModel(BaseModel):
     def set_price_display(self) -> Self:
         if self.price_display is not None:
             return self
-        if self.price_per_unit is None:
+        if (self.price_per_unit or 0) == 0:
             self.price_display = "FREE"
         else:
             self.price_display = price_type_to_macro_switch[self.type_].format(

@@ -6,7 +6,7 @@ import enum
 from datetime import UTC, datetime
 from typing import Optional
 
-from occam_core.agents.util import ChatStatus, OccamLLMMessage
+from occam_core.agents.util import OccamLLMMessage
 from pydantic import Field
 
 
