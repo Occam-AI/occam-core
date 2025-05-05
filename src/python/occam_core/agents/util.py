@@ -212,6 +212,7 @@ class TaggedAgentsModel(BaseModel):
         return self
 
 class ChatStatus(str, enum.Enum):
+    STANDBY = "STANDBY"
     TEMPLATE = "TEMPLATE"
     # the chat is continuing.
     ACTIVE = "ACTIVE"
