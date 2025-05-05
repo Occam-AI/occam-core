@@ -14,12 +14,6 @@ class ToolState(str, Enum):
     SLEEPING = "SLEEPING"
     """A tool is sleeping when it's not running, but the db has all the instance info."""
 
-    # Request States
-    PAUSE_REQUESTED = "PAUSE_REQUESTED"
-    RESUME_REQUESTED = "RESUME_REQUESTED"
-    STOP_REQUESTED = "STOP_REQUESTED"
-    """These are requests that can be sent to the tool to interrupt a run."""
-
     # Request in progress states
     PAUSE_IN_PROGRESS = "PAUSE_IN_PROGRESS"
     RESUME_IN_PROGRESS = "RESUME_IN_PROGRESS"
@@ -41,10 +35,6 @@ class ToolRunState(str, Enum):
     """
     These are run related states
     """
-
-    PAUSE_REQUESTED = "PAUSE_REQUESTED"
-    RESUME_REQUESTED = "RESUME_REQUESTED"
-    STOP_REQUESTED = "STOP_REQUESTED"
 
     PAUSE_IN_PROGRESS = "PAUSE_IN_PROGRESS"
     RESUME_IN_PROGRESS = "RESUME_IN_PROGRESS"
@@ -152,4 +142,9 @@ STOPPABLE_STATES = {
     ToolState.PAUSED,
     ToolState.RESUME_IN_PROGRESS,
     ToolState.PAUSE_IN_PROGRESS,
+}
+
+PAUSABLE_STATES = {
+    ToolState.RUNNING,
+    ToolState.RESUME_IN_PROGRESS,
 }
