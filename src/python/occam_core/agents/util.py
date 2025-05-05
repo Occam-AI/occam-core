@@ -101,10 +101,12 @@ class AgentContactType(str, enum.Enum):
     """User screen data sent back from the agent."""
 
 
-
 class TaggedAgentModel(BaseModel):
+
     tagged_agent_key: str
     tag_type: AgentContactType = AgentContactType.RUN
+    handover_required: bool = False
+
     tag_message: Optional[str] = None
     tagging_agent_key: Optional[str] = None
 
