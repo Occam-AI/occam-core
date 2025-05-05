@@ -58,15 +58,6 @@ class ToolRunState(str, Enum):
     STOPPED = "STOPPED"
 
 
-class StableToolState(str, Enum):
-    ALIVE = "ALIVE"
-    SLEEPING = "SLEEPING"
-    PAUSED = "PAUSED"
-    BATCH_COMPLETED = "BATCH_COMPLETED"
-    FAILED = "FAILED"
-    STOPPED = "STOPPED"
-
-
 class ToolRunSubStatus(str, Enum):
     # TODO: Implement
     ...
@@ -145,3 +136,20 @@ class StreamingStepDataType(str, Enum):
 
     RESUMED = "RESUMED"
     """Data sent back when the tool announces that it's resumed"""
+
+
+STABLE_STATES = {
+    ToolState.ALIVE,
+    ToolState.SLEEPING,
+    ToolState.PAUSED,
+    ToolState.BATCH_COMPLETED,
+    ToolState.FAILED,
+    ToolState.STOPPED,
+}
+
+STOPPABLE_STATES = {
+    ToolState.RUNNING,
+    ToolState.PAUSED,
+    ToolState.RESUME_IN_PROGRESS,
+    ToolState.PAUSE_IN_PROGRESS,
+}
