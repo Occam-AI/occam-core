@@ -140,6 +140,7 @@ STABLE_STATES = {
 STOPPABLE_STATES = {
     ToolState.RUNNING,
     ToolState.PAUSED,
+    ToolState.FAILED,
     ToolState.RESUME_IN_PROGRESS,
     ToolState.PAUSE_IN_PROGRESS,
 }
