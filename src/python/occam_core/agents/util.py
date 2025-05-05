@@ -252,7 +252,11 @@ class MessageType(str, enum.Enum):
     MANAGER = "manager"
 
 
-IBaseModel = TypeVar("IBaseModel", bound=BaseModel)
+class StructuredRequestsModel(BaseModel):
+    ...
+
+
+IStructuredRequestsModel = TypeVar("IStructuredRequestModel", bound=StructuredRequestsModel)
 
 
 class OccamLLMMessage(OccamDataType):
@@ -268,7 +272,7 @@ class OccamLLMMessage(OccamDataType):
     This is the content of the message.
     """
 
-    structured_requests_content: Optional[IBaseModel | Dict[str, Any]] = None
+    structured_requests_content: Optional[IStructuredRequestsModel | Dict[str, Any]] = None
     """
     This covers things like multiple choice questions, connection
     wizards, etc.
@@ -307,6 +311,14 @@ class OccamLLMMessage(OccamDataType):
         if self.type == MessageType.ATTACHMENT.value and not getattr(info.context, 'keep_content', False):
             return None
         return v
+
+    @field_serializer('structured_requests_content')
+    def serialize_structured_content(self, v, info):
+        if v is None:
+            return None
+        if isinstance(v, dict):
+            return v
+        return v.model_dump(mode="json")
 
     @model_validator(mode="after")
     def validate_messages(self):
