@@ -252,11 +252,11 @@ class MessageType(str, enum.Enum):
     MANAGER = "manager"
 
 
-class StructuredRequestsModel(BaseModel):
-    ...
+# class StructuredRequestsModel(BaseModel):
+#     ...
 
 
-IStructuredRequestsModel = TypeVar("IStructuredRequestModel", bound=StructuredRequestsModel)
+# IStructuredRequestsModel = TypeVar("IStructuredRequestModel", bound=StructuredRequestsModel)
 
 
 class OccamLLMMessage(OccamDataType):
@@ -272,11 +272,11 @@ class OccamLLMMessage(OccamDataType):
     This is the content of the message.
     """
 
-    structured_requests_content: Optional[IStructuredRequestsModel | Dict[str, Any]] = None
-    """
-    This covers things like multiple choice questions, connection
-    wizards, etc.
-    """
+    # structured_requests_content: Optional[IStructuredRequestsModel | Dict[str, Any]] = None
+    # """
+    # This covers things like multiple choice questions, connection
+    # wizards, etc.
+    # """
 
     source_attachment: Optional[MessageAttachmentModel] = None
     """
@@ -312,13 +312,13 @@ class OccamLLMMessage(OccamDataType):
             return None
         return v
 
-    @field_serializer('structured_requests_content')
-    def serialize_structured_content(self, v, info):
-        if v is None:
-            return None
-        if isinstance(v, dict):
-            return v
-        return v.model_dump(mode="json")
+    # @field_serializer('structured_requests_content')
+    # def serialize_structured_content(self, v, info):
+    #     if v is None:
+    #         return None
+    #     if isinstance(v, dict):
+    #         return v
+    #     return v.model_dump(mode="json")
 
     @model_validator(mode="after")
     def validate_messages(self):
