@@ -137,6 +137,8 @@ STABLE_STATES = {
     ToolState.STOPPED,
 }
 
+UNSTABLE_STATES = set(ToolState) - STABLE_STATES
+
 STOPPABLE_STATES = {
     ToolState.RUNNING,
     ToolState.PAUSED,
@@ -144,6 +146,7 @@ STOPPABLE_STATES = {
     ToolState.RESUME_IN_PROGRESS,
     ToolState.PAUSE_IN_PROGRESS,
 }
+
 
 PAUSABLE_STATES = {
     ToolState.RUNNING,
