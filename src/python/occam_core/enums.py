@@ -148,3 +148,9 @@ PAUSABLE_STATES = {
     ToolState.RUNNING,
     ToolState.RESUME_IN_PROGRESS,
 }
+
+
+RESUMABLE_STATES = {
+    ToolState.PAUSED,
+    ToolState.FAILED,
+}
