@@ -106,6 +106,11 @@ class TaggedAgentModel(BaseModel):
     tagged_agent_key: str
     tag_type: AgentContactType = AgentContactType.RUN
     tag_message: Optional[str] = None
+    tagging_agent_key: Optional[str] = None
+
+    def set_tagging_agent_key(self, tagging_agent_key: str):
+        self.tagging_agent_key = tagging_agent_key
+        return self
 
 
 class TaggedAgentsModel(BaseModel):
@@ -135,8 +140,8 @@ class TaggedAgentsModel(BaseModel):
                 f"tagged agent key must be unique. Got {tag_model.tagged_agent_key} " \
                 f"more than once."
             _tagged_agent_keys.add(tag_model.tagged_agent_key)
+            tag_model.set_tagging_agent_key(self.tagging_agent_key)
         self._tagged_agent_keys = _tagged_agent_keys
-
         return self
 
     @classmethod
@@ -146,7 +151,12 @@ class TaggedAgentsModel(BaseModel):
         for key in tagged_agent_keys:
             assert isinstance(key, str), \
                 f"tagged agent key must be a string. Got {type(key)}."
-            tag_models.append(TaggedAgentModel(tagged_agent_key=key))
+            tag_models.append(
+                TaggedAgentModel(
+                    tagged_agent_key=key,
+                    tagging_agent_key=tagging_agent_key
+                )
+            )
         return cls(tagging_agent_key=tagging_agent_key, tag_models=tag_models)
 
     def append(self, tagged_agent: TaggedAgentModel):
