@@ -212,13 +212,24 @@ class TaggedAgentsModel(BaseModel):
         return self
 
 class ChatStatus(str, enum.Enum):
-    STANDBY = "STANDBY"
+
+    # The are workspace templates.
     TEMPLATE = "TEMPLATE"
-    # the chat is continuing.
+
+    #When a workspace is initiated
+    # but not run yet.
+    STANDBY = "STANDBY"
+
+    # active workspaces (started or resumed).
     ACTIVE = "ACTIVE"
-    # this is the state while the user is being asked for their chat details.
+
+    # when a user terminates a workspace.
     ARCHIVING_REQUESTED = "ARCHIVING_REQUESTED"
     ARCHIVED = "ARCHIVED"
+
+    # when we pause a workspace from
+    # the server for whatever reason.
+    PAUSED = "PAUSED"
 
 
 class FileMetadataModel(BaseModel):
