@@ -217,7 +217,8 @@ class ChatStatus(str, enum.Enum):
     # the chat is continuing.
     ACTIVE = "ACTIVE"
     # this is the state while the user is being asked for their chat details.
-    ARCHIVE = "ARCHIVE"
+    ARCHIVING_REQUESTED = "ARCHIVING_REQUESTED"
+    ARCHIVED = "ARCHIVED"
 
 
 class FileMetadataModel(BaseModel):
