@@ -55,6 +55,17 @@ price_type_to_macro_switch = {
     PriceTypes.REQUESTS: "${price_per_unit} / request",
 }
 
+price_type_to_sort_order = {
+    PriceTypes.INPUT_TOKENS: 1,
+    PriceTypes.OUTPUT_TOKENS: 2,
+    PriceTypes.WEB_SEARCH: 3,
+    PriceTypes.REQUESTS: 4,
+    PriceTypes.IMAGE: 5,
+    PriceTypes.INTERNAL_REASONING: 6,
+    PriceTypes.INPUT_CACHE_READ: 7,
+    PriceTypes.HOURLY_RATE: 8,
+}
+
 
 class AgentPriceModel(BaseModel):
     type_: PriceTypes
@@ -80,10 +91,11 @@ class AgentPriceModels(BaseModel):
 
     @model_validator(mode="after")
     def set_price_display(self) -> Self:
-        new_models = []
+        new_models: List[AgentPriceModel] = []
         for model in self.models:
             if model.type_ != PriceTypes.HOURLY_RATE or model.price_display != "FREE":
                 new_models.append(model)
+        new_models.sort(key=lambda x: price_type_to_sort_order[x.type_])
         self.models = new_models
         return self
 
