@@ -78,6 +78,15 @@ class AgentPriceModel(BaseModel):
 class AgentPriceModels(BaseModel):
     models: List[AgentPriceModel]
 
+    @model_validator(mode="after")
+    def set_price_display(self) -> Self:
+        new_models = []
+        for model in self.models:
+            if model.type_ != PriceTypes.HOURLY_RATE or model.price_display != "FREE":
+                new_models.append(model)
+        self.models = new_models
+        return self
+
 
 class AgentIdentityCoreModel(BaseModel):
     """
