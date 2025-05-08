@@ -158,3 +158,11 @@ RESUMABLE_STATES = {
     ToolState.PAUSED,
     ToolState.FAILED,
 }
+
+RUNNABLE_STATES = {
+    ToolState.ALIVE,
+    ToolState.SLEEPING,
+    ToolState.BATCH_COMPLETED,
+    ToolState.FAILED,
+    ToolState.STOPPED,
+}
