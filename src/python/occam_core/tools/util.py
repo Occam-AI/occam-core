@@ -116,6 +116,15 @@ class ToolInstanceContext(BaseModel):
         self.set_ids()
         self.check_instance_type()
         self.check_workspace_permissions()
+        self.datetime_from_iso_string()
+        return self
+
+    def datetime_from_iso_string(self):
+        if self.last_sent_times_by_sender_id:
+            self.last_sent_times_by_sender_id = {
+                k: datetime.fromisoformat(v) for k, v in self.last_sent_times_by_sender_id.items()
+                if not isinstance(v, datetime)
+            }
         return self
 
     def set_ids(self):
