@@ -241,6 +241,23 @@ class FileMetadataModel(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
+    @model_validator(mode="after")
+    def make_name_user_friendly_for_workspace_uploads(self):
+        """
+        Workspace uploads have a non-user friendly name
+        of the form {workspace_id}__{username}__{filename}
+        to minimise clash. This function creates a user
+        friendly name for workspace upload files
+
+        by taking the filename from the file_key.
+        file_key takes the structure:
+        {workspace_id}/{filename} so we extract the filename
+        and use that as the name.
+        """
+        if self.workspace_id:
+            self.name = self.file_key.split("/")[-1]
+        return self
+
 
 class ReferenceMetadataModel(FileMetadataModel):
     ...
