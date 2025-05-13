@@ -236,6 +236,7 @@ class FileMetadataModel(BaseModel):
     name: str
     url: str
     file_key: str
+    datasource_uuid: str
     dataset_uuid: str
     workspace_id: Optional[str] = None
 
