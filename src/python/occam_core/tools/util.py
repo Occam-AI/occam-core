@@ -26,19 +26,6 @@ class ToolInstanceType(str, enum.Enum):
     WORKSPACE = "WORKSPACE"
 
 
-class ProgressMessageType(str, enum.Enum):
-    ACTION = "ACTION"
-    WARNING = "WARNING"
-    SEARCH = "SEARCH"
-    ERROR = "ERROR"
-    INFO = "INFO"
-
-
-class ProgressMessageModel(BaseModel):
-    message: str
-    message_type: ProgressMessageType = Field(default=ProgressMessageType.ACTION)
-
-
 class ToolInstanceContext(BaseModel):
 
     instance_id: Optional[str] = None
@@ -116,13 +103,6 @@ class ToolInstanceContext(BaseModel):
     """
     The last time that the tool instance has received a message
     through any channel.
-    """
-
-    progress_messages: Optional[List[ProgressMessageModel]] = Field(default_factory=list)
-    """
-    A list of progress messages that tool instance keeps
-    track of, these are specific to the last active run
-    call and gets emptied afterwards.
     """
 
     extra: Optional[Any] = None
