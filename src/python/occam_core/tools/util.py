@@ -118,7 +118,7 @@ class ToolInstanceContext(BaseModel):
     through any channel.
     """
 
-    progress_messages: Optional[List[ProgressMessageModel]] = None
+    progress_messages: Optional[List[ProgressMessageModel]] = Field(default_factory=list)
     """
     A list of progress messages that tool instance keeps
     track of, these are specific to the last active run
