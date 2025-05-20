@@ -105,7 +105,7 @@ class TaggedAgentModel(BaseModel):
 
     tagged_agent_key: str
     tag_type: AgentContactType = AgentContactType.RUN
-    handover_required: bool = False
+    tagging_required: bool = False
 
     tag_message: Optional[str] = None
     tagging_agent_key: Optional[str] = None
