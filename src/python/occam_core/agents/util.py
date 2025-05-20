@@ -234,6 +234,7 @@ class ChatStatus(str, enum.Enum):
 
 class FileMetadataModel(BaseModel):
     name: str
+    display_name: str
     url: str
     file_key: str
     datasource_uuid: str
@@ -250,13 +251,11 @@ class FileMetadataModel(BaseModel):
         to minimise clash. This function creates a user
         friendly name for workspace upload files
 
-        by taking the filename from the file_key.
-        file_key takes the structure:
-        {workspace_id}/{filename} so we extract the filename
-        and use that as the name.
+        by taking the filename from the name.
         """
+        self.display_name = self.name
         if self.workspace_id:
-            self.name = self.file_key.split("/")[-1]
+            self.display_name = self.name.split("__")[-1]
         return self
 
 
