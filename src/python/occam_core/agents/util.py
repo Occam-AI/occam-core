@@ -234,7 +234,7 @@ class ChatStatus(str, enum.Enum):
 
 class FileMetadataModel(BaseModel):
     name: str
-    display_name: str
+    display_name: str = Field(default_factory=str)
     url: str
     file_key: str
     datasource_uuid: str
