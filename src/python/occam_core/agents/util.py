@@ -303,6 +303,12 @@ class StreamingMessageModel(BaseModel):
 class StreamingMessagesModel(BaseModel):
     messages: List[StreamingMessageModel] = Field(default_factory=list)
 
+    def append(self, message: StreamingMessageModel):
+        self.messages.append(message)
+
+    def extend(self, messages: List[StreamingMessageModel]):
+        self.messages.extend(messages)
+
 
 class OccamLLMMessage(OccamDataType):
 
