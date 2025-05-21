@@ -105,7 +105,7 @@ class ToolInstanceContext(BaseModel):
     through any channel.
     """
 
-    produce_agent_output_if_producer: bool = False
+    produce_agent_output_if_producer: bool = True
     """
     Whether the tool instance should produce agent output
     if it can produce it as an encoded version of its
