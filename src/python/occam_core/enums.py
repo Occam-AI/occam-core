@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Callable
 
 
 class ToolState(str, Enum):
@@ -126,6 +127,17 @@ class StreamingStepDataType(str, Enum):
     RESUMED = "RESUMED"
     """Data sent back when the tool announces that it's resumed"""
 
+
+data_type_to_run_state_switch: Callable[[ToolDataType], ToolRunState] = \
+    lambda data_type: (
+        ToolRunState.RUNNING
+        if data_type in [
+            ToolDataType.INTERMEDIATE_RUN_UPDATES,
+            ToolDataType.RUN_STEP_COMPLETED,
+            ToolDataType.RESUMED,
+        ]
+        else ToolRunState(data_type.value)
+    )
 
 STABLE_STATES = {
     ToolState.ALIVE,
