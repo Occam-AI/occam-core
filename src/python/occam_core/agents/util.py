@@ -300,6 +300,10 @@ class StreamingMessageModel(BaseModel):
     message_type: StreamMessageType = Field(default=StreamMessageType.ACTION)
 
 
+class StreamingMessagesModel(BaseModel):
+    messages: List[StreamingMessageModel]
+
+
 class OccamLLMMessage(OccamDataType):
 
     type: MessageType = MessageType.BASE
@@ -313,7 +317,7 @@ class OccamLLMMessage(OccamDataType):
     This is the content of the message.
     """
 
-    streaming_messages: Optional[list[StreamingMessageModel]] = None
+    streaming_messages: Optional[StreamingMessagesModel] = None
     """
     A list of streaming messages. these are sometimes attached
     to a message, and allow us to display "steps or thoughts"
