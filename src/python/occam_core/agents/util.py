@@ -287,6 +287,18 @@ class MessageType(str, enum.Enum):
 
 # IStructuredRequestsModel = TypeVar("IStructuredRequestModel", bound=StructuredRequestsModel)
 
+class StreamMessageType(str, enum.Enum):
+    ACTION = "ACTION"
+    WARNING = "WARNING"
+    SEARCH = "SEARCH"
+    ERROR = "ERROR"
+    INFO = "INFO"
+
+
+class StreamingMessageModel(BaseModel):
+    message: str
+    message_type: StreamMessageType = Field(default=StreamMessageType.ACTION)
+
 
 class OccamLLMMessage(OccamDataType):
 
@@ -299,6 +311,14 @@ class OccamLLMMessage(OccamDataType):
     content: Optional[str | list[dict[str, Any]]] = None
     """
     This is the content of the message.
+    """
+
+    streaming_messages: Optional[list[StreamingMessageModel]] = None
+    """
+    A list of streaming messages. these are sometimes attached
+    to a message, and allow us to display "steps or thoughts"
+    that may have been involved in generation of the main
+    message
     """
 
     # structured_requests_content: Optional[IStructuredRequestsModel | Dict[str, Any]] = None
@@ -329,11 +349,11 @@ class OccamLLMMessage(OccamDataType):
     attachments: Optional[list[MessageAttachmentModel]] = None
     """Attachments are files that can be attached to a message."""
 
-    references: Optional[list[ReferenceMetadataModel]] = None
-    """References to attachments used to generate the message."""
-
     content_from_attachments: Optional[list['OccamLLMMessage']] = None
     """Content messages are messages extracted from attachments."""
+
+    references: Optional[list[ReferenceMetadataModel]] = None
+    """References to attachments used to generate the message."""
 
     @field_serializer('content')
     def serialize_content(self, v, info):
