@@ -301,7 +301,7 @@ class StreamingMessageModel(BaseModel):
 
 
 class StreamingMessagesModel(BaseModel):
-    messages: List[StreamingMessageModel]
+    messages: List[StreamingMessageModel] = Field(default_factory=list)
 
 
 class OccamLLMMessage(OccamDataType):
