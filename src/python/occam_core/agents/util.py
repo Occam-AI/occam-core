@@ -331,6 +331,11 @@ class OccamLLMMessage(OccamDataType):
     """
     This is the attachment that was used to generate
     the message, if any exists.
+
+    Reason we have this, is that for each attachment, we
+    explode it (in case of images usually) to feed into
+    LLMs, so we just move it around as a fully fledged
+    occam llm message.
     """
 
     role: LLMRole # system vs user vs assistant
