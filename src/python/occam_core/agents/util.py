@@ -323,9 +323,9 @@ class OccamLLMMessage(OccamDataType):
     This is the content of the message.
     """
 
-    streaming_messages: Optional[StreamingMessagesModel] = None
+    update_messages: Optional[StreamingMessagesModel] = None
     """
-    A list of streaming messages. these are sometimes attached
+    A list of update messages. these are sometimes attached
     to a message, and allow us to display "steps or thoughts"
     that may have been involved in generation of the main
     message
