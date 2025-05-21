@@ -158,6 +158,12 @@ RESUMABLE_STATES = {
     ToolState.FAILED,
 }
 
+
+SLEEPING_STATES = {
+    ToolState.SLEEPING,
+} | RESUMABLE_STATES
+
+
 RUNNABLE_STATES = {
     ToolState.ALIVE,
     ToolState.SLEEPING,
