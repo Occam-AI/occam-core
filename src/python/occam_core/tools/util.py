@@ -19,11 +19,11 @@ class OccamUUID(uuid.UUID):
         return str(uuid.uuid4()).replace("-", "_")
 
 
-
 class ToolInstanceType(str, enum.Enum):
     TOOL = "TOOL"
     AGENT = "AGENT"
     WORKSPACE = "WORKSPACE"
+# params
 
 
 class ToolInstanceContext(BaseModel):
@@ -103,6 +103,27 @@ class ToolInstanceContext(BaseModel):
     """
     The last time that the tool instance has received a message
     through any channel.
+    """
+
+    produce_agent_output_if_producer: bool = False
+    """
+    Whether the tool instance should produce agent output
+    if it can produce it as an encoded version of its
+    raw output.
+    """
+
+    trigger_reception_thread: bool = False
+    """
+    Whether the tool instance should trigger a reception thread
+    that runs asynchronously in the background to listen
+    to messages.
+    """
+
+    trigger_sending_thread: bool = False
+    """
+    Whether the tool instance should trigger a sending thread
+    that runs asynchronously in the background to send
+    messages.
     """
 
     extra: Optional[Any] = None
