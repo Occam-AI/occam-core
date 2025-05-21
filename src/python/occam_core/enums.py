@@ -128,7 +128,7 @@ class StreamingStepDataType(str, Enum):
     """Data sent back when the tool announces that it's resumed"""
 
 
-data_type_to_run_state_switch: Callable[[ToolDataType], ToolRunState] = \
+DATA_TYPE_TO_RUN_STATE_SWITCH: Callable[[ToolDataType], ToolRunState] = \
     lambda data_type: (
         ToolRunState.RUNNING
         if data_type in [
