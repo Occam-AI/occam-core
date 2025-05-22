@@ -299,6 +299,7 @@ class StreamMessageType(str, enum.Enum):
 class StreamingMessageModel(BaseModel):
     message: str
     message_type: StreamMessageType = Field(default=StreamMessageType.ACTION)
+    run_time: timedelta
 
 
 class StreamingMessagesModel(BaseModel):
