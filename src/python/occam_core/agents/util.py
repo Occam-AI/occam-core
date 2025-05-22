@@ -233,7 +233,21 @@ class ChatStatus(str, enum.Enum):
     PAUSED = "PAUSED"
 
 
-class FileMetadataModel(BaseModel):
+class CallToAction(str, enum.Enum):
+    REQUEST_APPROVAL = "REQUEST_APPROVAL"
+    APPROVE = "APPROVE"
+    REJECT = "REJECT"
+
+
+class BaseAttachmentModel(BaseModel):
+    content: Optional[str | bytes] = None
+
+
+class CtaAttachmentModel(BaseAttachmentModel):
+    cta: CallToAction
+
+
+class FileMetadataModel(BaseAttachmentModel):
     name: str
     url: str
     file_key: str
@@ -243,7 +257,7 @@ class FileMetadataModel(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     @model_validator(mode="after")
-    def make_name_user_friendly_for_workspace_uploads(self):
+    def set_name_for_workspace_uploads_and_remove_content(self):
         """
         Workspace uploads have a non-user friendly name
         of the form {workspace_id}__{username}__{filename}
@@ -254,9 +268,14 @@ class FileMetadataModel(BaseModel):
         file_key takes the structure:
         {workspace_id}/{filename} so we extract the filename
         and use that as the name.
+
+        This model is also not meant to be used to pass
+        content around, so we make sure to remove it.
         """
         if self.workspace_id:
             self.name = self.file_key.split("/")[-1]
+        if self.content:
+            self.content = None
         return self
 
 
@@ -265,7 +284,6 @@ class ReferenceMetadataModel(FileMetadataModel):
 
 
 class MessageAttachmentModel(FileMetadataModel):
-    content: Optional[str | bytes] = None
     content_type: Optional[str] = None
 
     @field_serializer('content')
@@ -273,6 +291,9 @@ class MessageAttachmentModel(FileMetadataModel):
         if self.content:
             return None
         return v
+
+
+IAttachmentModel = TypeVar("IAttachmentModel", bound=BaseAttachmentModel)
 
 
 class MessageType(str, enum.Enum):
@@ -368,8 +389,8 @@ class OccamLLMMessage(OccamDataType):
     tagged_agents: Optional[TaggedAgentsModel] = None
     """Agents can tag each other in a message."""
 
-    attachments: Optional[list[MessageAttachmentModel]] = None
-    """Attachments are files that can be attached to a message."""
+    attachments: Optional[list[IAttachmentModel]] = None
+    """Attachments are files that can be attached to a message or CTAs with additional content."""
 
     content_from_attachments: Optional[list['OccamLLMMessage']] = None
     """Content messages are messages extracted from attachments."""
@@ -432,7 +453,7 @@ class OccamLLMMessage(OccamDataType):
         ]).strip()
 
     @classmethod
-    def from_attachment(cls, role: LLMRole, attachment: MessageAttachmentModel) -> Self:
+    def from_attachment(cls, role: LLMRole, attachment: IAttachmentModel) -> Self:
         content = attachment.content
         attachment.content = None
         return cls(
