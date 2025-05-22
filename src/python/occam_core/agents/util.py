@@ -1,5 +1,6 @@
 import enum
 import re
+from datetime import timedelta
 from typing import (Any, Dict, List, Literal, Optional, Self, Type, TypeVar,
                     Union)
 
@@ -321,6 +322,11 @@ class OccamLLMMessage(OccamDataType):
     content: Optional[str | list[dict[str, Any]]] = None
     """
     This is the content of the message.
+    """
+
+    content_producer_run_time: Optional[timedelta] = None
+    """
+    The time it took for the content producer to produce the content.
     """
 
     update_messages: Optional[StreamingMessagesModel] = None
