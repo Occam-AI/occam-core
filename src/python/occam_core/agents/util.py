@@ -413,9 +413,13 @@ class OccamLLMMessage(OccamDataType):
         self.references = references
 
     def set_content_producer_run_time(self, content_producer_run_time: timedelta):
+        if self.content_producer_run_time:
+            return
         self.content_producer_run_time = content_producer_run_time
 
     def set_update_messages(self, update_messages: StreamingMessagesModel):
+        if self.update_messages:
+            return
         self.update_messages = update_messages
 
     def to_str(self, message_index: int | None = None):
