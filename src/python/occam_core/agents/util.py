@@ -324,12 +324,12 @@ class OccamLLMMessage(OccamDataType):
     This is the content of the message.
     """
 
-    content_producer_run_time: Optional[timedelta] = None
+    _content_producer_run_time: Optional[timedelta] = None
     """
     The time it took for the content producer to produce the content.
     """
 
-    update_messages: Optional[StreamingMessagesModel] = None
+    _update_messages: Optional[StreamingMessagesModel] = None
     """
     A list of update messages. these are sometimes attached
     to a message, and allow us to display "steps or thoughts"
@@ -376,6 +376,15 @@ class OccamLLMMessage(OccamDataType):
     references: Optional[list[ReferenceMetadataModel]] = None
     """References to attachments used to generate the message."""
 
+
+    @property
+    def content_producer_run_time(self):
+        return self._content_producer_run_time
+
+    @property
+    def update_messages(self):
+        return self._update_messages
+
     @field_serializer('content')
     def serialize_content(self, v, info):
         if self.type == MessageType.ATTACHMENT.value and not getattr(info.context, 'keep_content', False):
@@ -410,6 +419,12 @@ class OccamLLMMessage(OccamDataType):
 
     def set_references(self, references: list[ReferenceMetadataModel]):
         self.references = references
+
+    def set_content_producer_run_time(self, content_producer_run_time: timedelta):
+        self._content_producer_run_time = content_producer_run_time
+
+    def set_update_messages(self, update_messages: StreamingMessagesModel):
+        self._update_messages = update_messages
 
     def to_str(self, message_index: int | None = None):
         return "\n".join([
