@@ -240,6 +240,7 @@ class CallToAction(str, enum.Enum):
 
 
 class BaseAttachmentModel(BaseModel):
+    name: str
     content: Optional[str | bytes] = None
 
 
@@ -248,7 +249,6 @@ class CtaAttachmentModel(BaseAttachmentModel):
 
 
 class FileMetadataModel(BaseAttachmentModel):
-    name: str
     url: str
     file_key: str
     dataset_uuid: str
