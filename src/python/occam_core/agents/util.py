@@ -365,7 +365,7 @@ class OccamLLMMessage(OccamDataType):
     # wizards, etc.
     # """
 
-    source_attachment: Optional[IAttachmentModel] = None
+    source_attachment: Optional[MessageAttachmentModel] = None
     """
     This is the attachment that was used to generate
     the message, if any exists.
@@ -389,7 +389,10 @@ class OccamLLMMessage(OccamDataType):
     tagged_agents: Optional[TaggedAgentsModel] = None
     """Agents can tag each other in a message."""
 
-    attachments: Optional[list[IAttachmentModel]] = None
+    cta_attachment: Optional[CtaAttachmentModel] = None
+    """Call to action is an additional message that can be attached to the message."""
+
+    attachments: Optional[list[MessageAttachmentModel]] = None
     """Attachments are files that can be attached to a message or CTAs with additional content."""
 
     content_from_attachments: Optional[list['OccamLLMMessage']] = None
@@ -423,12 +426,22 @@ class OccamLLMMessage(OccamDataType):
             self.content_from_attachments = []
             for attachment in self.attachments:
                 self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, attachment))
+
+        if self.cta_attachment:
+            self.content_from_attachments = self.content_from_attachments or []
+            self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, self.cta_attachment))
+
         self.name = format_llm_messenger_name(self.name)
         return self
 
     def set_attachments(self, attachments: list[MessageAttachmentModel]):
         self.attachments = attachments
         self.content_from_attachments = [OccamLLMMessage.from_attachment(self.role, attachment) for attachment in attachments]
+
+    def set_cta_attachment(self, cta_attachment: CtaAttachmentModel):
+        self.cta_attachment = cta_attachment
+        self.content_from_attachments = self.content_from_attachments or []
+        self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, cta_attachment))
 
     def set_references(self, references: list[ReferenceMetadataModel]):
         self.references = references
