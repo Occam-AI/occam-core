@@ -365,7 +365,7 @@ class OccamLLMMessage(OccamDataType):
     # wizards, etc.
     # """
 
-    source_attachment: Optional[MessageAttachmentModel] = None
+    source_attachment: Optional[IAttachmentModel] = None
     """
     This is the attachment that was used to generate
     the message, if any exists.
