@@ -233,8 +233,22 @@ class ChatStatus(str, enum.Enum):
     PAUSED = "PAUSED"
 
 
-class FileMetadataModel(BaseModel):
+class CallToAction(str, enum.Enum):
+    REQUEST_APPROVAL = "REQUEST_APPROVAL"
+    APPROVE = "APPROVE"
+    REJECT = "REJECT"
+
+
+class BaseAttachmentModel(BaseModel):
     name: str
+    content: Optional[str | bytes] = None
+
+
+class CtaAttachmentModel(BaseAttachmentModel):
+    cta: CallToAction
+
+
+class FileMetadataModel(BaseAttachmentModel):
     url: str
     file_key: str
     dataset_uuid: str
@@ -243,7 +257,7 @@ class FileMetadataModel(BaseModel):
     model_config = ConfigDict(extra="ignore")
 
     @model_validator(mode="after")
-    def make_name_user_friendly_for_workspace_uploads(self):
+    def set_name_for_workspace_uploads_and_remove_content(self):
         """
         Workspace uploads have a non-user friendly name
         of the form {workspace_id}__{username}__{filename}
@@ -254,9 +268,14 @@ class FileMetadataModel(BaseModel):
         file_key takes the structure:
         {workspace_id}/{filename} so we extract the filename
         and use that as the name.
+
+        This model is also not meant to be used to pass
+        content around, so we make sure to remove it.
         """
         if self.workspace_id:
             self.name = self.file_key.split("/")[-1]
+        if self.content:
+            self.content = None
         return self
 
 
@@ -265,7 +284,6 @@ class ReferenceMetadataModel(FileMetadataModel):
 
 
 class MessageAttachmentModel(FileMetadataModel):
-    content: Optional[str | bytes] = None
     content_type: Optional[str] = None
 
     @field_serializer('content')
@@ -273,6 +291,9 @@ class MessageAttachmentModel(FileMetadataModel):
         if self.content:
             return None
         return v
+
+
+IAttachmentModel = TypeVar("IAttachmentModel", bound=BaseAttachmentModel)
 
 
 class MessageType(str, enum.Enum):
@@ -344,7 +365,7 @@ class OccamLLMMessage(OccamDataType):
     # wizards, etc.
     # """
 
-    source_attachment: Optional[MessageAttachmentModel] = None
+    source_attachment: Optional[IAttachmentModel] = None
     """
     This is the attachment that was used to generate
     the message, if any exists.
@@ -368,8 +389,11 @@ class OccamLLMMessage(OccamDataType):
     tagged_agents: Optional[TaggedAgentsModel] = None
     """Agents can tag each other in a message."""
 
+    cta_attachment: Optional[CtaAttachmentModel] = None
+    """Call to action is an additional message that can be attached to the message."""
+
     attachments: Optional[list[MessageAttachmentModel]] = None
-    """Attachments are files that can be attached to a message."""
+    """Attachments are files that can be attached to a message or CTAs with additional content."""
 
     content_from_attachments: Optional[list['OccamLLMMessage']] = None
     """Content messages are messages extracted from attachments."""
@@ -402,12 +426,24 @@ class OccamLLMMessage(OccamDataType):
             self.content_from_attachments = []
             for attachment in self.attachments:
                 self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, attachment))
+
+        # TODO: Figure out if we'll get the content from content from attachments. or the cta itself.
+        #  If from content_from_attachments, we need to uncomment this.
+        # if self.cta_attachment:
+        #     self.content_from_attachments = self.content_from_attachments or []
+        #     self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, self.cta_attachment))
+
         self.name = format_llm_messenger_name(self.name)
         return self
 
     def set_attachments(self, attachments: list[MessageAttachmentModel]):
         self.attachments = attachments
         self.content_from_attachments = [OccamLLMMessage.from_attachment(self.role, attachment) for attachment in attachments]
+
+    def set_cta_attachment(self, cta_attachment: CtaAttachmentModel):
+        self.cta_attachment = cta_attachment
+        self.content_from_attachments = self.content_from_attachments or []
+        self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, cta_attachment))
 
     def set_references(self, references: list[ReferenceMetadataModel]):
         self.references = references
@@ -432,7 +468,7 @@ class OccamLLMMessage(OccamDataType):
         ]).strip()
 
     @classmethod
-    def from_attachment(cls, role: LLMRole, attachment: MessageAttachmentModel) -> Self:
+    def from_attachment(cls, role: LLMRole, attachment: IAttachmentModel) -> Self:
         content = attachment.content
         attachment.content = None
         return cls(
