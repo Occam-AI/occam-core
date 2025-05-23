@@ -82,6 +82,9 @@ class ToolDataType(str, Enum):
     """Data sent back when the tool announces that it's stopped
     due to a termination request."""
 
+    FAILED = "FAILED"
+    """Data sent back when the tool announces that it's failed"""
+
 
 class BatchStepDataType(str, Enum):
     """
@@ -99,6 +102,9 @@ class BatchStepDataType(str, Enum):
     """Data sent back when the tool announces that it's stopped
     due to a termination request."""
 
+    FAILED = "FAILED"
+    """Data sent back when the tool announces that it's failed"""
+
     RESUMED = "RESUMED"
     """Data sent back when the tool announces that it's resumed"""
 
@@ -110,10 +116,16 @@ class StreamingStepDataType(str, Enum):
     """
 
     INTERMEDIATE_RUN_UPDATES = "INTERMEDIATE_RUN_UPDATES"
-    """Internal updates sent back from the tool sometimes this won't exist."""
+    """
+    Internal updates sent back from the tool sometimes
+    this won't exist.
+    """
 
     RUN_STEP_COMPLETED = "RUN_STEP_COMPLETED"
-    """Data sent back when the tool announces that a batch step has completed."""
+    """
+    Data sent back when the tool announces that a batch
+    step has completed.
+    """
 
     PAUSED = "PAUSED"
     """Data sent back when the tool announces that it's paused"""
@@ -123,6 +135,9 @@ class StreamingStepDataType(str, Enum):
     Data sent back when the tool announces that it's stopped
     due to a termination request.
     """
+
+    FAILED = "FAILED"
+    """Data sent back when the tool announces that it's failed"""
 
     RESUMED = "RESUMED"
     """Data sent back when the tool announces that it's resumed"""
