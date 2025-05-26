@@ -248,6 +248,12 @@ class CtaAttachmentModel(BaseAttachmentModel):
     cta: CallToAction
 
 
+class EmailDraftCtaModel(CtaAttachmentModel):
+    email_address: str
+    subject: str
+    body: str
+
+
 class FileMetadataModel(BaseAttachmentModel):
     url: str
     file_key: str
