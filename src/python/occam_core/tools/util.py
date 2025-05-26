@@ -187,3 +187,6 @@ class ToolInstanceContext(BaseModel):
     
     def update_run_state(self, run_state: ToolRunState):
         self.run_state = run_state
+
+    def clear_run_link(self):
+        self.run_link = None

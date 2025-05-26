@@ -320,7 +320,7 @@ class StreamMessageType(str, enum.Enum):
 class StreamingMessageModel(BaseModel):
     message: str
     message_type: StreamMessageType = Field(default=StreamMessageType.ACTION)
-    run_time: timedelta
+    run_time: Optional[timedelta] = None
 
 
 class StreamingMessagesModel(BaseModel):
@@ -454,7 +454,7 @@ class OccamLLMMessage(OccamDataType):
         self.content_producer_run_time = content_producer_run_time
 
     def set_update_messages(self, update_messages: StreamingMessagesModel):
-        if self.update_messages:
+        if self.update_messages and len(self.update_messages.messages) > 0:
             return
         self.update_messages = update_messages
 
