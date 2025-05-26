@@ -250,7 +250,7 @@ class CtaAttachmentModel(BaseAttachmentModel):
 
 class EmailDraftCtaModel(CtaAttachmentModel):
     email_address: str
-    subject: str
+    content: str
     body: str
 
 
