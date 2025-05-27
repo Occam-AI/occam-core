@@ -249,9 +249,10 @@ class CtaAttachmentModel(BaseAttachmentModel):
 
 
 class EmailDraftCtaModel(CtaAttachmentModel):
-    email_address: str
+    recipients: list[str]
     content: str
     subject: str
+    cc: Optional[list[str]] = None
 
 
 class FileMetadataModel(BaseAttachmentModel):
