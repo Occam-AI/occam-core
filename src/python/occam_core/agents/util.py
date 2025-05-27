@@ -237,6 +237,7 @@ class CallToAction(str, enum.Enum):
     REQUEST_APPROVAL = "REQUEST_APPROVAL"
     APPROVE = "APPROVE"
     REJECT = "REJECT"
+    NO_ACTION = "NO_ACTION"
 
 
 class BaseAttachmentModel(BaseModel):
