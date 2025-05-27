@@ -249,7 +249,7 @@ class CtaAttachmentModel(BaseAttachmentModel):
     cta: CallToAction
 
 
-class EmailDraftCtaModel(CtaAttachmentModel):
+class EmailDraftResponseModel(CtaAttachmentModel):
     recipients: list[str]
     content: str
     subject: str
