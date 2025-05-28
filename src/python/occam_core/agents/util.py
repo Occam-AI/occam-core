@@ -448,6 +448,11 @@ class OccamLLMMessage(OccamDataType):
             self.content_from_attachments = []
             for attachment in self.attachments:
                 self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, attachment))
+        # this is in case where the content is in the attachment model itself (eg email)
+        elif self.content_from_attachments:
+            for message in self.content_from_attachments:
+                if not message.content:
+                    message.content = message.source_attachment.content
 
         self.name = format_llm_messenger_name(self.name)
         return self
