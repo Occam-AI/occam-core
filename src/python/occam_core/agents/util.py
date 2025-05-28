@@ -429,14 +429,6 @@ class OccamLLMMessage(OccamDataType):
             return None
         return v
 
-    # @field_serializer('structured_requests_content')
-    # def serialize_structured_content(self, v, info):
-    #     if v is None:
-    #         return None
-    #     if isinstance(v, dict):
-    #         return v
-    #     return v.model_dump(mode="json")
-
     @model_validator(mode="after")
     def validate_messages(self):
         if self.type == MessageType.ATTACHMENT.value:
