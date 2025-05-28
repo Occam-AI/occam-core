@@ -377,7 +377,9 @@ class OccamLLMMessage(OccamDataType):
     # wizards, etc.
     # """
 
-    source_attachment: Optional[IAttachmentModel] = None
+    source_attachment: Optional[
+        Union[MessageAttachmentModel, EmailAttachmentModel]
+    ] = None
     """
     This is the attachment that was used to generate
     the message, if any exists.
@@ -401,7 +403,7 @@ class OccamLLMMessage(OccamDataType):
     tagged_agents: Optional[TaggedAgentsModel] = None
     """Agents can tag each other in a message."""
 
-    attachments: Optional[list[IAttachmentModel]] = None
+    attachments: Optional[list[Union[MessageAttachmentModel, EmailAttachmentModel]]] = None
     """Attachments are files that can be attached to a message or email attachments.
     We need explicit union here, otherwise pydantic would fail to load them correctly
     when LLM tools are preparing their input (converting AgentIOModel to LLMIOModel)
