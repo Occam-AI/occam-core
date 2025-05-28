@@ -241,6 +241,14 @@ class CallToAction(str, enum.Enum):
 class BaseAttachmentModel(BaseModel):
     content: Optional[str | bytes] = None
     cta: Optional[CallToAction] = None
+    confirmed: Optional[bool] = None
+
+    @model_validator(mode="after")
+    def validate_confirmed(self):
+        assert not (self.cta is not None and self.confirmed is not None), \
+            "attachment cannot have both cta and confirmed set, " \
+            "since we either ask for an action or confirm it."
+        return self
 
 
 class EmailAttachmentModel(BaseAttachmentModel):
@@ -255,8 +263,6 @@ class EmailAttachmentModel(BaseAttachmentModel):
     recipients: list[str]
     cc: Optional[list[str]] = None
     bcc: Optional[list[str]] = None
-
-    confirmed: Optional[bool] = None
 
 
 class FileMetadataModel(BaseAttachmentModel):
