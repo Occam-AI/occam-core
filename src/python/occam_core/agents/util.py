@@ -234,15 +234,13 @@ class ChatStatus(str, enum.Enum):
 
 
 class CallToAction(str, enum.Enum):
-    REQUEST_APPROVAL = "REQUEST_APPROVAL"
-    APPROVE = "APPROVE"
-    REJECT = "REJECT"
-    NO_ACTION = "NO_ACTION"
+    APPROVE = "Approve"
 
 
 class BaseAttachmentModel(BaseModel):
     name: str
     content: Optional[str | bytes] = None
+    cta: Optional[CallToAction] = None
 
 
 class EmailAttachmentModel(BaseAttachmentModel):
@@ -250,7 +248,6 @@ class EmailAttachmentModel(BaseAttachmentModel):
     content: str
     subject: str
     summary: str
-    cta: CallToAction
     sender: str
     confirmed: Optional[bool] = None
     cc: Optional[list[str]] = None
