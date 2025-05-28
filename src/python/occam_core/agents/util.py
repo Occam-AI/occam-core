@@ -234,28 +234,33 @@ class ChatStatus(str, enum.Enum):
 
 
 class CallToAction(str, enum.Enum):
-    APPROVE = "Approve"
+    SEND = "Send"
+    SAVE = "Save"
 
 
 class BaseAttachmentModel(BaseModel):
-    name: str
     content: Optional[str | bytes] = None
     cta: Optional[CallToAction] = None
 
 
 class EmailAttachmentModel(BaseAttachmentModel):
-    type: Literal["email_attachment"] = "email_attachment"
-    recipients: list[str]
+
+    # content
     content: str
     subject: str
     summary: str
     sender: str
-    confirmed: Optional[bool] = None
+
+    # contacts
+    recipients: list[str]
     cc: Optional[list[str]] = None
     bcc: Optional[list[str]] = None
 
+    confirmed: Optional[bool] = None
+
 
 class FileMetadataModel(BaseAttachmentModel):
+    name: str
     url: str
     file_key: str
     dataset_uuid: str
@@ -291,7 +296,6 @@ class ReferenceMetadataModel(FileMetadataModel):
 
 
 class MessageAttachmentModel(FileMetadataModel):
-    type: Literal["message_attachment"] = "message_attachment"
     content_type: Optional[str] = None
 
     @field_serializer('content')
@@ -397,7 +401,7 @@ class OccamLLMMessage(OccamDataType):
     tagged_agents: Optional[TaggedAgentsModel] = None
     """Agents can tag each other in a message."""
 
-    attachments: Optional[list[Union[MessageAttachmentModel, EmailAttachmentModel]]] = None
+    attachments: Optional[list[IAttachmentModel]] = None
     """Attachments are files that can be attached to a message or email attachments.
     We need explicit union here, otherwise pydantic would fail to load them correctly
     when LLM tools are preparing their input (converting AgentIOModel to LLMIOModel)
