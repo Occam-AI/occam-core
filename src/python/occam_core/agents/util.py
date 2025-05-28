@@ -395,8 +395,11 @@ class OccamLLMMessage(OccamDataType):
     tagged_agents: Optional[TaggedAgentsModel] = None
     """Agents can tag each other in a message."""
 
-    attachments: Optional[list[IAttachmentModel]] = None
-    """Attachments are files that can be attached to a message or CTAs with additional content."""
+    attachments: Optional[list[Union[MessageAttachmentModel, EmailAttachmentModel]]] = None
+    """Attachments are files that can be attached to a message or email attachments.
+    We need explicit union here, otherwise pydantic would fail to load them correctly
+    when LLM tools are preparing their input (converting AgentIOModel to LLMIOModel)
+    """
 
     content_from_attachments: Optional[list['OccamLLMMessage']] = None
     """Content messages are messages extracted from attachments."""
