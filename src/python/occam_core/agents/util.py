@@ -256,7 +256,6 @@ class EmailAttachmentModel(BaseAttachmentModel):
     # content
     content: str
     subject: str
-    summary: str
     sender: str
 
     # contacts
