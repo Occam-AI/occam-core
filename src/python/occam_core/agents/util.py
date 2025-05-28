@@ -444,15 +444,12 @@ class OccamLLMMessage(OccamDataType):
                 raise ValueError("Messages that represent a single attachment are not expected to have other attachments.")
             if not self.source_attachment:
                 raise ValueError("Messages that represent a single attachment must have a source attachment.")
+            if not self.content:
+                self.content = self.source_attachment.content
         elif self.attachments and not self.content_from_attachments:
             self.content_from_attachments = []
             for attachment in self.attachments:
                 self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, attachment))
-        # this is in case where the content is in the attachment model itself (eg email)
-        elif self.content_from_attachments:
-            for message in self.content_from_attachments:
-                if not message.content:
-                    message.content = message.source_attachment.content
 
         self.name = format_llm_messenger_name(self.name)
         return self
