@@ -291,8 +291,6 @@ class FileMetadataModel(BaseAttachmentModel):
         """
         if self.workspace_id:
             self.name = self.file_key.split("/")[-1]
-        if self.content:
-            self.content = None
         return self
 
 
@@ -301,6 +299,11 @@ class ReferenceMetadataModel(FileMetadataModel):
 
 
 class MessageAttachmentModel(FileMetadataModel):
+    """
+    We don't dump content of message attachments, as it
+    can be loaded back when needed from the database.
+    """
+
     content_type: Optional[str] = None
 
     @field_serializer('content')
@@ -477,14 +480,9 @@ class OccamLLMMessage(OccamDataType):
 
     @classmethod
     def from_attachment(cls, role: LLMRole, attachment: IAttachmentModel) -> Self:
-        content = attachment.content
-        # Don't throw away the content for other types of attachments.
-        if isinstance(attachment, MessageAttachmentModel):
-            attachment.content = None
         return cls(
             type=MessageType.ATTACHMENT.value,
-            content=content,
-            # TODO: Verify correctness of role and name
+            content=attachment.content,
             role=role,
             name=attachment.name,
             source_attachment=attachment
