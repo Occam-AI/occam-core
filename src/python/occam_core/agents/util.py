@@ -245,15 +245,13 @@ class BaseAttachmentModel(BaseModel):
     content: Optional[str | bytes] = None
 
 
-class CtaAttachmentModel(BaseAttachmentModel):
-    cta: CallToAction
-
-
-class EmailDraftResponseModel(CtaAttachmentModel):
+class EmailAttachmentModel(BaseAttachmentModel):
     recipients: list[str]
     content: str
     subject: str
     summary: str
+    cta: CallToAction
+    confirmed: Optional[bool] = None
     cc: Optional[list[str]] = None
 
 
@@ -398,10 +396,7 @@ class OccamLLMMessage(OccamDataType):
     tagged_agents: Optional[TaggedAgentsModel] = None
     """Agents can tag each other in a message."""
 
-    cta_attachment: Optional[CtaAttachmentModel] = None
-    """Call to action is an additional message that can be attached to the message."""
-
-    attachments: Optional[list[MessageAttachmentModel]] = None
+    attachments: Optional[list[IAttachmentModel]] = None
     """Attachments are files that can be attached to a message or CTAs with additional content."""
 
     content_from_attachments: Optional[list['OccamLLMMessage']] = None
