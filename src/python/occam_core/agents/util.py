@@ -242,6 +242,7 @@ class BaseAttachmentModel(BaseModel):
     content: Optional[str | bytes] = None
     cta: Optional[CallToAction] = None
     confirmed: Optional[bool] = None
+    name: str
 
     @model_validator(mode="after")
     def validate_confirmed(self):
@@ -265,7 +266,6 @@ class EmailAttachmentModel(BaseAttachmentModel):
 
 
 class FileMetadataModel(BaseAttachmentModel):
-    name: str
     url: str
     file_key: str
     dataset_uuid: str
