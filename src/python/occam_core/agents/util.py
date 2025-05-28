@@ -251,6 +251,7 @@ class EmailAttachmentModel(BaseAttachmentModel):
     subject: str
     summary: str
     cta: CallToAction
+    sender: str
     confirmed: Optional[bool] = None
     cc: Optional[list[str]] = None
 
