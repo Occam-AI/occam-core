@@ -253,6 +253,7 @@ class EmailDraftResponseModel(CtaAttachmentModel):
     recipients: list[str]
     content: str
     subject: str
+    summary: str
     cc: Optional[list[str]] = None
 
 
