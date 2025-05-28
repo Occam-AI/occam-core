@@ -431,23 +431,12 @@ class OccamLLMMessage(OccamDataType):
             for attachment in self.attachments:
                 self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, attachment))
 
-        # TODO: Figure out if we'll get the content from content from attachments. or the cta itself.
-        #  If from content_from_attachments, we need to uncomment this.
-        # if self.cta_attachment:
-        #     self.content_from_attachments = self.content_from_attachments or []
-        #     self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, self.cta_attachment))
-
         self.name = format_llm_messenger_name(self.name)
         return self
 
     def set_attachments(self, attachments: list[MessageAttachmentModel]):
         self.attachments = attachments
         self.content_from_attachments = [OccamLLMMessage.from_attachment(self.role, attachment) for attachment in attachments]
-
-    def set_cta_attachment(self, cta_attachment: CtaAttachmentModel):
-        self.cta_attachment = cta_attachment
-        self.content_from_attachments = self.content_from_attachments or []
-        self.content_from_attachments.append(OccamLLMMessage.from_attachment(self.role, cta_attachment))
 
     def set_references(self, references: list[ReferenceMetadataModel]):
         self.references = references
