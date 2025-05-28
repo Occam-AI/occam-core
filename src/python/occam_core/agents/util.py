@@ -244,6 +244,7 @@ class BaseAttachmentModel(BaseModel):
 
 
 class EmailAttachmentModel(BaseAttachmentModel):
+    type: Literal["email_attachment"] = "email_attachment"
     recipients: list[str]
     content: str
     subject: str
@@ -290,6 +291,7 @@ class ReferenceMetadataModel(FileMetadataModel):
 
 
 class MessageAttachmentModel(FileMetadataModel):
+    type: Literal["message_attachment"] = "message_attachment"
     content_type: Optional[str] = None
 
     @field_serializer('content')
