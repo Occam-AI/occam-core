@@ -251,6 +251,7 @@ class EmailAttachmentModel(BaseAttachmentModel):
     sender: str
     confirmed: Optional[bool] = None
     cc: Optional[list[str]] = None
+    bcc: Optional[list[str]] = None
 
 
 class FileMetadataModel(BaseAttachmentModel):
