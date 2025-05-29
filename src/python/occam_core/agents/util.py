@@ -1,4 +1,5 @@
 import enum
+import hashlib
 import re
 from datetime import timedelta
 from typing import (Any, Dict, List, Literal, Optional, Self, Type, TypeVar,
@@ -243,6 +244,7 @@ class BaseAttachmentModel(BaseModel):
     cta: Optional[CallToAction] = None
     confirmed: Optional[bool] = None
     name: str
+    attachment_id: str
 
     @model_validator(mode="after")
     def validate_confirmed(self):
@@ -253,7 +255,6 @@ class BaseAttachmentModel(BaseModel):
 
 
 class EmailAttachmentModel(BaseAttachmentModel):
-
     # content
     content: str
     subject: str
@@ -263,6 +264,22 @@ class EmailAttachmentModel(BaseAttachmentModel):
     recipients: list[str]
     cc: Optional[list[str]] = None
     bcc: Optional[list[str]] = None
+
+    @model_validator(mode="after")
+    def set_attachment_id(self):
+            
+        self.attachment_id = hashlib.sha256(
+            "".join([
+                self.content,
+                self.subject,
+                self.sender,
+                ",".join(self.recipients),
+                ",".join(self.cc or []),
+                ",".join(self.bcc or [])
+            ]).encode('utf-8')
+        ).hexdigest()
+
+        return self
 
 
 class FileMetadataModel(BaseAttachmentModel):
@@ -291,6 +308,11 @@ class FileMetadataModel(BaseAttachmentModel):
         """
         if self.workspace_id:
             self.name = self.file_key.split("/")[-1]
+        return self
+
+    @model_validator(mode="after")
+    def set_attachment_id(self):
+        self.attachment_id = self.dataset_uuid
         return self
 
 
