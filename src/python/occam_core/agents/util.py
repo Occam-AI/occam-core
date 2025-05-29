@@ -244,7 +244,9 @@ class BaseAttachmentModel(BaseModel):
     cta: Optional[CallToAction] = None
     confirmed: Optional[bool] = None
     name: str
-    attachment_id: str
+    # This will always be set by the model validator
+    # on child classes.
+    attachment_id: Optional[str] = None
 
     @model_validator(mode="after")
     def validate_confirmed(self):
