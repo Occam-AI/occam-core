@@ -260,7 +260,7 @@ class EmailAttachmentMetadataModel(BaseModel):
     bcc: Optional[list[str]] = None
 
 
-class EmailAttachmentModel(EmailAttachmentMetadataModel):
+class EmailAttachmentModel(BaseAttachmentModel, EmailAttachmentMetadataModel):
 
     content: str
 
