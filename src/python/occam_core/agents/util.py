@@ -265,7 +265,6 @@ class EmailAttachmentModel(EmailAttachmentMetadataModel):
     content: str
 
 
-
 class FileMetadataModel(BaseAttachmentModel):
     url: str
     file_key: str
