@@ -307,7 +307,7 @@ class EmailAttachmentMetadataModel(BaseModel):
     cc: Optional[list[str]] = None
     bcc: Optional[list[str]] = None
     # email attachments to send in the email.
-    attachments: Optional[list[FileMetadataModel]] = None
+    file_attachments: Optional[list[FileMetadataModel]] = None
 
     @model_validator(mode="after")
     def validate_attachment_id_required(self):
