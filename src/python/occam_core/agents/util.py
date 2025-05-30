@@ -1,4 +1,5 @@
 import enum
+import hashlib
 import re
 from datetime import timedelta
 from typing import (Any, Dict, List, Literal, Optional, Self, Type, TypeVar,
@@ -241,8 +242,10 @@ class CallToAction(str, enum.Enum):
 class BaseAttachmentModel(BaseModel):
     content: Optional[str | bytes] = None
     cta: Optional[CallToAction] = None
-    confirmed: Optional[bool] = None
     name: str
+    # This will always be set by the model validator
+    # on child classes.
+    attachment_id: Optional[str] = None
 
     @model_validator(mode="after")
     def validate_confirmed(self):
@@ -253,6 +256,10 @@ class BaseAttachmentModel(BaseModel):
 
 
 class EmailAttachmentMetadataModel(BaseModel):
+
+    # attachment is is required when this model is loaded
+    # by the front-end directly to confirm a user send.
+    attachment_id: Optional[str] = None
     subject: str
     sender: str
     recipients: list[str]
@@ -263,6 +270,22 @@ class EmailAttachmentMetadataModel(BaseModel):
 class EmailAttachmentModel(BaseAttachmentModel, EmailAttachmentMetadataModel):
 
     content: str
+
+    @model_validator(mode="after")
+    def set_attachment_id(self):
+
+        self.attachment_id = hashlib.sha256(
+            "".join([
+                self.content,
+                self.subject,
+                self.sender,
+                ",".join(self.recipients),
+                ",".join(self.cc or []),
+                ",".join(self.bcc or [])
+            ]).encode('utf-8')
+        ).hexdigest()
+ 
+        return self
 
 
 class FileMetadataModel(BaseAttachmentModel):
