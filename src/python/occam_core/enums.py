@@ -28,8 +28,9 @@ class ToolState(str, Enum):
 
     BATCH_COMPLETED = "BATCH_COMPLETED"
     FAILED = "FAILED"
+    TERMINALLY_FAILED = "TERMINALLY_FAILED"
     STOPPED = "STOPPED"
-    """These are terminal states that a tool can be in."""
+    """These are end states that a tool can be in."""
 
 
 class ToolRunState(str, Enum):
@@ -46,6 +47,7 @@ class ToolRunState(str, Enum):
 
     BATCH_COMPLETED = "BATCH_COMPLETED"
     FAILED = "FAILED"
+    TERMINALLY_FAILED = "TERMINALLY_FAILED"
     STOPPED = "STOPPED"
 
 
@@ -85,6 +87,9 @@ class ToolDataType(str, Enum):
     FAILED = "FAILED"
     """Data sent back when the tool announces that it's failed"""
 
+    TERMINALLY_FAILED = "TERMINALLY_FAILED"
+    """Data sent back when the tool announces that it's failed and can't be re-resumed"""
+
 
 class BatchStepDataType(str, Enum):
     """
@@ -104,6 +109,9 @@ class BatchStepDataType(str, Enum):
 
     FAILED = "FAILED"
     """Data sent back when the tool announces that it's failed"""
+
+    TERMINALLY_FAILED = "TERMINALLY_FAILED"
+    """Data sent back when the tool announces that it's failed and can't be re-resumed"""
 
     RESUMED = "RESUMED"
     """Data sent back when the tool announces that it's resumed"""
@@ -139,6 +147,9 @@ class StreamingStepDataType(str, Enum):
     FAILED = "FAILED"
     """Data sent back when the tool announces that it's failed"""
 
+    TERMINALLY_FAILED = "TERMINALLY_FAILED"
+    """Data sent back when the tool announces that it's failed and can't be re-resumed"""
+
     RESUMED = "RESUMED"
     """Data sent back when the tool announces that it's resumed"""
 
@@ -160,10 +171,13 @@ STABLE_STATES = {
     ToolState.PAUSED,
     ToolState.BATCH_COMPLETED,
     ToolState.FAILED,
+    ToolState.TERMINALLY_FAILED,
     ToolState.STOPPED,
 }
+NORMAL_SLEEPING_STATES = STABLE_STATES
 
 UNSTABLE_STATES = set(ToolState) - STABLE_STATES
+UNGRACEFUL_FAILURE_SLEEPING_STATES = UNSTABLE_STATES
 
 STOPPABLE_STATES = {
     ToolState.RUNNING,
@@ -186,15 +200,13 @@ RESUMABLE_STATES = {
 }
 
 
-SLEEPING_STATES = {
-    ToolState.SLEEPING,
-} | RESUMABLE_STATES
-
-
+# this is referring to fresh .run calls.
+# not a resumption.
 RUNNABLE_STATES = {
     ToolState.ALIVE,
     ToolState.SLEEPING,
     ToolState.BATCH_COMPLETED,
     ToolState.FAILED,
+    ToolState.TERMINALLY_FAILED,
     ToolState.STOPPED,
 }
