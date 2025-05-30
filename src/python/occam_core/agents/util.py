@@ -266,6 +266,18 @@ class EmailAttachmentMetadataModel(BaseModel):
     cc: Optional[list[str]] = None
     bcc: Optional[list[str]] = None
 
+    @model_validator(mode="after")
+    def validate_attachment_id_required(self):
+        # Only validate if this is a direct instantiation of 
+        # EmailAttachmentMetadataModel, not a subclass
+        if (type(self) is EmailAttachmentMetadataModel and 
+            self.attachment_id is None):
+            raise ValueError(
+                "attachment_id is required when EmailAttachmentMetadataModel "
+                "is directly instantiated"
+            )
+        return self
+
 
 class EmailAttachmentModel(BaseAttachmentModel, EmailAttachmentMetadataModel):
 
