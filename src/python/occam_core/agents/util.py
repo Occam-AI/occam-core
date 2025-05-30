@@ -248,51 +248,6 @@ class BaseAttachmentModel(BaseModel):
     attachment_id: Optional[str] = None
 
 
-class EmailAttachmentMetadataModel(BaseModel):
-
-    # attachment is is required when this model is loaded
-    # by the front-end directly to confirm a user send.
-    attachment_id: Optional[str] = None
-    subject: str
-    sender: str
-    recipients: list[str]
-    cc: Optional[list[str]] = None
-    bcc: Optional[list[str]] = None
-
-    @model_validator(mode="after")
-    def validate_attachment_id_required(self):
-        # Only validate if this is a direct instantiation of 
-        # EmailAttachmentMetadataModel, not a subclass
-        if (type(self) is EmailAttachmentMetadataModel and 
-            self.attachment_id is None):
-            raise ValueError(
-                "attachment_id is required when EmailAttachmentMetadataModel "
-                "is directly instantiated"
-            )
-        return self
-
-
-class EmailAttachmentModel(BaseAttachmentModel, EmailAttachmentMetadataModel):
-
-    content: str
-
-    @model_validator(mode="after")
-    def set_attachment_id(self):
-
-        self.attachment_id = hashlib.sha256(
-            "".join([
-                self.content,
-                self.subject,
-                self.sender,
-                ",".join(self.recipients),
-                ",".join(self.cc or []),
-                ",".join(self.bcc or [])
-            ]).encode('utf-8')
-        ).hexdigest()
- 
-        return self
-
-
 class FileMetadataModel(BaseAttachmentModel):
     url: str
     file_key: str
@@ -326,7 +281,7 @@ class ReferenceMetadataModel(FileMetadataModel):
     ...
 
 
-class MessageAttachmentModel(FileMetadataModel):
+class FileAttachmentModel(FileMetadataModel):
     """
     We don't dump content of message attachments, as it
     can be loaded back when needed from the database.
@@ -339,6 +294,53 @@ class MessageAttachmentModel(FileMetadataModel):
         if self.content:
             return None
         return v
+
+
+class EmailAttachmentMetadataModel(BaseModel):
+
+    # attachment is is required when this model is loaded
+    # by the front-end directly to confirm a user send.
+    attachment_id: Optional[str] = None
+    subject: str
+    sender: str
+    recipients: list[str]
+    cc: Optional[list[str]] = None
+    bcc: Optional[list[str]] = None
+    # email attachments to send in the email.
+    attachments: Optional[list[FileMetadataModel]] = None
+
+    @model_validator(mode="after")
+    def validate_attachment_id_required(self):
+        # Only validate if this is a direct instantiation of 
+        # EmailAttachmentMetadataModel, not a subclass
+        if (type(self) is EmailAttachmentMetadataModel and 
+            self.attachment_id is None):
+            raise ValueError(
+                "attachment_id is required when EmailAttachmentMetadataModel "
+                "is directly instantiated"
+            )
+        return self
+
+
+class EmailAttachmentModel(BaseAttachmentModel, EmailAttachmentMetadataModel):
+
+    content: str
+
+    @model_validator(mode="after")
+    def set_attachment_id(self):
+
+        self.attachment_id = hashlib.sha256(
+            "".join([
+                self.content,
+                self.subject,
+                self.sender,
+                ",".join(self.recipients),
+                ",".join(self.cc or []),
+                ",".join(self.bcc or [])
+            ]).encode('utf-8')
+        ).hexdigest()
+
+        return self
 
 
 IAttachmentModel = TypeVar("IAttachmentModel", bound=BaseAttachmentModel)
@@ -414,7 +416,7 @@ class OccamLLMMessage(OccamDataType):
     # """
 
     source_attachment: Optional[
-        Union[MessageAttachmentModel, EmailAttachmentModel]
+        Union[FileAttachmentModel, EmailAttachmentModel]
     ] = None
     """
     This is the attachment that was used to generate
@@ -439,7 +441,7 @@ class OccamLLMMessage(OccamDataType):
     tagged_agents: Optional[TaggedAgentsModel] = None
     """Agents can tag each other in a message."""
 
-    attachments: Optional[list[Union[MessageAttachmentModel, EmailAttachmentModel]]] = None
+    attachments: Optional[list[Union[FileAttachmentModel, EmailAttachmentModel]]] = None
     """Attachments are files that can be attached to a message or email attachments.
     We need explicit union here, otherwise pydantic would fail to load them correctly
     when LLM tools are preparing their input (converting AgentIOModel to LLMIOModel)
@@ -474,7 +476,7 @@ class OccamLLMMessage(OccamDataType):
         self.name = format_llm_messenger_name(self.name)
         return self
 
-    def set_attachments(self, attachments: list[MessageAttachmentModel]):
+    def set_attachments(self, attachments: list[IAttachmentModel]):
         self.attachments = attachments
         self.content_from_attachments = [OccamLLMMessage.from_attachment(self.role, attachment) for attachment in attachments]
 
