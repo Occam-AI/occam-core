@@ -252,17 +252,18 @@ class BaseAttachmentModel(BaseModel):
         return self
 
 
-class EmailAttachmentModel(BaseAttachmentModel):
-
-    # content
-    content: str
+class EmailAttachmentMetadataModel(BaseModel):
     subject: str
     sender: str
-
-    # contacts
     recipients: list[str]
     cc: Optional[list[str]] = None
     bcc: Optional[list[str]] = None
+
+
+class EmailAttachmentModel(EmailAttachmentMetadataModel):
+
+    content: str
+
 
 
 class FileMetadataModel(BaseAttachmentModel):
