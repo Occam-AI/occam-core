@@ -247,13 +247,6 @@ class BaseAttachmentModel(BaseModel):
     # on child classes.
     attachment_id: Optional[str] = None
 
-    @model_validator(mode="after")
-    def validate_confirmed(self):
-        assert not (self.cta is not None and self.confirmed is not None), \
-            "attachment cannot have both cta and confirmed set, " \
-            "since we either ask for an action or confirm it."
-        return self
-
 
 class EmailAttachmentMetadataModel(BaseModel):
 
