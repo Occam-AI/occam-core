@@ -129,9 +129,14 @@ class ToolInstanceContext(BaseModel):
     messages.
     """
 
-    params: Optional[TIOModel] = None
+    init_params: Optional[TIOModel] = None
     """
     The _init_ parameters for the tool instance.
+    """
+
+    run_params: Optional[TIOModel] = None
+    """
+    The ._run parameters for the tool instance.
     """
 
     extra: Optional[Any] = None
