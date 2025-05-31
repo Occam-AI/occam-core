@@ -204,5 +204,8 @@ class ToolInstanceContext(BaseModel):
     def clear_run_link(self):
         self.run_link = None
 
+    def update_init_params(self, init_params: TIOModel):
+        self.init_params = init_params
+
     def update_run_params(self, run_params: TIOModel):
         self.run_params = run_params
