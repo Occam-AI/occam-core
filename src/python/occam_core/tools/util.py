@@ -2,11 +2,14 @@ import enum
 import uuid
 from collections import defaultdict
 from datetime import UTC, datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, TypeVar
 
 from occam_core.chat.model import ChatPermissions
 from occam_core.enums import ToolRunState, ToolState
+from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, Field, model_validator
+
+TIOModel = TypeVar("TIOModel", bound=IOModel)
 
 
 class OccamUUID(uuid.UUID):
@@ -124,6 +127,11 @@ class ToolInstanceContext(BaseModel):
     Whether the tool instance should trigger a sending thread
     that runs asynchronously in the background to send
     messages.
+    """
+
+    params: Optional[TIOModel] = None
+    """
+    The _init_ parameters for the tool instance.
     """
 
     extra: Optional[Any] = None
