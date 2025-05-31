@@ -203,3 +203,6 @@ class ToolInstanceContext(BaseModel):
 
     def clear_run_link(self):
         self.run_link = None
+
+    def update_run_params(self, run_params: TIOModel):
+        self.run_params = run_params
