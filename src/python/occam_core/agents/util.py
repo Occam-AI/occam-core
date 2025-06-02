@@ -296,6 +296,11 @@ class FileAttachmentModel(FileMetadataModel):
         return v
 
 
+class EmailSenderModel(BaseModel):
+    name: str
+    email: str
+
+
 class EmailAttachmentMetadataModel(BaseModel):
     """
     This model serves two primary functions:
@@ -320,7 +325,8 @@ class EmailAttachmentMetadataModel(BaseModel):
     # by the front-end directly to confirm a user send.
     attachment_id: Optional[str] = None
     subject: str
-    sender: str
+    sender: EmailSenderModel
+    snippet: str
     recipients: list[str]
     cc: Optional[list[str]] = None
     bcc: Optional[list[str]] = None
