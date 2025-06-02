@@ -122,6 +122,11 @@ class ToolInstanceContext(BaseModel):
     to messages.
     """
 
+    reception_actor_is_synchronous: bool = False
+    """
+    Whether the receiving thread actor is synchronous.
+    """
+
     trigger_sending_thread: bool = False
     """
     Whether the tool instance should trigger a sending thread
