@@ -31,9 +31,9 @@ class ToolInstanceType(str, enum.Enum):
 
 class ToolInstanceContext(BaseModel):
 
-    owner_id: Optional[str] = None
+    owner_uuid: Optional[str] = None
     """
-    The id of the owner of the tool instance.
+    The uuid of the owner of the tool instance.
     """
 
     instance_id: Optional[str] = None
