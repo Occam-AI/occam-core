@@ -31,11 +31,6 @@ class ToolInstanceType(str, enum.Enum):
 
 class ToolInstanceContext(BaseModel):
 
-    owner_uuid: Optional[str] = None
-    """
-    The uuid of the owner of the tool instance.
-    """
-
     instance_id: Optional[str] = None
     """
     The id of the instance for checkpointing and tracking.
