@@ -241,6 +241,7 @@ class CallToAction(str, enum.Enum):
 
 class BaseAttachmentModel(BaseModel):
     content: Optional[str | bytes] = None
+    content_type: Optional[str] = None
     cta: Optional[CallToAction] = None
     name: str
     # This will always be set by the model validator
@@ -286,8 +287,6 @@ class FileAttachmentModel(FileMetadataModel):
     We don't dump content of message attachments, as it
     can be loaded back when needed from the database.
     """
-
-    content_type: Optional[str] = None
 
     @field_serializer('content')
     def serialize_content(self, v, _info):
