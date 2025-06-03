@@ -356,7 +356,7 @@ class EmailAttachmentModel(BaseAttachmentModel, EmailAttachmentMetadataModel):
             "".join([
                 self.content,
                 self.subject,
-                self.sender,
+                self.sender.email,
                 ",".join(self.recipients),
                 ",".join(self.cc or []),
                 ",".join(self.bcc or [])
