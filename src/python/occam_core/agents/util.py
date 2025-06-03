@@ -329,7 +329,12 @@ class EmailAttachmentMetadataModel(BaseModel):
     recipients: list[str]
     cc: Optional[list[str]] = None
     bcc: Optional[list[str]] = None
-    file_attachments: Optional[list[FileAttachmentModel]] = None
+    # BaseAttachmentModel is supported here as a way to get attachments to emails
+    # from the user inbox before we create datasets for them and have the other
+    # required fields in FileAttachmentModel. This is all internal to the inbox agent
+    # though and base attachments are converted to FileAttachmentModel before results
+    # are returned from the agent.
+    file_attachments: Optional[list[FileAttachmentModel | BaseAttachmentModel]] = None
 
     @model_validator(mode="after")
     def validate_attachment_id_required(self):
