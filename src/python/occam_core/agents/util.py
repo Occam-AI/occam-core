@@ -1,7 +1,7 @@
 import enum
 import hashlib
 import re
-from datetime import timedelta
+from datetime import datetime, timedelta
 from typing import (Any, Dict, List, Literal, Optional, Self, Type, TypeVar,
                     Union)
 
@@ -253,6 +253,7 @@ class FileMetadataModel(BaseAttachmentModel):
     url: str
     file_key: str
     dataset_uuid: str
+    size_kb: int
     workspace_id: Optional[str] = None
 
     model_config = ConfigDict(extra="ignore")
@@ -327,14 +328,24 @@ class EmailAttachmentMetadataModel(BaseModel):
     sender: EmailSenderModel
     snippet: str
     recipients: list[str]
+    sent_date: Optional[datetime] = None
+    """
+    Optional because we only get this for emails we
+    retrieve through fetching emails from the user's
+    inbox, so this is not available for emails we draft
+    ourselves.
+    """
     cc: Optional[list[str]] = None
     bcc: Optional[list[str]] = None
-    # BaseAttachmentModel is supported here as a way to get attachments to emails
-    # from the user inbox before we create datasets for them and have the other
-    # required fields in FileAttachmentModel. This is all internal to the inbox agent
-    # though and base attachments are converted to FileAttachmentModel before results
-    # are returned from the agent.
+
     file_attachments: Optional[list[FileAttachmentModel | BaseAttachmentModel]] = None
+    """
+    BaseAttachmentModel is supported here as a way to get attachments to emails
+    from the user inbox before we create datasets for them and have the other
+    required fields in FileAttachmentModel. This is all internal to the inbox agent
+    though and base attachments are converted to FileAttachmentModel before results
+    are returned from the agent.
+    """
 
     @model_validator(mode="after")
     def validate_attachment_id_required(self):
