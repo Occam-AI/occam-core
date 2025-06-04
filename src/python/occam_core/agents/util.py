@@ -248,6 +248,18 @@ class BaseAttachmentModel(BaseModel):
     # on child classes.
     attachment_id: Optional[str] = None
 
+    @field_validator('name', mode="before")
+    @classmethod
+    def ensure_name_under_64_chars(cls, name: str) -> str:
+        """
+        Validator to guarantee name remains under 64 chars
+        as otherwise it would lead to issues with LLM when
+        attachments are exploded into messages.
+        """
+        if len(name) >= 64:
+            name = name[:64]
+        return name
+
 
 class FileMetadataModel(BaseAttachmentModel):
     url: str
