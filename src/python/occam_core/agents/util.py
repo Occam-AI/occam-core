@@ -253,7 +253,7 @@ class FileMetadataModel(BaseAttachmentModel):
     url: str
     file_key: str
     dataset_uuid: str
-    size_kb: int
+    size_kb: Optional[int] = None
     workspace_id: Optional[str] = None
 
     model_config = ConfigDict(extra="ignore")
