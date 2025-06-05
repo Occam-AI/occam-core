@@ -367,6 +367,8 @@ class EmailAttachmentMetadataModel(BaseModel):
     # attachment is is required when this model is loaded
     # by the front-end directly to confirm a user send.
     attachment_id: Optional[str] = None
+    # This is needed for sending draft edits.
+    content: Optional[str] = None
 
     file_attachments: Optional[list[FileAttachmentModel | BaseAttachmentModel]] = None
     """
@@ -495,7 +497,7 @@ class OccamLLMMessage(OccamDataType):
     message
     """
 
-    evaluation: Optional[MessageEvaluationModel] = None
+    action_evaluation: Optional[MessageEvaluationModel] = None
     """
     This is used when we want to append an evaluation to a
     message, in case where it relates to a task, that may have
