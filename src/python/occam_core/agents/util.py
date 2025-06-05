@@ -339,12 +339,7 @@ class EmailAttachmentMetadataModel(BaseModel):
     added/removed by the user.
     """
 
-    # fields only assigned when model is sent to front-end.
-    cc: Optional[list[str]] = None
-    bcc: Optional[list[str]] = None
-
-    # Used for email reads and confirmations that a send
-    # request was executed.
+    # Reads.
     sent_date: Optional[datetime] = None
     """
     Optional because we only get this for emails we
@@ -353,15 +348,16 @@ class EmailAttachmentMetadataModel(BaseModel):
     ourselves.
     """
 
-    # attachment is is required when this model is loaded
-    # by the front-end directly to confirm a user send.
-    attachment_id: Optional[str] = None
+    # Reads to web-app, drafts to webapp, send approvals to back-end.
     subject: str
     sender: EmailSenderModel
     snippet: str
     recipients: list[str]
-    
-
+    cc: Optional[list[str]] = None
+    bcc: Optional[list[str]] = None
+    # attachment is is required when this model is loaded
+    # by the front-end directly to confirm a user send.
+    attachment_id: Optional[str] = None
 
     file_attachments: Optional[list[FileAttachmentModel | BaseAttachmentModel]] = None
     """
