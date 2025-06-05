@@ -48,6 +48,11 @@ class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
     the index of the message in the chat.
     """
 
+    parent_message_index: Optional[int] = None
+    """
+    the index of the message that this message is a response to.
+    """
+
     message_time: datetime = Field(default_factory=lambda: datetime.now(UTC))
     """
     the time the message was sent.
