@@ -313,6 +313,12 @@ class EmailSenderModel(BaseModel):
     email: str
 
 
+class EmailDraftProposalResponseEnum(str, enum.Enum):
+    SEND = "SEND"
+    REDRAFT = "RE-DRAFT"
+    DISCARD = "DISCARD"
+
+
 class EmailAttachmentMetadataModel(BaseModel):
     """
     This model serves two primary functions:
@@ -347,6 +353,9 @@ class EmailAttachmentMetadataModel(BaseModel):
     inbox, so this is not available for emails we draft
     ourselves.
     """
+
+    # Send Approvals.
+    draft_proposal_response: Optional[EmailDraftProposalResponseEnum] = None
 
     # Reads to web-app, drafts to webapp, send approvals to back-end.
     subject: str
