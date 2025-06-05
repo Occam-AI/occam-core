@@ -367,6 +367,8 @@ class EmailAttachmentMetadataModel(BaseModel):
     # attachment is is required when this model is loaded
     # by the front-end directly to confirm a user send.
     attachment_id: Optional[str] = None
+    # This is needed for sending draft edits.
+    content: Optional[str] = None
 
     file_attachments: Optional[list[FileAttachmentModel | BaseAttachmentModel]] = None
     """
