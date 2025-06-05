@@ -495,7 +495,7 @@ class OccamLLMMessage(OccamDataType):
     message
     """
 
-    evaluation: Optional[MessageEvaluationModel] = None
+    action_evaluation: Optional[MessageEvaluationModel] = None
     """
     This is used when we want to append an evaluation to a
     message, in case where it relates to a task, that may have
