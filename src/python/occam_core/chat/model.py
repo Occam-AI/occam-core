@@ -38,11 +38,6 @@ class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
     the id of the workspace in which the message was sent.
     """
 
-    agent_key: Optional[str] = None
-    """
-    the key of the agent that sent the message.
-    """
-
     message_index: Optional[int] = None
     """
     the index of the message in the chat.

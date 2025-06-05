@@ -526,18 +526,37 @@ class OccamLLMMessage(OccamDataType):
 
     parsed: Optional[Any] = None
     """
-    Note: this is a pydantic model of the sturcture output if available.
-    this means that it can't be loaded back from a dump, unless the consumer knows
-    what the source model is.
+    Note: this is a pydantic model of the sturcture output
+    if available. this means that it can't be loaded back
+    from a dump, unless the consumer knows what the source
+    model is.
+    """
+
+    tagging_agent_keys_chain: Optional[List[str]] = None
+    """
+    The chain of agents that ran on the way to us
+    triggering this agent.
+    """
+
+    agent_key: Optional[str] = None
+    """
+    The key of the agent that generated the message,
+    if applicable.
     """
 
     tagged_agents: Optional[TaggedAgentsModel] = None
-    """Agents can tag each other in a message."""
+    """
+    Agents that were tagged by this message and
+    sent this message.
+    """
 
     attachments: Optional[list[Union[FileAttachmentModel, EmailAttachmentModel]]] = None
-    """Attachments are files that can be attached to a message or email attachments.
-    We need explicit union here, otherwise pydantic would fail to load them correctly
-    when LLM tools are preparing their input (converting AgentIOModel to LLMIOModel)
+    """
+    Attachments are files that can be attached to a message
+    or email attachments. We need explicit union here,
+    otherwise pydantic would fail to load them correctly
+    when LLM tools are preparing their input
+    (converting AgentIOModel to LLMIOModel)
     """
 
     content_from_attachments: Optional[list['OccamLLMMessage']] = None
