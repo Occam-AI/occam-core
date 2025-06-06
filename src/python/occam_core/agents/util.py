@@ -308,9 +308,15 @@ class FileAttachmentModel(FileMetadataModel):
         return v
 
 
-class EmailSenderModel(BaseModel):
-    name: str
-    email: str
+class MailContactModel(BaseModel):
+    full_name: str
+    primary_email: str
+    email_addresses: Optional[List[str]] = None
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    company: Optional[str] = None
+    job_title: Optional[str] = None
+    address: Optional[str] = None
 
 
 class EmailDraftProposalResponseEnum(str, enum.Enum):
@@ -359,9 +365,9 @@ class EmailAttachmentMetadataModel(BaseModel):
 
     # Reads to web-app, drafts to webapp, send approvals to back-end.
     subject: str
-    sender: EmailSenderModel
+    sender: MailContactModel
     snippet: str
-    recipients: list[str]
+    recipients: list[MailContactModel]
     cc: Optional[list[str]] = None
     bcc: Optional[list[str]] = None
     # attachment is is required when this model is loaded
@@ -403,8 +409,8 @@ class EmailAttachmentModel(BaseAttachmentModel, EmailAttachmentMetadataModel):
             "".join([
                 self.content,
                 self.subject,
-                self.sender.email,
-                ",".join(self.recipients),
+                self.sender.primary_email,
+                ",".join([r.primary_email for r in self.recipients]),
                 ",".join(self.cc or []),
                 ",".join(self.bcc or [])
             ]).encode('utf-8')
