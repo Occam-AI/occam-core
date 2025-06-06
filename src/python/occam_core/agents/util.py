@@ -262,8 +262,10 @@ class BaseAttachmentModel(BaseModel):
 
 
 class FileMetadataModel(BaseAttachmentModel):
+    display_name: str = Field(default_factory=str)
     url: str
     file_key: str
+    datasource_uuid: str
     dataset_uuid: str
     size_kb: Optional[int] = None
     workspace_id: Optional[str] = None
@@ -278,16 +280,11 @@ class FileMetadataModel(BaseAttachmentModel):
         to minimise clash. This function creates a user
         friendly name for workspace upload files
 
-        by taking the filename from the file_key.
-        file_key takes the structure:
-        {workspace_id}/{filename} so we extract the filename
-        and use that as the name.
-
-        This model is also not meant to be used to pass
-        content around, so we make sure to remove it.
+        by taking the filename from the name.
         """
+        self.display_name = self.name
         if self.workspace_id:
-            self.name = self.file_key.split("/")[-1]
+            self.display_name = self.name.split("__")[-1]
         return self
 
 
