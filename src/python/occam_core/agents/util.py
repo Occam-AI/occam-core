@@ -368,8 +368,8 @@ class EmailAttachmentMetadataModel(BaseModel):
     sender: MailContactModel
     snippet: str
     recipients: list[MailContactModel]
-    cc: Optional[list[str]] = None
-    bcc: Optional[list[str]] = None
+    cc: Optional[list[MailContactModel]] = None
+    bcc: Optional[list[MailContactModel]] = None
     # attachment is is required when this model is loaded
     # by the front-end directly to confirm a user send.
     attachment_id: Optional[str] = None
@@ -411,8 +411,8 @@ class EmailAttachmentModel(BaseAttachmentModel, EmailAttachmentMetadataModel):
                 self.subject,
                 self.sender.primary_email,
                 ",".join([r.primary_email for r in self.recipients]),
-                ",".join(self.cc or []),
-                ",".join(self.bcc or [])
+                ",".join([r.primary_email for r in (self.cc or [])]),
+                ",".join([r.primary_email for r in (self.bcc or [])])
             ]).encode('utf-8')
         ).hexdigest()
 
