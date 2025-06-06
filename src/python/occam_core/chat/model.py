@@ -38,14 +38,14 @@ class MultiAgentWorkspaceCoreMessageModel(OccamLLMMessage):
     the id of the workspace in which the message was sent.
     """
 
-    agent_key: Optional[str] = None
-    """
-    the key of the agent that sent the message.
-    """
-
     message_index: Optional[int] = None
     """
     the index of the message in the chat.
+    """
+
+    parent_message_index: Optional[int] = None
+    """
+    the index of the message that this message is a response to.
     """
 
     message_time: datetime = Field(default_factory=lambda: datetime.now(UTC))

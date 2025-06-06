@@ -2,11 +2,14 @@ import enum
 import uuid
 from collections import defaultdict
 from datetime import UTC, datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, TypeVar
 
 from occam_core.chat.model import ChatPermissions
 from occam_core.enums import ToolRunState, ToolState
+from occam_core.util.base_models import IOModel
 from pydantic import BaseModel, Field, model_validator
+
+TIOModel = TypeVar("TIOModel", bound=IOModel)
 
 
 class OccamUUID(uuid.UUID):
@@ -19,11 +22,11 @@ class OccamUUID(uuid.UUID):
         return str(uuid.uuid4()).replace("-", "_")
 
 
-
 class ToolInstanceType(str, enum.Enum):
     TOOL = "TOOL"
     AGENT = "AGENT"
     WORKSPACE = "WORKSPACE"
+# params
 
 
 class ToolInstanceContext(BaseModel):
@@ -105,6 +108,42 @@ class ToolInstanceContext(BaseModel):
     through any channel.
     """
 
+    produce_agent_output_if_producer: bool = True
+    """
+    Whether the tool instance should produce agent output
+    if it can produce it as an encoded version of its
+    raw output.
+    """
+
+    trigger_reception_thread: bool = False
+    """
+    Whether the tool instance should trigger a reception thread
+    that runs asynchronously in the background to listen
+    to messages.
+    """
+
+    reception_actor_is_synchronous: bool = False
+    """
+    Whether the receiving thread actor is synchronous.
+    """
+
+    trigger_sending_thread: bool = False
+    """
+    Whether the tool instance should trigger a sending thread
+    that runs asynchronously in the background to send
+    messages.
+    """
+
+    init_params: Optional[TIOModel] = None
+    """
+    The _init_ parameters for the tool instance.
+    """
+
+    run_params: Optional[TIOModel] = None
+    """
+    The ._run parameters for the tool instance.
+    """
+
     extra: Optional[Any] = None
 
     class Config:
@@ -166,3 +205,12 @@ class ToolInstanceContext(BaseModel):
     
     def update_run_state(self, run_state: ToolRunState):
         self.run_state = run_state
+
+    def clear_run_link(self):
+        self.run_link = None
+
+    def update_init_params(self, init_params: TIOModel):
+        self.init_params = init_params
+
+    def update_run_params(self, run_params: TIOModel):
+        self.run_params = run_params
