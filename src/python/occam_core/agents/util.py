@@ -631,7 +631,7 @@ class OccamLLMMessage(OccamDataType):
             content=attachment.content,
             role=role,
             # Definisevly guard against long names (max 64 for OpenAI)
-            name=attachment.name[:64],
+            name=attachment.name,
             source_attachment=attachment
         )
 
