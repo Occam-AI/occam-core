@@ -102,6 +102,12 @@ class AgentContactType(str, enum.Enum):
     USER_SCREEN_MESSAGES = "USER_SCREEN_MESSAGES"
     """User screen data sent back from the agent."""
 
+    I_AM_ALIVE = "I_AM_ALIVE"
+    """
+    This is a special message that is routinely sent by
+    the agent listener to declare that it's alive
+    """
+
 
 class TaggedAgentModel(BaseModel):
 
@@ -625,7 +631,8 @@ class OccamLLMMessage(OccamDataType):
             type=MessageType.ATTACHMENT.value,
             content=attachment.content,
             role=role,
-            name=attachment.name,
+            # Definisevly guard against long names (max 64 for OpenAI)
+            name=attachment.name[:64],
             source_attachment=attachment
         )
 
