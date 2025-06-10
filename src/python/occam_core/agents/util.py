@@ -633,11 +633,31 @@ class OccamLLMMessage(OccamDataType):
         return cls(
             type=MessageType.ATTACHMENT.value,
             content=attachment.content,
-            role=role,
+            role=cls.override_role_for_attachment(role, attachment.content),
             # Definisevly guard against long names (max 64 for OpenAI)
             name=attachment.name[:64],
             source_attachment=attachment
         )
+
+    @classmethod
+    def override_role_for_attachment(cls, role: LLMRole, content: str | bytes | list[dict[str, Any]]) -> LLMRole:
+        """
+        FIXME
+        For messages from attachments that are images, the content is a list
+        with 'type' and 'image_url' fields. For those messages, the role cannot
+        be assistant, as it would lead to issues with OpenAI.
+
+        For now we override it to user, but we should
+        find a better way to handle this.
+        """
+        if isinstance(content, str):
+            return role
+        elif isinstance(content, bytes):
+            return role
+        elif isinstance(content, list):
+            return LLMRole.user
+        else:
+            return role
 
     class Config:
         arbitrary_types_allowed = True
