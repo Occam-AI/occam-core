@@ -629,7 +629,9 @@ class OccamLLMMessage(OccamDataType):
         return cls(
             type=MessageType.ATTACHMENT.value,
             content=attachment.content,
-            role=role,
+            # FIXME FIXME FIXME. OpenAI fails if role is assistant for image attachments.
+            # Temporarily setting it to user.
+            role=LLMRole.user,
             # Definisevly guard against long names (max 64 for OpenAI)
             name=attachment.name,
             source_attachment=attachment
