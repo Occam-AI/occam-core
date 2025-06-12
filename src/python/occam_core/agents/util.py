@@ -250,52 +250,48 @@ class BaseAttachmentModel(BaseModel):
     content_type: Optional[str] = None
     cta: Optional[CallToAction] = None
     name: str
-    # This will always be set by the model validator
-    # on child classes.
+    display_name: str = Field(default_factory=str)
+    """
+    This is the name of the file as it appears in the
+    workspace.
+    """
     attachment_id: Optional[str] = None
+    """
+    This is the id of the attachment in the workspace.
+    This will always be set by the model validator
+    on child classes.
+    """
+    workspace_id: Optional[str] = None
+    
 
-    @field_validator('name', mode="before")
-    @classmethod
-    def ensure_name_under_64_chars(cls, name: str) -> str:
+    @model_validator(mode="after")
+    def ensure_size_limit_for_name_and_add_display_name(self):
         """
-        Validator to guarantee name remains under 64 chars
+        Workspace uploads have a non-user friendly name
+        of the form {workspace_id}__{user_email}__{filename}
+        to minimise clash. This function creates a user
+        friendly name for workspace upload files.
+
+        We also ensure that the attachment name is under 64 chars,
         as otherwise it would lead to issues with LLM when
         attachments are exploded into messages.
         """
-        if len(name) >= 64:
-            name = name[:64]
-        return name
+        self.display_name = self.name
+        if self.workspace_id:
+            parts = self.name.split("__")
+            self.display_name = parts[-1]
+            self.name = self.display_name[:64]
+        return self
 
 
 class FileMetadataModel(BaseAttachmentModel):
     url: str
     file_key: str
+    datasource_uuid: str
     dataset_uuid: str
     size_kb: Optional[int] = None
-    workspace_id: Optional[str] = None
 
     model_config = ConfigDict(extra="ignore")
-
-    @model_validator(mode="after")
-    def set_name_for_workspace_uploads_and_remove_content(self):
-        """
-        Workspace uploads have a non-user friendly name
-        of the form {workspace_id}__{username}__{filename}
-        to minimise clash. This function creates a user
-        friendly name for workspace upload files
-
-        by taking the filename from the file_key.
-        file_key takes the structure:
-        {workspace_id}/{filename} so we extract the filename
-        and use that as the name.
-
-        This model is also not meant to be used to pass
-        content around, so we make sure to remove it.
-        """
-        if self.workspace_id:
-            self.name = self.file_key.split("/")[-1]
-        return self
-
 
 class ReferenceMetadataModel(FileMetadataModel):
     ...
@@ -637,7 +633,7 @@ class OccamLLMMessage(OccamDataType):
             # Temporarily setting it to user.
             role=LLMRole.user,
             # Definisevly guard against long names (max 64 for OpenAI)
-            name=attachment.name[:64],
+            name=attachment.name,
             source_attachment=attachment
         )
 
