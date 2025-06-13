@@ -9,7 +9,7 @@ from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
 from occam_core.util.data_types.occam import OccamDataType
 from openai.types.chat import ParsedChatCompletionMessage
-from openai.types.chat.chat_completion import ChoiceLogprobs
+from openai.types.chat.chat_completion import ChoiceLogprobs, CompletionUsage
 from pydantic import (BaseModel, ConfigDict, Field, field_serializer,
                       field_validator, model_validator)
 
@@ -699,6 +699,26 @@ class LLMIOModel(IOModel):
     # we dont' save as TypeVar IBaseModel as it can't be
     # loaded back and beaks validation as a result.
     response_format: Optional[Any] = None
+
+    # these fields come back from ChatCompletion responses of LLMs.
+    id: Optional[str] = None
+    """A unique identifier for the chat completion."""
+
+    model: Optional[str] = None
+    """The model used for the chat completion."""
+
+    service_tier: Optional[Literal["scale", "default"]] = None
+    """The service tier used for processing the request."""
+
+    system_fingerprint: Optional[str] = None
+    """This fingerprint represents the backend configuration that the model runs with.
+
+    Can be used in conjunction with the `seed` request parameter to understand when
+    backend changes have been made that might impact determinism.
+    """
+
+    usage: Optional[CompletionUsage] = None
+    """Usage statistics for the completion request."""
 
     @field_validator('query', 'prompt', mode="before")
     @classmethod
