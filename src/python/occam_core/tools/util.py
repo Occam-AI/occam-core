@@ -93,7 +93,7 @@ class ToolInstanceContext(BaseModel):
     Whether the tool is allowed to control the state of the agent.
     """
 
-    last_sent_times_by_sender_id: Optional[Dict[str, datetime]] \
+    last_received_times_by_sender_id: Optional[Dict[str, datetime]] \
         = Field(default_factory=dict)
     """
     A log of the last times that the tool instance has
@@ -102,7 +102,7 @@ class ToolInstanceContext(BaseModel):
     with other tools. i.e. not having memory loss.
     """
 
-    last_channel_sent_time: Optional[datetime] = None
+    last_channel_received_time: Optional[datetime] = None
     """
     The last time that the tool instance has received a message
     through any channel.
@@ -159,9 +159,9 @@ class ToolInstanceContext(BaseModel):
         return self
 
     def datetime_from_iso_string(self):
-        if self.last_sent_times_by_sender_id:
-            self.last_sent_times_by_sender_id = {
-                k: datetime.fromisoformat(v) for k, v in self.last_sent_times_by_sender_id.items()
+        if self.last_received_times_by_sender_id:
+            self.last_received_times_by_sender_id = {
+                k: datetime.fromisoformat(v) for k, v in self.last_received_times_by_sender_id.items()
                 if not isinstance(v, datetime)
             }
         return self
