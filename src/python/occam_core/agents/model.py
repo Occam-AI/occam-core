@@ -4,7 +4,9 @@ from inspect import isabstract
 from typing import Any, Dict, List, Optional, Self, Type, TypeVar
 
 from occam_core.agents.util import LLMIOModel, OccamLLMMessage
-from occam_core.util.base_models import AgentInstanceParamsModel
+from openai.types.chat.chat_completion import ChatCompletion, Choice
+from openai.types.chat.parsed_chat_completion import (ParsedChatCompletion,
+                                                      ParsedChoice)
 from pydantic import BaseModel, Field, model_validator
 
 
@@ -132,6 +134,14 @@ class AgentIdentityCoreModel(BaseModel):
     is_ready_to_run: bool
 
 
+chat_completion_fields = set(ChatCompletion.model_fields.keys())
+llm_model_fields = set(LLMIOModel.model_fields.keys())
+intersecting_llm_model_fields = llm_model_fields.intersection(chat_completion_fields)
+
+choice_fields = set(Choice.model_fields.keys())
+intersecting_choice_fields = choice_fields.intersection(choice_fields)
+
+
 class AgentIOModel(LLMIOModel):
     """
     IO model for agents.
@@ -161,6 +171,49 @@ class AgentIOModel(LLMIOModel):
         for model in models:
             merged_model.chat_messages.extend(model.chat_messages)
         return merged_model
+
+    @classmethod
+    def from_llm_response(cls, llm_response: ChatCompletion | ParsedChatCompletion, assistant_name: str) -> Self:
+        """
+        Convert LLM response to AgentIOModel.
+
+        This method creates an AgentIOModel from ChatCompletion or 
+        ParsedChatCompletion responses, which is the core model of our 
+        architecture.
+
+        Key transformations:
+        - Choice-level fields are moved to the message level in our model
+        - Selected ChatCompletion fields are included in the AgentIOModel
+        - Assistant name is assigned since it's not returned by the LLM
+
+        Args:
+            llm_response: ChatCompletion or ParsedChatCompletion response
+            assistant_name: Name to assign to the assistant messages
+
+        Returns:
+            AgentIOModel with converted messages and metadata
+        """
+
+        init_variables = {}
+        for field in intersecting_llm_model_fields:
+            init_variables[field] = getattr(llm_response, field)
+
+        messages = []
+        for choice in llm_response.choices:
+            message_init_variables = {}
+            # we get top level choice fields that we use at message level.
+            for field in intersecting_choice_fields:
+                message_init_variables[field] = getattr(choice, field)
+            # we get all fields since occam message inherits from chat completion message.
+            for field in choice.message.model_fields.keys():
+                message_init_variables[field] = getattr(choice.message, field)
+
+            occam_message = OccamLLMMessage.model_construct(**message_init_variables)
+            occam_message.name = assistant_name
+            messages.append(occam_message)
+        agent_model = cls.model_construct(**init_variables)
+        agent_model.chat_messages = messages
+        return agent_model
 
 
 TAgentIOModel = TypeVar("TAgentIOModel", bound=AgentIOModel)
