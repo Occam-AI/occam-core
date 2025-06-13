@@ -587,9 +587,6 @@ class OccamLLMMessage(OccamDataType, ChatCompletionMessage):
     (deprecated) if the model called a function.
     """
 
-    index: Optional[int] = None
-    """The index of the choice in the list of choices."""
-
     logprobs: Optional[ChoiceLogprobs] = None
     """Log probability information for the choice."""
 
