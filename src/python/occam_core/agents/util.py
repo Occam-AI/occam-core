@@ -9,6 +9,7 @@ from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
 from occam_core.util.data_types.occam import OccamDataType
 from openai.types.chat import ChatCompletionMessage
+from openai.types.chat.chat_completion import ChoiceLogprobs
 from pydantic import (BaseModel, ConfigDict, Field, field_serializer,
                       field_validator, model_validator)
 
@@ -575,6 +576,25 @@ class OccamLLMMessage(OccamDataType, ChatCompletionMessage):
 
     references: Optional[list[ReferenceMetadataModel]] = None
     """References to attachments used to generate the message."""
+
+
+    # these come from standard LLM calls.
+    finish_reason: Optional[Literal["stop", "length", "tool_calls", "content_filter", "function_call"]] = None
+    """The reason the model stopped generating tokens.
+
+    This will be `stop` if the model hit a natural stop point or a provided stop
+    sequence, `length` if the maximum number of tokens specified in the request was
+    reached, `content_filter` if content was omitted due to a flag from our content
+    filters, `tool_calls` if the model called a tool, or `function_call`
+    (deprecated) if the model called a function.
+    """
+
+    index: Optional[int] = None
+    """The index of the choice in the list of choices."""
+
+    logprobs: Optional[ChoiceLogprobs] = None
+    """Log probability information for the choice."""
+
 
     @field_serializer('content')
     def serialize_content(self, v, info):
