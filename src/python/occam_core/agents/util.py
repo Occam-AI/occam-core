@@ -8,7 +8,7 @@ from typing import (Any, Dict, List, Literal, Optional, Self, Type, TypeVar,
 from occam_core.enums import ToolRunState, ToolState
 from occam_core.util.base_models import IOModel
 from occam_core.util.data_types.occam import OccamDataType
-from openai.types.chat import ChatCompletionMessage
+from openai.types.chat import ParsedChatCompletionMessage
 from openai.types.chat.chat_completion import ChoiceLogprobs
 from pydantic import (BaseModel, ConfigDict, Field, field_serializer,
                       field_validator, model_validator)
@@ -481,7 +481,7 @@ class MessageEvaluationModel(BaseModel):
         return self
 
 
-class OccamLLMMessage(OccamDataType, ChatCompletionMessage):
+class OccamLLMMessage(OccamDataType, ParsedChatCompletionMessage):
 
     type: MessageType = MessageType.BASE
     """
