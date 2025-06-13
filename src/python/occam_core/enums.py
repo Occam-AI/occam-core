@@ -15,6 +15,12 @@ class ToolState(str, Enum):
     SLEEPING = "SLEEPING"
     """A tool is sleeping when it's not running, but the db has all the instance info."""
 
+    BATCH_COMPLETED = "BATCH_COMPLETED"
+    FAILED = "FAILED"
+    TERMINALLY_FAILED = "TERMINALLY_FAILED"
+    STOPPED = "STOPPED"
+    """These are end states that a tool can be in."""
+
     # Request in progress states
     PAUSE_IN_PROGRESS = "PAUSE_IN_PROGRESS"
     RESUME_IN_PROGRESS = "RESUME_IN_PROGRESS"
@@ -25,12 +31,6 @@ class ToolState(str, Enum):
     RUNNING = "RUNNING"
     PAUSED = "PAUSED"
     """A tool run can switch between RUNNING and PAUSED states."""
-
-    BATCH_COMPLETED = "BATCH_COMPLETED"
-    FAILED = "FAILED"
-    TERMINALLY_FAILED = "TERMINALLY_FAILED"
-    STOPPED = "STOPPED"
-    """These are end states that a tool can be in."""
 
 
 class ToolRunState(str, Enum):
@@ -180,6 +180,7 @@ UNSTABLE_STATES = set(ToolState) - STABLE_STATES
 UNGRACEFUL_FAILURE_SLEEPING_STATES = UNSTABLE_STATES
 
 STOPPABLE_STATES = {
+    ToolState.ALIVE,
     ToolState.RUNNING,
     ToolState.PAUSED,
     ToolState.FAILED,
@@ -189,12 +190,14 @@ STOPPABLE_STATES = {
 
 
 PAUSABLE_STATES = {
+    ToolState.ALIVE,
     ToolState.RUNNING,
     ToolState.RESUME_IN_PROGRESS,
 }
 
 
 RESUMABLE_STATES = {
+    ToolState.ALIVE,
     ToolState.PAUSED,
     ToolState.FAILED,
 }
