@@ -193,7 +193,6 @@ class AgentIOModel(LLMIOModel):
         Returns:
             AgentIOModel with converted messages and metadata
 
-        # FIXME: handle loading chat completion fields when it's not a parsed response.
         """
 
         init_variables = {}
