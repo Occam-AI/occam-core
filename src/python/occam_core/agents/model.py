@@ -194,25 +194,27 @@ class AgentIOModel(LLMIOModel):
             AgentIOModel with converted messages and metadata
 
         """
+        llm_response_model = llm_response.model_dump(mode="json")
 
         init_variables = {}
         for field in intersecting_llm_model_fields:
-            init_variables[field] = getattr(llm_response, field)
+            init_variables[field] = llm_response_model.get(field)
 
         messages = []
-        for choice in llm_response.choices:
+        for choice in llm_response_model.get("choices", []):
             message_init_variables = {}
             # we get top level choice fields that we use at message level.
             for field in intersecting_choice_fields:
-                message_init_variables[field] = getattr(choice, field)
+                message_init_variables[field] = choice.get(field)
+            message: dict = choice.get("message", {})
             # we get all fields since occam message inherits from chat completion message.
-            for field in choice.message.__class__.model_fields.keys():
-                message_init_variables[field] = getattr(choice.message, field)
+            for field in message.keys():
+                message_init_variables[field] = message.get(field)
 
-            occam_message = OccamLLMMessage.model_construct(**message_init_variables)
+            occam_message = OccamLLMMessage.model_validate(message_init_variables)
             occam_message.name = assistant_name
             messages.append(occam_message)
-        agent_model = cls.model_construct(**init_variables)
+        agent_model = cls.model_validate(init_variables)
         agent_model.chat_messages = messages
         return agent_model
 
