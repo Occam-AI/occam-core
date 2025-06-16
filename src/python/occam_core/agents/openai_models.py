@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 
-from openai._models import BaseModel
+from pydantic import BaseModel
 from typing_extensions import Literal
 
 __all__ = [
