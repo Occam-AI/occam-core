@@ -206,7 +206,7 @@ class AgentIOModel(LLMIOModel):
             for field in intersecting_choice_fields:
                 message_init_variables[field] = getattr(choice, field)
             # we get all fields since occam message inherits from chat completion message.
-            for field in choice.message.model_fields.keys():
+            for field in choice.message.__class__.model_fields.keys():
                 message_init_variables[field] = getattr(choice.message, field)
 
             occam_message = OccamLLMMessage.model_construct(**message_init_variables)

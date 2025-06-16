@@ -42,6 +42,8 @@ class LLMRole(str, enum.Enum):
     system = "system"
     developer = "developer"
     user = "user"
+    tool = "tool"
+    function = "function"
 
 
 
