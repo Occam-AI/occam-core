@@ -173,7 +173,12 @@ class AgentIOModel(LLMIOModel):
         return merged_model
 
     @classmethod
-    def from_llm_response(cls, llm_response: ChatCompletion | ParsedChatCompletion, assistant_name: str) -> Self:
+    def from_llm_response(
+        cls,
+        llm_response: ChatCompletion | ParsedChatCompletion,
+        assistant_name: str,
+        response_format: Optional[Type[BaseModel]] = None,
+    ) -> Self:
         """
         Convert LLM response to AgentIOModel.
 
@@ -210,6 +215,8 @@ class AgentIOModel(LLMIOModel):
             # we get all fields since occam message inherits from chat completion message.
             for field in message.keys():
                 message_init_variables[field] = message.get(field)
+                if field == "parsed" and response_format:
+                    message_init_variables[field] = response_format.model_validate(message.get(field))
 
             occam_message = OccamLLMMessage.model_validate(message_init_variables)
             occam_message.name = assistant_name
