@@ -9,7 +9,7 @@ from openai.types.chat.parsed_chat_completion import (ParsedChatCompletion,
                                                       ParsedChoice)
 from pydantic import BaseModel, Field, model_validator
 
-from python.occam_core.agents.openai_models import ParsedFunctionToolCall
+from occam_core.agents.openai_models import ParsedFunctionToolCall
 
 
 class AgentType(str, Enum):
