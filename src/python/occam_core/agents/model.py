@@ -6,7 +6,7 @@ from typing import Any, Dict, List, Optional, Self, Tuple, Type, TypeVar
 from occam_core.agents.util import LLMIOModel, OccamLLMMessage
 from openai.types.chat.chat_completion import ChatCompletion, Choice
 from openai.types.chat.parsed_chat_completion import (ParsedChatCompletion,
-                                                      ParsedChoice)
+                                                      ParsedChoice, ParsedChatCompletionMessage)
 from pydantic import BaseModel, Field, model_validator
 
 from occam_core.agents.openai_models import ParsedFunctionToolCall
@@ -248,7 +248,7 @@ class AgentIOModel(LLMIOModel):
         response_models = {}
         tool_calls = {}
         for choice in llm_response.choices:
-            if choice.message.parsed:
+            if isinstance(choice.message, ParsedChatCompletionMessage) and choice.message.parsed:
                 response_models[choice.index] = choice.message.parsed
                 choice.message.parsed = None
             if choice.message.tool_calls:
