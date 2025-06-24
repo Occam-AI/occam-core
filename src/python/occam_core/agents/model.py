@@ -1,13 +1,15 @@
 import inspect
 from enum import Enum
 from inspect import isabstract
-from typing import Any, Dict, List, Optional, Self, Type, TypeVar
+from typing import Any, Dict, List, Optional, Self, Tuple, Type, TypeVar
 
 from occam_core.agents.util import LLMIOModel, OccamLLMMessage
 from openai.types.chat.chat_completion import ChatCompletion, Choice
 from openai.types.chat.parsed_chat_completion import (ParsedChatCompletion,
                                                       ParsedChoice)
 from pydantic import BaseModel, Field, model_validator
+
+from python.occam_core.agents.openai_models import ParsedFunctionToolCall
 
 
 class AgentType(str, Enum):
@@ -139,7 +141,8 @@ llm_model_fields = set(LLMIOModel.model_fields.keys())
 intersecting_llm_model_fields = llm_model_fields.intersection(chat_completion_fields)
 
 choice_fields = set(Choice.model_fields.keys())
-intersecting_choice_fields = choice_fields.intersection(choice_fields)
+llm_message_fields = set(OccamLLMMessage.model_fields.keys())
+intersecting_choice_fields = choice_fields.intersection(llm_message_fields)
 
 
 class AgentIOModel(LLMIOModel):
@@ -177,7 +180,6 @@ class AgentIOModel(LLMIOModel):
         cls,
         llm_response: ChatCompletion | ParsedChatCompletion,
         assistant_name: str,
-        response_format: Optional[Type[BaseModel]] = None,
     ) -> Self:
         """
         Convert LLM response to AgentIOModel.
@@ -199,24 +201,33 @@ class AgentIOModel(LLMIOModel):
             AgentIOModel with converted messages and metadata
 
         """
+        response_models, tool_calls = \
+            AgentIOModel.pop_structured_outputs(llm_response)
         llm_response_model = llm_response.model_dump(mode="json")
+        AgentIOModel.re_add_structured_outputs(
+            llm_response_model,
+            response_models,
+            tool_calls
+        )
 
         init_variables = {}
         for field in intersecting_llm_model_fields:
             init_variables[field] = llm_response_model.get(field)
 
+
         messages = []
         for choice in llm_response_model.get("choices", []):
             message_init_variables = {}
+
             # we get top level choice fields that we use at message level.
+            # basically logprobs and finish_reason.
             for field in intersecting_choice_fields:
                 message_init_variables[field] = choice.get(field)
+
             message: dict = choice.get("message", {})
             # we get all fields since occam message inherits from chat completion message.
             for field in message.keys():
                 message_init_variables[field] = message.get(field)
-                if field == "parsed" and response_format:
-                    message_init_variables[field] = response_format.model_validate(message.get(field))
 
             occam_message = OccamLLMMessage.model_validate(message_init_variables)
             occam_message.name = assistant_name
@@ -224,6 +235,39 @@ class AgentIOModel(LLMIOModel):
         agent_model = cls.model_validate(init_variables)
         agent_model.chat_messages = messages
         return agent_model
+
+    @staticmethod
+    def pop_structured_outputs(llm_response: ChatCompletion | ParsedChatCompletion) \
+        -> Tuple[Dict[int, BaseModel], Dict[int, List[ParsedFunctionToolCall]]]:
+        """
+        this is to preserve pydantic models for structured outputs
+        and tool calls, instead of dumping then failing to validate
+        back.
+        """
+
+        response_models = {}
+        tool_calls = {}
+        for choice in llm_response.choices:
+            if choice.message.parsed:
+                response_models[choice.index] = choice.message.parsed
+                choice.message.parsed = None
+            if choice.message.tool_calls:
+                tool_calls[choice.index] = choice.message.tool_calls
+                choice.message.tool_calls = None
+        return response_models, tool_calls
+
+    @staticmethod
+    def re_add_structured_outputs(llm_response_model: dict, response_models: dict, tool_calls: dict) -> None:
+        """
+        this is to re-add the structured outputs to the llm_response_model
+        """
+        # we need to preserve pydantic models for structured outputs
+        # so we override the dumps with them.
+        for choice in llm_response_model.get("choices", []):
+            if choice.get("index") in response_models:
+                choice["message"]["parsed"] = response_models[choice["index"]]
+            if choice.get("index") in tool_calls:
+                choice["message"]["tool_calls"] = tool_calls[choice["index"]]
 
 
 TAgentIOModel = TypeVar("TAgentIOModel", bound=AgentIOModel)
