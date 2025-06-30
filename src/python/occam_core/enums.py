@@ -166,7 +166,6 @@ DATA_TYPE_TO_RUN_STATE_SWITCH: Callable[[ToolDataType], ToolRunState] = \
     )
 
 STABLE_STATES = {
-    ToolState.ALIVE,
     ToolState.SLEEPING,
     ToolState.PAUSED,
     ToolState.BATCH_COMPLETED,
