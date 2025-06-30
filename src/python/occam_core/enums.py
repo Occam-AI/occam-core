@@ -205,21 +205,6 @@ RUNNING_STATES = {
     ToolState.RESUME_IN_PROGRESS
 }
 
-AUTO_PAUSABLE_STATES = {
-    ToolState.PAUSED,
-    ToolState.FAILED,
-    ToolState.RESUME_IN_PROGRESS,
-    ToolState.PAUSE_IN_PROGRESS,
-
-    ToolState.ALIVE,
-    ToolState.SLEEPING,
-    ToolState.TERMINALLY_FAILED,
-    ToolState.BATCH_COMPLETED,
-
-    ToolState.STOPPED,
-    ToolState.STOP_IN_PROGRESS,
-}
-
 
 RESUMABLE_STATES = {
     ToolState.PAUSED,
