@@ -25,6 +25,7 @@ class ToolState(str, Enum):
     PAUSE_IN_PROGRESS = "PAUSE_IN_PROGRESS"
     RESUME_IN_PROGRESS = "RESUME_IN_PROGRESS"
     STOP_IN_PROGRESS = "STOP_IN_PROGRESS"
+    SLEEPING_IN_PROGRESS = "SLEEPING_IN_PROGRESS"
     """Once a tool receives a request, it will transition to the appropriate in progress state."""
 
     # Run related states
@@ -199,6 +200,7 @@ PAUSABLE_STATES = {
     ToolState.RUNNING,
     ToolState.RESUME_IN_PROGRESS,
 }
+
 
 RUNNING_STATES = {
     ToolState.RUNNING,
