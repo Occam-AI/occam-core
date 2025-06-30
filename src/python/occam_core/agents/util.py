@@ -406,6 +406,11 @@ class EmailAttachmentMetadataModel(BaseModel):
         return self
 
 
+class DocumentEditAttachmentModel(BaseAttachmentModel):
+    file_key: str
+    url: str
+
+
 class EmailAttachmentModel(BaseAttachmentModel, EmailAttachmentMetadataModel):
 
     content: str
