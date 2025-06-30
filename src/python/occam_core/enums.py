@@ -231,3 +231,12 @@ WINDING_DOWN_STATES = {
     ToolState.STOP_IN_PROGRESS,
     ToolState.SLEEPING_IN_PROGRESS,
 }
+
+
+WINDED_DOWN_STATES = {
+    ToolState.PAUSED,
+    ToolState.FAILED,
+    ToolState.TERMINALLY_FAILED,
+    ToolState.SLEEPING,
+    ToolState.STOPPED,
+}
