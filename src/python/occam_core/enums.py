@@ -238,6 +238,7 @@ PAUSABLE_STATES = {
 
 
 RESUMABLE_STATES = {
+    ToolState.ALIVE,
     ToolState.PAUSED,
     ToolState.FAILED,
 }
