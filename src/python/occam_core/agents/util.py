@@ -406,6 +406,11 @@ class EmailAttachmentMetadataModel(BaseModel):
         return self
 
 
+class DocumentEditAttachmentModel(BaseAttachmentModel):
+    file_key: str
+    url: str
+
+
 class EmailAttachmentModel(BaseAttachmentModel, EmailAttachmentMetadataModel):
 
     content: str
@@ -528,7 +533,7 @@ class OccamLLMMessage(OccamDataType, ChatCompletionMessage):
     # """
 
     source_attachment: Optional[
-        Union[FileAttachmentModel, EmailAttachmentModel]
+        Union[FileAttachmentModel, EmailAttachmentModel, DocumentEditAttachmentModel]
     ] = None
     """
     This is the attachment that was used to generate
@@ -561,7 +566,7 @@ class OccamLLMMessage(OccamDataType, ChatCompletionMessage):
     sent this message.
     """
 
-    attachments: Optional[list[Union[FileAttachmentModel, EmailAttachmentModel]]] = None
+    attachments: Optional[list[Union[FileAttachmentModel, EmailAttachmentModel, DocumentEditAttachmentModel]]] = None
     """
     Attachments are files that can be attached to a message
     or email attachments. We need explicit union here,
