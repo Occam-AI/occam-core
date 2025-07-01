@@ -181,36 +181,10 @@ UNSTABLE_STATES = set(ToolState) - STABLE_STATES
 UNGRACEFUL_FAILURE_SLEEPING_STATES = UNSTABLE_STATES
 
 
-STOPPABLE_STATES = {
-    ToolState.RUNNING,
-    ToolState.PAUSED,
-    ToolState.FAILED,
-    ToolState.RESUME_IN_PROGRESS,
-    ToolState.PAUSE_IN_PROGRESS,
-
-    ToolState.ALIVE,
-    ToolState.SLEEPING,
-    ToolState.TERMINALLY_FAILED,
-    ToolState.BATCH_COMPLETED,
-}
-
-
-PAUSABLE_STATES = {
-    ToolState.ALIVE,
-    ToolState.RUNNING,
-    ToolState.RESUME_IN_PROGRESS,
-}
-
 
 RUNNING_STATES = {
     ToolState.RUNNING,
     ToolState.RESUME_IN_PROGRESS
-}
-
-
-RESUMABLE_STATES = {
-    ToolState.PAUSED,
-    ToolState.FAILED,
 }
 
 
@@ -239,4 +213,39 @@ WINDED_DOWN_STATES = {
     ToolState.TERMINALLY_FAILED,
     ToolState.SLEEPING,
     ToolState.STOPPED,
+}
+
+
+
+STOPPABLE_STATES = {
+    ToolState.RUNNING,
+    ToolState.PAUSED,
+    ToolState.FAILED,
+    ToolState.RESUME_IN_PROGRESS,
+    ToolState.PAUSE_IN_PROGRESS,
+
+    ToolState.ALIVE,
+    ToolState.SLEEPING,
+    ToolState.TERMINALLY_FAILED,
+    ToolState.BATCH_COMPLETED,
+}
+
+
+PAUSABLE_STATES = {
+    ToolState.RUNNING,
+    ToolState.RESUME_IN_PROGRESS,
+}
+
+
+RESUMABLE_STATES = {
+    ToolState.PAUSED,
+    ToolState.FAILED,
+}
+
+
+SLEEPABLE_STATES = {
+    ToolState.ALIVE,
+    ToolState.BATCH_COMPLETED,
+    ToolState.FAILED,
+    ToolState.TERMINALLY_FAILED,
 }
