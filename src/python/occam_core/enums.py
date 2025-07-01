@@ -249,4 +249,5 @@ SLEEPABLE_STATES = {
     ToolState.BATCH_COMPLETED,
     ToolState.FAILED,
     ToolState.TERMINALLY_FAILED,
+    ToolState.PAUSED
 }
