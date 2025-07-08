@@ -408,7 +408,6 @@ class EmailAttachmentMetadataModel(BaseModel):
 
 class DocumentEditAttachmentModel(BaseAttachmentModel):
     file_key: str
-    tmp_file_key: str
     url: str
     datasource_uuid: str
 
