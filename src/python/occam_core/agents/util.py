@@ -476,19 +476,30 @@ class StreamingMessagesModel(BaseModel):
 
 class MessageLabelEnum(str, enum.Enum):
 
-    WARNING = "WARNING"
+    WAITING = "WAITING"
+    IN_PROGRESS = "IN_PROGRESS"
     SUCCESS = "SUCCESS"
+    WARNING = "WARNING"
     ERROR = "ERROR"
     GENERAL = "GENERAL"
 
 
-class MessageEvaluationModel(BaseModel):
+class MessageHighlightModel(BaseModel):
+    """
+    This is a special message field that allows highlighting messages
+    in the chat. Example; declaring that an email was sent successfully.
+
+    This can either be pre-passed when a message makes it to the front-end
+    and can also be updated after the fact.
+    """
+
     label: MessageLabelEnum
     message: str
 
     @model_validator(mode="after")
     def validate_message(self):
-        assert len(self.message) <= 100, "message must be no longer than 100 characters"
+        assert len(self.message) <= 100, \
+            "message must be no longer than 100 characters"
         return self
 
 
@@ -521,11 +532,11 @@ class OccamLLMMessage(OccamDataType, ChatCompletionMessage):
     message
     """
 
-    action_evaluation: Optional[MessageEvaluationModel] = None
+    message_highlight: Optional[MessageHighlightModel] = None
     """
-    This is used when we want to append an evaluation to a
-    message, in case where it relates to a task, that may have
-    failed, or succeeded etc.
+    This is used when we want to append a highlight to a
+    message. This will usually happen if the message
+    relates to a task.
     """
 
     # structured_requests_content: Optional[IStructuredRequestsModel | Dict[str, Any]] = None
