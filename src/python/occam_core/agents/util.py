@@ -254,6 +254,7 @@ class CallToAction(str, enum.Enum):
 class BaseAttachmentModel(BaseModel):
     content: Optional[str | bytes] = None
     content_type: Optional[str] = None
+    extension: Optional[str] = None
     cta: Optional[CallToAction] = None
     name: str
     display_name: str = Field(default_factory=str)
