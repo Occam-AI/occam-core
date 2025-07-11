@@ -227,13 +227,6 @@ class TaggedAgentsModel(BaseModel):
 
 class ChatStatus(str, enum.Enum):
 
-    # The are workspace templates.
-    TEMPLATE = "TEMPLATE"
-
-    #When a workspace is initiated
-    # but not run yet.
-    STANDBY = "STANDBY"
-
     # active workspaces (started or resumed).
     ACTIVE = "ACTIVE"
 
